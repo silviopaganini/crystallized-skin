@@ -3,6 +3,15 @@ body
     font-family: Cambria, Georgia, serif;
 }
 
+*:focus {
+    outline: 0;
+}
+
+*[data-disabled]
+{
+    pointer-events: none;
+}
+
 a
 {
     color: inherit;
@@ -23,6 +32,7 @@ header
     height: 100vh;
     text-align: center;
     display: table;
+    /*pointer-events: none;*/
 }
 
 header .container
@@ -52,8 +62,8 @@ h3
 
 header button
 {
-    background-color: #6b6b6b;
     padding: 15px 20px;
+    background-color: #6b6b6b;
     color: white;
     border: 0;
     text-transform: uppercase;
@@ -68,6 +78,12 @@ header button:hover
 {
     background-color: white;
     color: #6b6b6b;
+}
+
+header button[data-disabled]
+{
+    background-color: #6b6b6b;
+    color: white;
 }
 
 section.about
@@ -123,6 +139,34 @@ section.gallery div.container p.piece-link a
 {
     text-decoration: underline;
     cursor : pointer;
+}
+
+section.video-page
+{
+    background-color: rgba(0,0,0,.7);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+section.video-page iframe
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+section.video-page button
+{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: white;
+    background-color: transparent;
+    border: 0;
+    font-size: 3em;
 }
 
 nav

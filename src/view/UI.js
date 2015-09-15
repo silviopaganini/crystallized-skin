@@ -2,6 +2,7 @@ import _        from 'underscore';
 import TweenMax from 'gsap';
 import eve      from 'dom-events';
 import css      from 'dom-css';
+import Scroll   from 'scroll-js';
 
 class UI  {
   constructor(copy) 
@@ -31,6 +32,10 @@ class UI  {
   listen()
   {
     eve.on(this.button, 'click', this.showArtist.bind(this));
+    eve.on(this.pieceLink, 'click', (e) => {
+      e.preventDefault();
+      window.__C.video.addVideo(this.pieceLink.href)
+    });
   }
 
   setCopy()
@@ -52,26 +57,28 @@ class UI  {
 
   showArtist()
   {
-    this.animateOutLanding( () => {
+    this.button.dataset.disabled = "true";
 
-      this.animateInGallery();
-      window.__C.landing.showArtist();
+    this.scroller.to(0,0, {easing: 'easeInOutCubic', duration: 700}).then( () => {
+      this.animateOutLanding( () => {
 
-      let data = window.__C.artists[window.__C.currentArtist];
-      this.h2Gallery.innerHTML = data.artist_name;
-      this.pieceName.innerHTML = data.piece_name;
-      this.pieceLink.href = data.video_url;  
+        this.animateInGallery();
+        window.__C.landing.showArtist();
 
+        let data = window.__C.artists[window.__C.currentArtist];
+        this.h2Gallery.innerHTML = data.artist_name;
+        this.pieceName.innerHTML = data.piece_name;
+        this.pieceLink.href = data.video_url;  
+
+      });
     });
   }
 
   animateOutLanding(callback)
   {
-    var timeline = new TimelineMax({autoStart: false, onComplete: callback.bind(this)})
+    var timeline = new TimelineMax({paused: true, onComplete: callback.bind(this)})
 
-    css(this.header, {
-      'pointer-events' : 'none'
-    });
+    css(this.header, { 'pointer-events' : 'none' });
     
     for (var i = 0; i < this.landingEls.length; i++) {
       timeline.add( TweenMax.to( this.landingEls[i], .4, { y: 10, autoAlpha: 0, ease: Power2.easeOut }), i * .1);
@@ -82,6 +89,7 @@ class UI  {
 
   initObjectsToAnimate()
   {
+    this.scroller = new Scroll( {el: document.body} );
     this.galleryEls = document.querySelectorAll('section.gallery > *[data-animation]');
 
     for (var i = 0; i < this.galleryEls.length; i++) {

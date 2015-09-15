@@ -43,9 +43,8 @@ class SceneGallery
     showArtist()
     {
         let data = window.__C.artists[window.__C.currentArtist];
-        let url = this.getURL('https://drive.google.com/open?id=0B0uHwEQ4FBZxSWo1aGk3MHBucW8');
+        let url = this.getURL(data.model);
         this.loader.load(url, this.onLoaded.bind(this));
-
     }
 
     onLoaded(collada)

@@ -1,6 +1,7 @@
-import EC       from '../postprocessing/core/EffectComposer';
-import NS       from '../postprocessing/Noise';
-import RP       from '../postprocessing/core/RenderPass';
+import EC from '../postprocessing/core/EffectComposer';
+import NS from '../postprocessing/Noise';
+import RP from '../postprocessing/core/RenderPass';
+// import OC from 'three-orbit-controls';
 
 import THREE    from 'three'; 
 import noise    from 'perlin-noise';
@@ -27,6 +28,8 @@ class SceneHome
 
   createScene()
   {
+    // const OrbitControls = OC(THREE);
+
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 4000 );
     this.camera.position.set(0, 45, 240);
     // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -64,8 +67,8 @@ class SceneHome
 
   generatePlane()
   {
-      if(this.mesh) scene.remove(this.mesh);
-      if(this.light) scene.remove(this.light);
+      if(this.mesh) this.scene.remove(this.mesh);
+      if(this.light) this.scene.remove(this.light);
 
       this.light = new THREE.DirectionalLight(this.p.lightColor, 1);
       this.light.position.set( 0, 0, 100 );
@@ -155,11 +158,30 @@ class SceneHome
 
   updateColours()
   {
-      this.mesh.material.color = new THREE.Color(this.p.meshColor);
-      this.mesh.material.specular = new THREE.Color(this.p.meshSpecular);
-      this.mesh.material.emissive = new THREE.Color(this.p.meshEmissive);
+      this.mesh.material.color = parseInt(this.p.meshColor, 16);
+      this.mesh.material.specular = parseInt(this.p.meshSpecular, 16);
+      this.mesh.material.emissive = parseInt(this.p.meshEmissive, 16);
       this.mesh.material.shininess = this.p.shininess;
       this.mesh.material.needsUpdate = true;
+  }
+
+  transitionGallery(callback)
+  {
+    this.updateColor = true;
+    var time = 1;
+    var timeline = new TimelineMax({paused: true, onComplete: () => {
+        this.updateColor = false;
+        callback();
+    }});
+
+    var colours = [this.mesh.material.color, this.mesh.material.specular, this.mesh.material.emissive];
+
+    for (var i = 0; i < colours.length; i++) {
+        timeline.add( TweenMax.to(colours[i], time, { r : 0, g : 0, b : 0}), 0);
+    };
+
+    timeline.play();
+
   }
 
   render()
@@ -167,6 +189,8 @@ class SceneHome
     this.noisePass.uniforms['amount'].value = this.p.noiseAmount;
     this.noisePass.uniforms['speed'].value = this.p.noiseSpeed;
     this.noisePass.uniforms['time'].value = this.clock.getElapsedTime();
+
+    if(this.updateColor) this.mesh.material.needsUpdate = true;
 
     this.mesh.geometry.verticesNeedUpdate = true;
 

@@ -36,8 +36,10 @@ class LandingPage {
 
   showArtist()
   {
-    this.state = 1;
     this.sceneGallery.showArtist();
+    this.sceneHome.transitionGallery( ()=> {
+      this.state = 1;
+    });
   }
 
   createRender()
