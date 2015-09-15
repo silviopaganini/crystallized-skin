@@ -1,6 +1,6 @@
 import Tabletop     from "tabletop";
 import css          from 'dom-css';
-import LandingPage  from './view/Landing';
+import LandingPage  from './view/LandingPage';
 import UI           from './view/UI';
 import VideoOverlay from './view/VideoOverlay';
 
