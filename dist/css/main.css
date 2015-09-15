@@ -71,11 +71,6 @@ header button:hover
     color: #6b6b6b;
 }
 
-section
-{
-    pointer-events: none;
-}
-
 section.about
 {
     padding: 2% 10%;
@@ -108,6 +103,7 @@ section.gallery
     width: 100%;
     height: 100%;
     color: #6b6b6b;
+    pointer-events: none;
 }
 
 section.gallery h2
