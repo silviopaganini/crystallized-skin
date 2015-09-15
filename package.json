@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "babelify": "^6.3.0",
+    "browserify": "^11.1.0",
     "budo": "^4.1.0",
     "dat-gui": "^0.5.0",
     "dom-css": "^1.1.2",
@@ -27,6 +28,7 @@
     "tabletop": "^1.4.2",
     "three": "^0.71.0",
     "three-orbit-controls": "^69.0.4",
+    "uglifyjs": "^2.4.10",
     "underscore": "^1.8.3",
     "watchify": "^3.2.3"
   },
