@@ -1,6 +1,7 @@
 import _        from 'underscore';
 import TweenMax from 'gsap';
 import eve      from 'dom-events';
+import css      from 'dom-css';
 
 class UI  {
   constructor(copy) 
@@ -15,9 +16,11 @@ class UI  {
     
     this.button        = document.querySelector('button');
     this.copyContainer = document.querySelector('.about-copy');
-
-    this.pieceName = document.querySelector('p.piece-name');
-    this.pieceLink = document.querySelector('p.piece-link a');
+    
+    this.pieceName     = document.querySelector('p.piece-name');
+    this.pieceLink     = document.querySelector('p.piece-link a');
+    
+    this.header        = document.querySelector('header');
 
     this.initObjectsToAnimate();
 
@@ -65,6 +68,10 @@ class UI  {
   animateOutLanding(callback)
   {
     var timeline = new TimelineMax({autoStart: false, onComplete: callback.bind(this)})
+
+    css(this.header, {
+      'pointer-events' : 'none'
+    });
     
     for (var i = 0; i < this.landingEls.length; i++) {
       timeline.add( TweenMax.to( this.landingEls[i], .4, { y: 10, autoAlpha: 0, ease: Power2.easeOut }), i * .1);
