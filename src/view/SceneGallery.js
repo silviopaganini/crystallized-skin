@@ -1,7 +1,7 @@
-import THREE from 'three'; 
-// import OC    from 'three-orbit-controls';
-import URL   from 'url';
-import eve   from 'dom-events';
+import THREE  from 'three'; 
+import URL    from 'url';
+import eve    from 'dom-events';
+import UtilsP from 'utils-perf';
 
 const collada = require('three-loaders-collada')(THREE);
 
@@ -97,7 +97,7 @@ class SceneGallery
     {
         // if(this.dae) this.scene.remove(this.dae);
 
-        let offset = this.direction == "right" ? 300 : -300;
+        let offset = this.direction == 1 ? 300 : -300;
 
         let tempDae = collada.scene;
         tempDae = tempDae;
@@ -125,7 +125,6 @@ class SceneGallery
             }
 
             this.dae = tempDae;
-            // this.camera.lookAt(this.dae.position);
             this.listen('on');
         }})
 
@@ -144,7 +143,7 @@ class SceneGallery
     getURL(url)
     {
         let parsed = URL.parse(url, true);
-        return "https://googledrive.com/host/" + parsed.query.id;
+        return "https://googledrive.com/host/" + parsed.query.id + "?r=" + UtilsP.rrandom(9999);
     }
 
     createParticleBackground()

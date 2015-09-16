@@ -3,9 +3,6 @@ import TweenMax from 'gsap';
 import eve      from 'dom-events';
 import css      from 'dom-css';
 import Scroll   from 'scroll-js';
-import ee       from 'event-emitter';
-
-const emitter = ee({});
 
 class UI  {
   constructor(copy) 
@@ -51,8 +48,7 @@ class UI  {
   navArtist(e)
   {
     let dir = e.target.parentElement.dataset.side == "right" ? 1 : -1;
-    emitter.emit('updateArtist', dir);
-    this.showArtist(e.target.parentElement.dataset.side);
+    window.__C.emitter.emit('updateArtist', dir);
   }
 
   setCopy()

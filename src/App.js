@@ -5,8 +5,6 @@ import LandingPage  from './view/LandingPage';
 import UI           from './view/UI';
 import VideoOverlay from './view/VideoOverlay';
 
-const emitter = ee({});
-
 class App {
   constructor(data) {
     
@@ -19,13 +17,14 @@ class App {
 
   init(data, tabletop)
   {
+    this.emitter       = ee({});
     this.artists       = data['artists'].elements;
     this.currentArtist = 0;
     this.ui            = new UI(data['general-copy'].elements);
     this.landing       = new LandingPage();
     this.video         = new VideoOverlay();
 
-    emitter.on('updateArtist', this.updateCurrentArtist.bind(this));
+    this.emitter.on('updateArtist', this.updateCurrentArtist.bind(this));
 
     window.onresize = this.landing.onResize.bind(this.landing);
 
@@ -45,6 +44,8 @@ class App {
     {
       this.currentArtist = 0;
     }
+
+    this.ui.showArtist(dir);
   }
 }
 
