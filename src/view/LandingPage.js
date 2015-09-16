@@ -8,15 +8,19 @@ import SceneGallery from './SceneGallery';
 class LandingPage {
   constructor() 
   {
-    this.startStats();
+    this.first = true;
 
     this.renderer = null;
     this.container = document.getElementById('container-canvas');
 
+    this.state = 0; // shows homepage : 1 shows gallery element
+  }
+
+  init()
+  {
+    this.startStats();
     this.createRender();
     this.createScenes();
-
-    this.state = 0; // shows homepage : 1 shows gallery element
 
     this.onResize();
     this.update();
@@ -28,7 +32,8 @@ class LandingPage {
     css(this.stats.domElement, {
         position: 'absolute',
         top: 0,
-        left: 0
+        left: 0,
+        display: 'none'
     });
 
     document.body.appendChild(this.stats.domElement);
@@ -76,6 +81,13 @@ class LandingPage {
     }
 
     this.stats.end()
+
+    if(this.first)
+    {
+      this.first = false;
+      window.__C.emitter.emit('ready');
+    }
+
     requestAnimationFrame(this.update.bind(this));
   }
 

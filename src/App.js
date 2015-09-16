@@ -1,5 +1,4 @@
 import Tabletop     from "tabletop";
-import css          from 'dom-css';
 import ee           from 'event-emitter';
 import LandingPage  from './view/LandingPage';
 import UI           from './view/UI';
@@ -11,15 +10,15 @@ class App {
     
     Tabletop.init({
         key: "1iYhvt8m8VNK4TMv6UAHt1IjG0DFksGw0GkpDhAke_FI",
-        callback: this.init.bind(this)
+        callback: (data, tabletop)=>{
+          TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [data, tabletop]});
+        } 
     });
 
   }
 
   init(data, tabletop)
   {
-    TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0});
-    
     this.emitter       = ee({});
     this.artists       = data['artists'].elements;
     this.currentArtist = 0;
@@ -28,12 +27,12 @@ class App {
     this.video         = new VideoOverlay();
 
     this.emitter.on('updateArtist', this.updateCurrentArtist.bind(this));
-
-    window.onresize = this.landing.onResize.bind(this.landing);
-
-    css(document.querySelector('main'), {
-        display: 'block'
+    this.emitter.on('ready', () => {
+      window.onresize = this.landing.onResize.bind(this.landing);
+      TweenMax.to(document.querySelector('main'), 1, {autoAlpha: 1});
     });
+
+    this.landing.init();
   }
 
   updateCurrentArtist(dir)

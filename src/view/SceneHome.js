@@ -21,7 +21,7 @@ class SceneHome
     this.renderer = renderer;
     this.clock    = clock;
 
-    this.startGUI();
+    this.startGUI(false);
     this.createScene();
     this.addObjects();
   }
@@ -119,7 +119,7 @@ class SceneHome
       })
   }
 
-  startGUI()
+  startGUI(showGUI)
   {
 
     var Params = function(){
@@ -135,6 +135,8 @@ class SceneHome
     }
 
     this.p = new Params();
+
+    if(!showGUI) return;
 
     var gui = new dat.GUI()
     gui.add(this.p, 'nodes', 100, 200).onChange(this.generatePlane.bind(this));
