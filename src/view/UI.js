@@ -18,7 +18,9 @@ class UI  {
     this.button          = document.querySelector('button');
     this.copyContainer   = document.querySelector('.about-copy');
     
+    this.containerPiece  = document.querySelector('section.gallery > div.container');
     this.pieceName       = document.querySelector('p.piece-name');
+    this.pieceLinkCont   = document.querySelector('p.piece-link');
     this.pieceLink       = document.querySelector('p.piece-link a');
     
     this.header          = document.querySelector('header');
@@ -55,6 +57,8 @@ class UI  {
   {
     eve.on(this.button, 'click', this.showArtist.bind(this));
 
+    eve.on(this.h2Gallery, 'click', this.animateOutGallery.bind(this));
+
     eve.on(this.navLeft, 'click', this.navArtist.bind(this), true);
     eve.on(this.navRight, 'click', this.navArtist.bind(this), true);
 
@@ -66,6 +70,7 @@ class UI  {
 
   navArtist(e)
   {
+    window.APP.ui.showLoading(true, true);
     let dir = e.target.parentElement.dataset.side == "right" ? 1 : -1;
     window.APP.emitter.emit('updateArtist', dir);
   }
@@ -89,31 +94,46 @@ class UI  {
 
   showArtist(direction)
   {
-    this.button.dataset.disabled = "true";
-
     this.scroller.to(0,0, {easing: 'easeInOutCubic', duration: 700}).then( () => {
-      this.animateOutLanding( () => {
+      this.animateLanding( true,  () => {
 
-        this.animateInGallery();
+        for (var i = 0; i < this.galleryEls.length; i++) {
+          TweenMax.to(this.galleryEls[i], .5, {y: 0, autoAlpha: 1});
+        };
+
         window.APP.landing.showArtist(direction);
-
-        let data = window.APP.artists[window.APP.currentArtist];
-        this.h2Gallery.innerHTML = data.artist_name;
-        this.pieceName.innerHTML = data.piece_name;
-        this.pieceLink.href = data.video_url;  
-
       });
     });
   }
 
-  animateOutLanding(callback)
+  changeCopyArtist()
   {
-    var timeline = new TimelineMax({paused: true, onComplete: callback.bind(this)})
+    TweenMax.to(this.containerPiece, 0, {autoAlpha: 1});
 
-    css(this.header, { 'pointer-events' : 'none' });
-    
+    let data = window.APP.artists[window.APP.currentArtist];
+    this.changeCopyArtistField(this.h2Gallery, data.artist_name, 0);
+    this.changeCopyArtistField(this.pieceName, data.piece_name, .2);
+    this.changeCopyArtistField(this.pieceLinkCont, null, .4);
+    this.pieceLink.href = data.video_url;  
+  }
+
+  changeCopyArtistField(field, data, delay)
+  {
+    TweenMax.to(field, .4, {delay: delay, autoAlpha: 0, y: 15, onComplete: () =>{
+      if(data) field.innerHTML = data;
+      TweenMax.to(field, 0, {y: -15});
+      TweenMax.to(field, .4, {autoAlpha: 1, y: 0});
+    }})
+  }
+
+  animateLanding(out, callback)
+  {
+    var timeline = new TimelineMax({paused: true, onComplete: callback ? callback.bind(this): null})
+
+    this.button.dataset.disabled = out ? "true" : 'false';
+
     for (var i = 0; i < this.landingEls.length; i++) {
-      timeline.add( TweenMax.to( this.landingEls[i], .4, { y: 10, autoAlpha: 0, ease: Power2.easeOut }), i * .1);
+      timeline.add( TweenMax.to( this.landingEls[i], .4, { y: out ? 15 : 0, autoAlpha: out ? 0 : 1, ease: Power2.easeOut }), i * .1);
     };
 
     timeline.play();
@@ -125,17 +145,27 @@ class UI  {
     this.galleryEls = document.querySelectorAll('section.gallery > *[data-animation]');
 
     for (var i = 0; i < this.galleryEls.length; i++) {
-      TweenMax.to(this.galleryEls[i], 0, {y: -20, autoAlpha: 0});
+      TweenMax.to(this.galleryEls[i], 0, {y: -15, autoAlpha: 0});
     };
+
+    TweenMax.to(this.pieceName, 0, {y: -15, autoAlpha: 0});
+    TweenMax.to(this.pieceLinkCont, 0, {y: -15, autoAlpha: 0});
 
     this.landingEls = document.querySelectorAll('header > div.container > *[data-animation]');
   }
 
-  animateInGallery()
+  animateOutGallery()
   {
     for (var i = 0; i < this.galleryEls.length; i++) {
-      TweenMax.to(this.galleryEls[i], 0.4, {delay: i * .1, y: 0, autoAlpha: 1});
+      TweenMax.to(this.galleryEls[i], .4, {y: 15, autoAlpha: 0});
     };
+
+    TweenMax.to(this.pieceName, .4, {y: 15, autoAlpha: 0});
+    TweenMax.to(this.pieceLinkCont, .4, {y: 15, autoAlpha: 0});
+
+    this.animateLanding(false);
+
+    window.APP.landing.showLanding();
   }
 }
 

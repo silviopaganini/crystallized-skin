@@ -42,8 +42,16 @@ class LandingPage {
   showArtist(direction)
   {
     this.sceneGallery.showArtist(direction);
-    this.sceneHome.transitionGallery( ()=> {
+    this.sceneHome.transitionGallery( true,  ()=> {
       this.state = 1;
+    });
+  }
+
+  showLanding()
+  {
+    this.state = 0;
+    this.sceneHome.transitionGallery( false, () => {
+      window.APP.ui.animateLanding(false);
     });
   }
 
@@ -52,8 +60,10 @@ class LandingPage {
     this.renderer = new THREE.WebGLRenderer( {
         antialias : true,
         clearColor: 0,
+        alpha: false,
         gammaInput : true,
-        gammeOutput : true
+        gammeOutput : true,
+        devicePixelRatio : window.devicePixelRatio
     } );
 
     // this.renderer.setClearColor(0xFFFFFF, 1);

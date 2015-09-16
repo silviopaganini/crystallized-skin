@@ -3,11 +3,14 @@ body
     font-family: Cambria, Georgia, serif;
 }
 
+::-moz-selection { background: #ccc; }
+::selection { background: #ccc; }
+
 *:focus {
     outline: 0;
 }
 
-*[data-disabled]
+*[data-disabled=true]
 {
     pointer-events: none;
 }
@@ -60,6 +63,11 @@ h3
     font-weight: 100;
 }
 
+header
+{
+  pointer-events: none;
+}
+
 header button
 {
     padding: 15px 20px;
@@ -80,7 +88,7 @@ header button:hover
     color: #6b6b6b;
 }
 
-header button[data-disabled]
+header button[data-disabled=true]
 {
     background-color: #6b6b6b;
     color: white;
@@ -161,6 +169,8 @@ section.gallery
 section.gallery h2
 {
     text-decoration: underline;
+    cursor: pointer;
+    pointer-events: visible;
 }
 
 section.gallery div.container
@@ -169,6 +179,8 @@ section.gallery div.container
     pointer-events: visible;
     width: 100%;
     bottom: 0;
+    visibility: hidden;
+    opacity: 0;
     text-align: center;
 }
 
@@ -198,7 +210,7 @@ section.video-page iframe
 section.video-page button
 {
     position: fixed;
-    top: 20px;
+    top: 0px;
     right: 20px;
     color: white;
     background-color: transparent;

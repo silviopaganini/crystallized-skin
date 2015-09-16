@@ -167,19 +167,29 @@ class SceneHome
       this.mesh.material.needsUpdate = true;
   }
 
-  transitionGallery(callback)
+  transitionGallery(out, callback)
   {
     this.updateColor = true;
     var time = 1;
     var timeline = new TimelineMax({paused: true, onComplete: () => {
         this.updateColor = false;
-        callback();
+        if(callback) callback();
     }});
 
-    var colours = [this.mesh.material.color, this.mesh.material.specular, this.mesh.material.emissive];
+    var a = new THREE.Color(this.p.meshColor);
+
+    var colours = [
+      {obj : this.mesh.material.color, cl: new THREE.Color(this.p.meshColor), bl: {r: 0, g: 0, b: 0}}, 
+      {obj: this.mesh.material.specular, cl: new THREE.Color(this.p.meshSpecular), bl: {r: 0, g: 0, b: 0}}, 
+      {obj: this.mesh.material.emissive, cl: new THREE.Color(this.p.meshEmissive), bl: {r: 0, g: 0, b: 0}}
+    ];
 
     for (var i = 0; i < colours.length; i++) {
-        timeline.add( TweenMax.to(colours[i], time, { r : 0, g : 0, b : 0}), 0);
+        timeline.add( TweenMax.to(colours[i].obj, time, { 
+          r : out ? colours[i].bl.r : colours[i].cl.r, 
+          g : out ? colours[i].bl.g : colours[i].cl.g, 
+          b : out ? colours[i].bl.b : colours[i].cl.b
+        }), 0);
     };
 
     timeline.play();

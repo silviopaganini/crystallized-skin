@@ -86,8 +86,6 @@ class SceneGallery
 
     showArtist(direction)
     {
-        window.APP.ui.showLoading(true, true);
-
         this.direction = direction;
         let data = window.APP.artists[window.APP.currentArtist];
         let url = this.getURL(data.model);
@@ -121,11 +119,10 @@ class SceneGallery
         this.scene.add(tempDae);
 
         var timeline = new TimelineMax({paused: true, onComplete: ()=>{
-            if(this.dae)
-            {
-                this.scene.remove(this.dae);
-            }
 
+            window.APP.ui.changeCopyArtist();
+
+            if(this.dae) this.scene.remove(this.dae);
             this.dae = tempDae;
             this.listen('on');
             window.APP.ui.showLoading(false, true);
@@ -133,10 +130,10 @@ class SceneGallery
 
         if(this.dae)
         {
-            timeline.add( TweenMax.to(this.dae.position, 2, {ease: Power2.easeInOut, x: -offset}) , 0);
+            timeline.add( TweenMax.to(this.dae.position, 1.8, {ease: Quart.easeInOut, x: -offset}) , 0);
         }
 
-        timeline.add( TweenMax.to(tempDae.position, 2, {ease: Power2.easeInOut, x: 0}), 0);
+        timeline.add( TweenMax.to(tempDae.position, 1.8, {ease: Quart.easeInOut, x: 0}), 0);
 
         timeline.play()
 
