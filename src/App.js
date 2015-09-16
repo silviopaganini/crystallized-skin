@@ -4,6 +4,7 @@ import ee           from 'event-emitter';
 import LandingPage  from './view/LandingPage';
 import UI           from './view/UI';
 import VideoOverlay from './view/VideoOverlay';
+import TweenMax     from 'gsap';
 
 class App {
   constructor(data) {
@@ -17,6 +18,8 @@ class App {
 
   init(data, tabletop)
   {
+    TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0});
+    
     this.emitter       = ee({});
     this.artists       = data['artists'].elements;
     this.currentArtist = 0;
