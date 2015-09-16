@@ -86,8 +86,10 @@ class SceneGallery
 
     showArtist(direction)
     {
+        window.APP.ui.showLoading(true, true);
+
         this.direction = direction;
-        let data = window.__C.artists[window.__C.currentArtist];
+        let data = window.APP.artists[window.APP.currentArtist];
         let url = this.getURL(data.model);
         this.listen('off');
         this.loader.load(url, this.onLoaded.bind(this));
@@ -126,6 +128,7 @@ class SceneGallery
 
             this.dae = tempDae;
             this.listen('on');
+            window.APP.ui.showLoading(false, true);
         }})
 
         if(this.dae)

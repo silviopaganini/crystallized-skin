@@ -85,7 +85,7 @@ class LandingPage {
     if(this.first)
     {
       this.first = false;
-      window.__C.emitter.emit('ready');
+      window.APP.emitter.emit('ready');
     }
 
     requestAnimationFrame(this.update.bind(this));

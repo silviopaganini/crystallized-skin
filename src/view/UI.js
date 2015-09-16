@@ -7,29 +7,48 @@ import Scroll   from 'scroll-js';
 class UI  {
   constructor(copy) 
   {
-    this.copy          = copy;
-    this.h1            = document.querySelector('h1');
+    this.copy            = copy;
+    this.h1              = document.querySelector('h1');
     
-    this.h2About       = document.querySelector('h2[data-title="about"]');
-    this.h2Gallery     = document.querySelector('h2[data-title="gallery"]');
+    this.h2About         = document.querySelector('h2[data-title="about"]');
+    this.h2Gallery       = document.querySelector('h2[data-title="gallery"]');
     
-    this.h3            = document.querySelector('h3');
+    this.h3              = document.querySelector('h3');
     
-    this.button        = document.querySelector('button');
-    this.copyContainer = document.querySelector('.about-copy');
+    this.button          = document.querySelector('button');
+    this.copyContainer   = document.querySelector('.about-copy');
     
-    this.pieceName     = document.querySelector('p.piece-name');
-    this.pieceLink     = document.querySelector('p.piece-link a');
+    this.pieceName       = document.querySelector('p.piece-name');
+    this.pieceLink       = document.querySelector('p.piece-link a');
     
-    this.header        = document.querySelector('header');
-
-    this.navLeft  = document.querySelector("nav a[data-side='left']");
-    this.navRight = document.querySelector("nav a[data-side='right']");
+    this.header          = document.querySelector('header');
+    
+    this.navLeft         = document.querySelector("nav a[data-side='left']");
+    this.navRight        = document.querySelector("nav a[data-side='right']");
+    
+    this.spinner         = document.querySelector('.preloader');
+    this.spinnerChildren = document.querySelectorAll('.sk-cube');
 
     this.initObjectsToAnimate();
 
     this.setCopy();
     this.listen();
+  }
+
+  showLoading(show, white)
+  {
+    if(white)
+    {
+      for (var i = 0; i < this.spinnerChildren.length; i++) {
+        this.spinnerChildren[i].classList.remove('white-preloader');
+        this.spinnerChildren[i].classList.add('white-preloader');
+      };
+    } else {
+      for (var i = 0; i < this.spinnerChildren.length; i++) {
+        this.spinnerChildren[i].classList.remove('white-preloader');
+      };
+    }
+    TweenMax.to(this.spinner, .4, {autoAlpha: show | 0});
   }
 
   listen()
@@ -41,14 +60,14 @@ class UI  {
 
     eve.on(this.pieceLink, 'click', (e) => {
       e.preventDefault();
-      window.__C.video.addVideo(this.pieceLink.href)
+      window.APP.video.addVideo(this.pieceLink.href)
     });
   }
 
   navArtist(e)
   {
     let dir = e.target.parentElement.dataset.side == "right" ? 1 : -1;
-    window.__C.emitter.emit('updateArtist', dir);
+    window.APP.emitter.emit('updateArtist', dir);
   }
 
   setCopy()
@@ -76,9 +95,9 @@ class UI  {
       this.animateOutLanding( () => {
 
         this.animateInGallery();
-        window.__C.landing.showArtist(direction);
+        window.APP.landing.showArtist(direction);
 
-        let data = window.__C.artists[window.__C.currentArtist];
+        let data = window.APP.artists[window.APP.currentArtist];
         this.h2Gallery.innerHTML = data.artist_name;
         this.pieceName.innerHTML = data.piece_name;
         this.pieceLink.href = data.video_url;  
