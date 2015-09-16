@@ -33,7 +33,6 @@ header
     height: 100vh;
     text-align: center;
     display: table;
-    /*pointer-events: none;*/
 }
 
 header .container
@@ -87,6 +86,41 @@ header button[data-disabled]
     color: white;
 }
 
+header div.arrow-bottom
+{
+    position: absolute;
+    z-index: 100;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    -webkit-animation: arrow-bottom 1.3s infinite ease-in-out;
+          animation: arrow-bottom 1.3s infinite ease-in-out; 
+}
+
+@-webkit-keyframes arrow-bottom {
+  0%, 100% {
+    bottom: 10px;
+  } 50% {
+    bottom: 20px;
+  }
+}
+
+@keyframes arrow-bottom {
+  0%, 100% {
+    bottom: 10px;
+  } 50% {
+    bottom: 20px;
+  }
+}
+
+header div.arrow-bottom img
+{
+    width: 25px;
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
+
 section.about
 {
     padding: 2% 10%;
@@ -104,6 +138,8 @@ section div.about-copy
     column-count: 2;
 
     color: #73746b;
+
+    padding-bottom: 5%;
 }
 
 section div.about-copy p:first-child
@@ -172,7 +208,7 @@ section.video-page button
 
 nav
 {
-    position: fixed;
+    position: absolute;
     height: 100%;
     width: 100%;
     top: 0;
