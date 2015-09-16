@@ -3,6 +3,9 @@ import TweenMax from 'gsap';
 import eve      from 'dom-events';
 import css      from 'dom-css';
 import Scroll   from 'scroll-js';
+import ee       from 'event-emitter';
+
+const emitter = ee({});
 
 class UI  {
   constructor(copy) 
@@ -23,6 +26,9 @@ class UI  {
     
     this.header        = document.querySelector('header');
 
+    this.navLeft  = document.querySelector("nav a[data-side='left']");
+    this.navRight = document.querySelector("nav a[data-side='right']");
+
     this.initObjectsToAnimate();
 
     this.setCopy();
@@ -32,10 +38,21 @@ class UI  {
   listen()
   {
     eve.on(this.button, 'click', this.showArtist.bind(this));
+
+    eve.on(this.navLeft, 'click', this.navArtist.bind(this), true);
+    eve.on(this.navRight, 'click', this.navArtist.bind(this), true);
+
     eve.on(this.pieceLink, 'click', (e) => {
       e.preventDefault();
       window.__C.video.addVideo(this.pieceLink.href)
     });
+  }
+
+  navArtist(e)
+  {
+    let dir = e.target.parentElement.dataset.side == "right" ? 1 : -1;
+    emitter.emit('updateArtist', dir);
+    this.showArtist(e.target.parentElement.dataset.side);
   }
 
   setCopy()
@@ -55,7 +72,7 @@ class UI  {
     el.innerHTML = _.findWhere(this.copy, {label : key}).copy
   }
 
-  showArtist()
+  showArtist(direction)
   {
     this.button.dataset.disabled = "true";
 
@@ -63,7 +80,7 @@ class UI  {
       this.animateOutLanding( () => {
 
         this.animateInGallery();
-        window.__C.landing.showArtist();
+        window.__C.landing.showArtist(direction);
 
         let data = window.__C.artists[window.__C.currentArtist];
         this.h2Gallery.innerHTML = data.artist_name;

@@ -1,8 +1,11 @@
 import Tabletop     from "tabletop";
 import css          from 'dom-css';
+import ee           from 'event-emitter';
 import LandingPage  from './view/LandingPage';
 import UI           from './view/UI';
 import VideoOverlay from './view/VideoOverlay';
+
+const emitter = ee({});
 
 class App {
   constructor(data) {
@@ -22,11 +25,26 @@ class App {
     this.landing       = new LandingPage();
     this.video         = new VideoOverlay();
 
+    emitter.on('updateArtist', this.updateCurrentArtist.bind(this));
+
     window.onresize = this.landing.onResize.bind(this.landing);
 
     css(document.querySelector('main'), {
         display: 'block'
     });
+  }
+
+  updateCurrentArtist(dir)
+  {
+    this.currentArtist += dir;
+
+    if(this.currentArtist < 0)
+    {
+      this.currentArtist == this.artists.length - 1;
+    } else if(this.currentArtist > this.artists.length - 1)
+    {
+      this.currentArtist = 0;
+    }
   }
 }
 

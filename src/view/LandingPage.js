@@ -34,9 +34,9 @@ class LandingPage {
     document.body.appendChild(this.stats.domElement);
   }
 
-  showArtist()
+  showArtist(direction)
   {
-    this.sceneGallery.showArtist();
+    this.sceneGallery.showArtist(direction);
     this.sceneHome.transitionGallery( ()=> {
       this.state = 1;
     });
