@@ -8,6 +8,8 @@ import noise    from 'perlin-noise';
 import TweenMax from 'gsap';
 import dat      from 'dat-gui' ;
 
+import URL    from 'url';
+
 const EffectComposer = EC(THREE);
 const NoiseShader = NS(THREE);
 const RenderPass = RP(THREE);
@@ -21,7 +23,7 @@ class SceneHome
     this.renderer = renderer;
     this.clock    = clock;
 
-    this.startGUI(false);
+    this.startGUI( parseInt(URL.parse(window.location.href, true).query.d) );
     this.createScene();
     this.addObjects();
   }
@@ -74,8 +76,8 @@ class SceneHome
       this.light.position.set( 0, 0, 100 );
       this.scene.add(this.light);
 
-      this.nodes = window.innerWidth / this.p.nodes >> 0;
-      this.geo  = new THREE.PlaneGeometry(500, 500, this.nodes, this.nodes);
+      this.nodes = this.p.nodes >> 0;
+      this.geo  = new THREE.PlaneGeometry(window.innerWidth / 2, window.innerWidth / 2, this.nodes, this.nodes);
       this.geo.originalVertices = this.geo.vertices.slice();
       this.mesh = new THREE.Mesh(this.geo, new THREE.MeshPhongMaterial({
           color     : new THREE.Color(this.p.meshColor),
@@ -121,9 +123,8 @@ class SceneHome
 
   startGUI(showGUI)
   {
-
     var Params = function(){
-        this.nodes = 150;
+        this.nodes = 20;
         this.power = 100;
         this.lightColor = '#d7e3ff';
         this.meshColor = '#ebf1ff';
@@ -136,10 +137,10 @@ class SceneHome
 
     this.p = new Params();
 
-    if(!showGUI) return;
+    if(showGUI == 0 || isNaN(showGUI)) return;
 
     var gui = new dat.GUI()
-    gui.add(this.p, 'nodes', 100, 200).onChange(this.generatePlane.bind(this));
+    gui.add(this.p, 'nodes', 1, 25).onChange(this.generatePlane.bind(this));
     gui.add(this.p, 'power', 0, 200).onChange(this.generatePlane.bind(this));
 
     var folderColors = gui.addFolder('Colours');

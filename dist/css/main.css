@@ -1,6 +1,7 @@
 body
 {
     font-family: Cambria, Georgia, serif;
+    overflow-x: hidden;
 }
 
 ::-moz-selection { background: #ccc; }
@@ -53,7 +54,6 @@ h2
 {
     text-align: center;
     font-size: 1.2em;
-    padding: 3% 0;
 }
 
 h3
@@ -96,6 +96,7 @@ header button[data-disabled=true]
 
 header div.arrow-bottom
 {
+    pointer-events:visible;
     position: absolute;
     z-index: 100;
     bottom: 10px;
@@ -104,6 +105,11 @@ header div.arrow-bottom
     text-align: center;
     -webkit-animation: arrow-bottom 1.3s infinite ease-in-out;
           animation: arrow-bottom 1.3s infinite ease-in-out; 
+}
+
+header div.arrow-bottom img
+{
+    cursor: pointer;
 }
 
 @-webkit-keyframes arrow-bottom {
@@ -131,11 +137,21 @@ header div.arrow-bottom img
 
 section.about
 {
-    padding: 2% 10%;
     line-height: 1.8em;
+    height: 100vh;
+    display: table;
+    margin: 0 auto;
 }
 
-section div.about-copy
+section.about div.container
+{
+  vertical-align: middle;
+  display: table-cell;
+  max-width: 950px;
+  padding: 0 5%;
+}
+
+section.about div.container div.about-copy
 {
     -webkit-column-gap: 60px; /* Chrome, Safari, Opera */
     -moz-column-gap: 60px; /* Firefox */
@@ -145,9 +161,8 @@ section div.about-copy
     -moz-column-count: 2; /* Firefox */
     column-count: 2;
 
+    margin-top: 4em;
     color: #73746b;
-
-    padding-bottom: 5%;
 }
 
 section div.about-copy p:first-child

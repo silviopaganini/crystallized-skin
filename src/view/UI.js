@@ -7,11 +7,16 @@ import Scroll   from 'scroll-js';
 class UI  {
   constructor(copy) 
   {
+    this.scroller = new Scroll( {el: document.body} );
+
     this.copy            = copy;
     this.h1              = document.querySelector('h1');
     
     this.h2About         = document.querySelector('h2[data-title="about"]');
     this.h2Gallery       = document.querySelector('h2[data-title="gallery"]');
+
+    this.arrowBottom     = document.querySelector('.arrow-bottom > img');
+    console.log(this.arrowBottom)
     
     this.h3              = document.querySelector('h3');
     
@@ -59,12 +64,23 @@ class UI  {
 
     eve.on(this.h2Gallery, 'click', this.animateOutGallery.bind(this));
 
+    eve.on(this.arrowBottom, 'click', this.scrollAbout.bind(this));
+    eve.on(window, 'keydown', this.scrollAbout.bind(this));
+
     eve.on(this.navLeft, 'click', this.navArtist.bind(this), true);
     eve.on(this.navRight, 'click', this.navArtist.bind(this), true);
 
     eve.on(this.pieceLink, 'click', (e) => {
       e.preventDefault();
       window.APP.video.addVideo(this.pieceLink.href)
+    });
+  }
+
+  scrollAbout(e)
+  {
+    e.preventDefault();
+    this.scroller.to( 0, e.type == 'click' || e.which == 40 ? window.innerHeight : 0, {
+      easing: 'easeInOutCubic', duration: 800
     });
   }
 
@@ -94,6 +110,10 @@ class UI  {
 
   showArtist(direction)
   {
+
+    eve.off(this.arrowBottom, 'click', this.scrollAbout.bind(this));
+    eve.off(window, 'keydown', this.scrollAbout.bind(this));
+
     this.scroller.to(0,0, {easing: 'easeInOutCubic', duration: 700}).then( () => {
       this.animateLanding( true,  () => {
 
@@ -141,7 +161,6 @@ class UI  {
 
   initObjectsToAnimate()
   {
-    this.scroller = new Scroll( {el: document.body} );
     this.galleryEls = document.querySelectorAll('section.gallery > *[data-animation]');
 
     for (var i = 0; i < this.galleryEls.length; i++) {
@@ -156,6 +175,10 @@ class UI  {
 
   animateOutGallery()
   {
+    
+    eve.on(this.arrowBottom, 'click', this.scrollAbout.bind(this));
+    eve.on(window, 'keydown', this.scrollAbout.bind(this));
+
     for (var i = 0; i < this.galleryEls.length; i++) {
       TweenMax.to(this.galleryEls[i], .4, {y: 15, autoAlpha: 0});
     };
