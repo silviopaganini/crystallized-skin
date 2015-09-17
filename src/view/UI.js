@@ -15,9 +15,10 @@ class UI  {
     this.h2About         = document.querySelector('h2[data-title="about"]');
     this.h2Gallery       = document.querySelector('h2[data-title="gallery"]');
     
-    this.arrowBottom     = document.querySelector('.arrow-bottom > img');
-    
     this.h3              = document.querySelector('h3');
+
+    this.sectionAbout    = document.querySelector('section.about');
+    this.sectionVideo    = document.querySelector('section.video');
     
     this.button          = document.querySelector('button');
     this.copyContainer   = document.querySelector('.about-copy');
@@ -25,12 +26,14 @@ class UI  {
     this.containerPiece  = document.querySelector('section.gallery > div.container');
     this.pieceName       = document.querySelector('p.piece-name');
     this.pieceLinkCont   = document.querySelector('p.piece-link');
-    this.pieceLink       = document.querySelector('p.piece-link a');
+    this.pieceLink       = document.querySelector('p.piece-link span');
     
     this.header          = document.querySelector('header');
     
     this.navLeft         = document.querySelector("nav a[data-side='left']");
     this.navRight        = document.querySelector("nav a[data-side='right']");
+    this.arrowBottom     = document.querySelector('.arrow-bottom > img');
+    this.arrowUp         = document.querySelector(".arrow-up > img");
     
     this.spinner         = document.querySelector('.preloader');
     this.spinnerChildren = document.querySelectorAll('.sk-cube');
@@ -57,14 +60,21 @@ class UI  {
     TweenMax.to(this.spinner, .4, {autoAlpha: show | 0});
   }
 
-  showAbout()
+  showAboveTheFold()
   {
     this.scroll.scrollTo(window.innerHeight);
   }
 
   backHome()
   {
-    this.animateOutGallery(this.showAbout.bind(this));
+    window.APP.video.stop();
+    this.animateOutGallery(this.showAboveTheFold.bind(this));
+  }
+
+  scrollUp()
+  {
+    window.APP.video.stop();
+    this.scroll.scrollTo(0);
   }
 
   listen()
@@ -72,17 +82,16 @@ class UI  {
     eve.on(this.button, 'click', this.showArtist.bind(this));
 
     eve.on(this.h2Gallery, 'click', this.backHome.bind(this));
-    eve.on(this.arrowBottom, 'click', this.showAbout.bind(this));
+
+    eve.on(this.arrowBottom, 'click', this.showAboveTheFold.bind(this));
+    eve.on(this.arrowUp, 'click', this.scrollUp.bind(this));
+    
+    eve.on(this.pieceLink, 'click', this.showAboveTheFold.bind(this));
 
     eve.on(this.navLeft, 'click', this.navArtist.bind(this), true);
     eve.on(this.navRight, 'click', this.navArtist.bind(this), true);
 
     this.scroll.emitter.on('changeArtist', this.navArtist.bind(this));
-
-    eve.on(this.pieceLink, 'click', (e) => {
-      e.preventDefault();
-      window.APP.video.addVideo(this.pieceLink.href)
-    });
   }
 
   navArtist(e)
@@ -121,6 +130,9 @@ class UI  {
     this.scroll.scrollTo(0, () => {
       this.animateLanding( true,  () => {
 
+        css(this.sectionAbout, {display: 'none'});
+        css(this.sectionVideo, {display: 'block'});
+
         for (var i = 0; i < this.galleryEls.length; i++) {
           TweenMax.to(this.galleryEls[i], .5, {y: 0, autoAlpha: 1});
         };
@@ -135,9 +147,9 @@ class UI  {
     TweenMax.to(this.containerPiece, 0, {autoAlpha: 1});
 
     let data = window.APP.artists[window.APP.currentArtist];
-    this.changeCopyArtistField(this.pieceName, data.artist_name + " - " + data.piece_name, 0);
+    this.changeCopyArtistField(this.pieceName, data.artist_name + " - " + data.piece_name + " - " + data.year, 0);
     this.changeCopyArtistField(this.pieceLinkCont, null, .2);
-    this.pieceLink.href = data.video_url;  
+    window.APP.video.addVideo(data.video_url);
   }
 
   changeCopyArtistField(field, data, delay)
@@ -153,6 +165,10 @@ class UI  {
   {
     var timeline = new TimelineMax({paused: true, onComplete: ()=> {
       out ? this.scroll.disableScroll() : this.scroll.enableScroll();
+
+      css(this.sectionAbout, {display: 'table'});
+      css(this.sectionVideo, {display: 'none'});
+
       if(callback) callback();
     }});
 

@@ -25,32 +25,29 @@ class ScrollManager
   {
     this.preventDefaultForScrollKeys(e);
 
-    if(window.APP.landing.state == 0)
+    switch(e.keyCode)
     {
-        switch(e.keyCode)
-        {
-            case 40:
-                this.scrollTo(window.innerHeight);
-                break;
-            case 38: 
-                this.scrollTo(0);
-                break;
-        }
+        case 40:
+            this.scrollTo(window.innerHeight);
+            break;
+        case 38: 
+            window.APP.video.stop();
+            this.scrollTo(0);
+            break;
     }
 
-    if(window.APP.landing.state == 1)
+    if(window.APP.landing.state == 0) return;
+
+    switch(e.keyCode)
     {
-        switch(e.keyCode)
-        {
-            case 39:
-                // right
-                this.emitter.emit('changeArtist', 'right');
-                break;
-            case 37:
-                // left 
-                this.emitter.emit('changeArtist', 'left');
-                break;
-        }
+        case 39:
+            // right
+            this.emitter.emit('changeArtist', 'right');
+            break;
+        case 37:
+            // left 
+            this.emitter.emit('changeArtist', 'left');
+            break;
     }
   }
 
@@ -116,6 +113,7 @@ class ScrollManager
       if(window.pageYOffset < (window.innerHeight / 3) * 2)
       {
         e.preventDefault();
+        window.APP.video.stop();
         this.scrollTo(0, null, true);
       }
 
