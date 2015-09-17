@@ -29,6 +29,7 @@ class App {
     this.emitter.on('updateArtist', this.updateCurrentArtist.bind(this));
     this.emitter.on('ready', () => {
       window.onresize = this.landing.onResize.bind(this.landing);
+      document.querySelector('main').style.display = 'block';
       TweenMax.to(document.querySelector('main'), 1, {autoAlpha: 1});
     });
 
