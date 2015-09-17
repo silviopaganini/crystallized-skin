@@ -186,6 +186,7 @@ section.gallery h2
     text-decoration: underline;
     cursor: pointer;
     pointer-events: visible;
+    margin-top: 5%;
 }
 
 section.gallery div.container

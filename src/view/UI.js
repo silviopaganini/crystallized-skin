@@ -2,21 +2,20 @@ import _        from 'underscore';
 import TweenMax from 'gsap';
 import eve      from 'dom-events';
 import css      from 'dom-css';
-import Scroll   from 'scroll-js';
+import Scroll   from '../utils/ScrollManager';
 
 class UI  {
   constructor(copy) 
   {
-    this.scroller = new Scroll( {el: document.body} );
+    this.scroll          = new Scroll();
 
     this.copy            = copy;
     this.h1              = document.querySelector('h1');
     
     this.h2About         = document.querySelector('h2[data-title="about"]');
     this.h2Gallery       = document.querySelector('h2[data-title="gallery"]');
-
+    
     this.arrowBottom     = document.querySelector('.arrow-bottom > img');
-    console.log(this.arrowBottom)
     
     this.h3              = document.querySelector('h3');
     
@@ -58,17 +57,22 @@ class UI  {
     TweenMax.to(this.spinner, .4, {autoAlpha: show | 0});
   }
 
+  showAbout()
+  {
+    this.scroll.scrollTo(window.innerHeight);
+  }
+
   listen()
   {
     eve.on(this.button, 'click', this.showArtist.bind(this));
 
     eve.on(this.h2Gallery, 'click', this.animateOutGallery.bind(this));
-
-    eve.on(this.arrowBottom, 'click', this.scrollAbout.bind(this));
-    eve.on(window, 'keydown', this.scrollAbout.bind(this));
+    eve.on(this.arrowBottom, 'click', this.showAbout.bind(this));
 
     eve.on(this.navLeft, 'click', this.navArtist.bind(this), true);
     eve.on(this.navRight, 'click', this.navArtist.bind(this), true);
+
+    this.scroll.emitter.on('changeArtist', this.navArtist.bind(this));
 
     eve.on(this.pieceLink, 'click', (e) => {
       e.preventDefault();
@@ -76,18 +80,17 @@ class UI  {
     });
   }
 
-  scrollAbout(e)
-  {
-    e.preventDefault();
-    this.scroller.to( 0, e.type == 'click' || e.which == 40 ? window.innerHeight : 0, {
-      easing: 'easeInOutCubic', duration: 800
-    });
-  }
-
   navArtist(e)
   {
+    let dir; 
+    if(e.target)
+    {
+      dir = e.target.parentElement.dataset.side == "right" ? 1 : -1;
+    } else {
+      dir = e == "right" ? 1 : -1;
+    }
+
     window.APP.ui.showLoading(true, true);
-    let dir = e.target.parentElement.dataset.side == "right" ? 1 : -1;
     window.APP.emitter.emit('updateArtist', dir);
   }
 
@@ -110,11 +113,7 @@ class UI  {
 
   showArtist(direction)
   {
-
-    eve.off(this.arrowBottom, 'click', this.scrollAbout.bind(this));
-    eve.off(window, 'keydown', this.scrollAbout.bind(this));
-
-    this.scroller.to(0,0, {easing: 'easeInOutCubic', duration: 700}).then( () => {
+    this.scroll.scrollTo(0, () => {
       this.animateLanding( true,  () => {
 
         for (var i = 0; i < this.galleryEls.length; i++) {
@@ -123,7 +122,7 @@ class UI  {
 
         window.APP.landing.showArtist(direction);
       });
-    });
+    })
   }
 
   changeCopyArtist()
@@ -131,9 +130,8 @@ class UI  {
     TweenMax.to(this.containerPiece, 0, {autoAlpha: 1});
 
     let data = window.APP.artists[window.APP.currentArtist];
-    this.changeCopyArtistField(this.h2Gallery, data.artist_name, 0);
-    this.changeCopyArtistField(this.pieceName, data.piece_name, .2);
-    this.changeCopyArtistField(this.pieceLinkCont, null, .4);
+    this.changeCopyArtistField(this.pieceName, data.artist_name + " - " + data.piece_name, 0);
+    this.changeCopyArtistField(this.pieceLinkCont, null, .2);
     this.pieceLink.href = data.video_url;  
   }
 
@@ -148,7 +146,10 @@ class UI  {
 
   animateLanding(out, callback)
   {
-    var timeline = new TimelineMax({paused: true, onComplete: callback ? callback.bind(this): null})
+    var timeline = new TimelineMax({paused: true, onComplete: ()=> {
+      out ? this.scroll.disableScroll() : this.scroll.enableScroll();
+      if(callback) callback();
+    }});
 
     this.button.dataset.disabled = out ? "true" : 'false';
 
@@ -175,10 +176,6 @@ class UI  {
 
   animateOutGallery()
   {
-    
-    eve.on(this.arrowBottom, 'click', this.scrollAbout.bind(this));
-    eve.on(window, 'keydown', this.scrollAbout.bind(this));
-
     for (var i = 0; i < this.galleryEls.length; i++) {
       TweenMax.to(this.galleryEls[i], .4, {y: 15, autoAlpha: 0});
     };

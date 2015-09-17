@@ -213,6 +213,7 @@ class SceneHome
   onResize()
   {
     this.composer.setSize(window.innerWidth, window.innerHeight);
+    this.generatePlane();
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
   }
