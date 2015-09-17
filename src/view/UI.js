@@ -62,11 +62,16 @@ class UI  {
     this.scroll.scrollTo(window.innerHeight);
   }
 
+  backHome()
+  {
+    this.animateOutGallery(this.showAbout.bind(this));
+  }
+
   listen()
   {
     eve.on(this.button, 'click', this.showArtist.bind(this));
 
-    eve.on(this.h2Gallery, 'click', this.animateOutGallery.bind(this));
+    eve.on(this.h2Gallery, 'click', this.backHome.bind(this));
     eve.on(this.arrowBottom, 'click', this.showAbout.bind(this));
 
     eve.on(this.navLeft, 'click', this.navArtist.bind(this), true);
@@ -174,7 +179,7 @@ class UI  {
     this.landingEls = document.querySelectorAll('header > div.container > *[data-animation]');
   }
 
-  animateOutGallery()
+  animateOutGallery(callback)
   {
     for (var i = 0; i < this.galleryEls.length; i++) {
       TweenMax.to(this.galleryEls[i], .4, {y: 15, autoAlpha: 0});
@@ -185,7 +190,7 @@ class UI  {
 
     this.animateLanding(false);
 
-    window.APP.landing.showLanding();
+    window.APP.landing.showLanding(callback);
   }
 }
 

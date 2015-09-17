@@ -9,7 +9,7 @@ class ScrollManager
     this.prevScroll = 0;
     this.emitter = window.APP.emitter;
 
-    this.delay = 800;
+    this.delay = 700;
 
     window.onscroll = this.onScroll.bind(this);
     window.onkeydown = this.onKeyDown.bind(this);

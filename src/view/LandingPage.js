@@ -47,11 +47,11 @@ class LandingPage {
     });
   }
 
-  showLanding()
+  showLanding(callback)
   {
     this.state = 0;
     this.sceneHome.transitionGallery( false, () => {
-      window.APP.ui.animateLanding(false);
+      window.APP.ui.animateLanding(false, callback);
     });
   }
 
