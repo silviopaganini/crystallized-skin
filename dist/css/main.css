@@ -207,6 +207,11 @@ section.gallery div.container p.piece-link span
     cursor : pointer;
 }
 
+section.video 
+{
+    display: none;
+}
+
 section.video div.container
 {
     display: table;
