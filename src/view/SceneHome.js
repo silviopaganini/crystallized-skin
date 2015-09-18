@@ -7,8 +7,9 @@ import THREE    from 'three';
 import noise    from 'perlin-noise';
 import TweenMax from 'gsap';
 import dat      from 'dat-gui' ;
+import URL      from 'url';
 
-import URL    from 'url';
+const browser = require('browser-detection/src/browser-detection')();
 
 const EffectComposer = EC(THREE);
 const NoiseShader = NS(THREE);
@@ -22,6 +23,8 @@ class SceneHome
     this.scene    = null;
     this.renderer = renderer;
     this.clock    = clock;
+
+    this.renderPost = browser.os == 'osx';
 
     this.startGUI( parseInt(URL.parse(window.location.href, true).query.d) );
     this.createScene();
@@ -51,7 +54,7 @@ class SceneHome
     // var gridHelper = new THREE.GridHelper( 100, 10 );        
     // this.scene.add( gridHelper );
 
-    this.createComposer();
+    if(this.renderPost) this.createComposer();
   }
 
   createComposer()
@@ -198,20 +201,30 @@ class SceneHome
 
   render()
   {
-    this.noisePass.uniforms['amount'].value = this.p.noiseAmount;
-    this.noisePass.uniforms['speed'].value = this.p.noiseSpeed;
-    this.noisePass.uniforms['time'].value = this.clock.getElapsedTime();
-
     if(this.updateColor) this.mesh.material.needsUpdate = true;
 
     this.mesh.geometry.verticesNeedUpdate = true;
 
-    this.composer.render();
+    if(this.renderPost)
+    {
+      this.noisePass.uniforms['amount'].value = this.p.noiseAmount;
+      this.noisePass.uniforms['speed'].value = this.p.noiseSpeed;
+      this.noisePass.uniforms['time'].value = this.clock.getElapsedTime();  
+      this.composer.render();
+    } else {
+      this.renderer.render(this.scene, this.camera);
+    }
+
   }
 
   onResize()
   {
-    this.composer.setSize(window.innerWidth, window.innerHeight);
+    if(this.renderPost)
+    {
+      this.composer.setSize(window.innerWidth, window.innerHeight);
+    } else {
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
     this.generatePlane();
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
