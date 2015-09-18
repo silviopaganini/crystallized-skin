@@ -8,6 +8,7 @@ class UI  {
   constructor(copy) 
   {
     this.scroll          = new Scroll();
+    this.loadingOnScreen = false;
 
     this.copy            = copy;
     this.h1              = document.querySelector('h1');
@@ -46,6 +47,8 @@ class UI  {
 
   showLoading(show, white)
   {
+    this.loadingOnScreen = show;
+
     if(white)
     {
       for (var i = 0; i < this.spinnerChildren.length; i++) {
@@ -96,6 +99,8 @@ class UI  {
 
   navArtist(e)
   {
+    if(this.loadingOnScreen) return;
+    
     let dir; 
     if(e.target)
     {

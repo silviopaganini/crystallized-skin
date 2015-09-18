@@ -52,7 +52,6 @@ class SceneHome
     // this.scene.add( gridHelper );
 
     this.createComposer();
-    this.generatePlane();
   }
 
   createComposer()

@@ -1,6 +1,7 @@
-import THREE        from 'three'; 
-import css          from 'dom-css';
-import Stats        from 'stats-js' ;
+import THREE from 'three'; 
+import css   from 'dom-css';
+import Stats from 'stats-js' ;
+import URL   from 'url';
 
 import SceneHome    from './SceneHome';
 import SceneGallery from './SceneGallery';
@@ -33,7 +34,7 @@ class LandingPage {
         position: 'absolute',
         top: 0,
         left: 0,
-        display: 'none'
+        display: parseInt(URL.parse(window.location.href, true).query.d) == 1 ? 'block' : 'none'
     });
 
     document.body.appendChild(this.stats.domElement);
