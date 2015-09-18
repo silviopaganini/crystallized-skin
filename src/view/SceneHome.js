@@ -77,7 +77,7 @@ class SceneHome
 
       this.nodes = this.p.nodes >> 0;
       this.geo  = new THREE.PlaneGeometry(window.innerWidth / 2, window.innerWidth / 2, this.nodes, this.nodes);
-      this.geo.originalVertices = this.geo.vertices.slice();
+      // this.geo.originalVertices = this.geo.vertices.slice();
       this.mesh = new THREE.Mesh(this.geo, new THREE.MeshPhongMaterial({
           color     : new THREE.Color(this.p.meshColor),
           specular  : new THREE.Color(this.p.meshSpecular),
@@ -93,7 +93,7 @@ class SceneHome
 
       for (var i = 0; i < this.mesh.geometry.vertices.length; i++) {
           this.mesh.geometry.vertices[i].z = this.perlin[i] * -(Math.random() * this.p.power);
-          this.animateVertice(this.mesh.geometry.vertices[i], i);
+          this.animateVertice( i );
       };
 
   }
@@ -108,9 +108,9 @@ class SceneHome
 
   }
 
-  animateVertice(vert, i)
+  animateVertice( i )
   {
-      TweenMax.to(vert, 1.5 + Math.random() * 3, {
+      TweenMax.to(this.mesh.geometry.vertices[i], 1.5 + Math.random() * 3, {
           z: this.perlin[i] * -(Math.random() * this.p.power), 
           delay: .5 + Math.random(),
           yoyo: true,
