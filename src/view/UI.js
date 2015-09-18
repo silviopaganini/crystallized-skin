@@ -11,18 +11,20 @@ class UI  {
     this.loadingOnScreen = false;
 
     this.copy            = copy;
-    this.h1              = document.querySelector('header div.container > h1');
+    this.h1              = document.querySelector('main header div.container > h1');
     
-    this.h2About         = document.querySelector('h2[data-title="about"]');
-    this.h2Gallery       = document.querySelector('h2[data-title="gallery"]');
+    this.h2About         = document.querySelector('section.about div.container > h2[data-title="about"]');
+    this.h2Gallery       = document.querySelector('section.gallery > h2[data-title="gallery"]');
     
-    this.h3              = document.querySelector('header div.container > h3');
+    this.h3              = document.querySelector('main header div.container > h3');
+
+    console.log(this.h2Gallery, this.h3);
 
     this.sectionAbout    = document.querySelector('section.about');
     this.sectionVideo    = document.querySelector('section.video');
     
     this.button          = document.querySelector('button');
-    this.copyContainer   = document.querySelector('.about-copy');
+    this.copyContainer   = document.querySelector('section.about div.container > .about-copy');
     
     this.containerPiece  = document.querySelector('section.gallery > div.container');
     this.pieceName       = document.querySelector('p.piece-name');

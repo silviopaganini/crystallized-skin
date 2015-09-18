@@ -12,6 +12,7 @@ class MobileFallback {
     this.title   = this.el.querySelector('h1');
     this.h2      = this.el.querySelector('h2');
     this.sub     = this.el.querySelector('h3');
+    this.p     = this.el.querySelector('p');
     this.content = this.el.querySelector('.content div.about-copy');
 
     css(this.el, {display: 'block'});
@@ -24,10 +25,7 @@ class MobileFallback {
     this.setString( this.title, 'title' );
     this.setString( this.sub, 'sub_header' );
     this.setString( this.h2, 'about_label' );
-    
-    // this.setString( this.button, 'launch_button' );
-    // this.setString( this.h2Gallery, 'title' );
-    // this.setString( this.pieceLink, 'watch_film_button' );
+    this.setString( this.p, 'mobile_fallback' );
     this.setString( this.content, 'about_copy' );
     
   }
