@@ -35,7 +35,7 @@ class UI  {
     
     this.navLeft         = document.querySelector("nav a[data-side='left']");
     this.navRight        = document.querySelector("nav a[data-side='right']");
-    this.arrowBottom     = document.querySelector('.arrow-bottom > img');
+    this.arrowBottom     = document.querySelector('main header .arrow-bottom > img');
     this.arrowUp         = document.querySelector(".arrow-up > img");
     
     this.spinner         = document.querySelector('.preloader');
