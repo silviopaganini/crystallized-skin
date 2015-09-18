@@ -11,12 +11,12 @@ class UI  {
     this.loadingOnScreen = false;
 
     this.copy            = copy;
-    this.h1              = document.querySelector('h1');
+    this.h1              = document.querySelector('header div.container > h1');
     
     this.h2About         = document.querySelector('h2[data-title="about"]');
     this.h2Gallery       = document.querySelector('h2[data-title="gallery"]');
     
-    this.h3              = document.querySelector('h3');
+    this.h3              = document.querySelector('header div.container > h3');
 
     this.sectionAbout    = document.querySelector('section.about');
     this.sectionVideo    = document.querySelector('section.video');

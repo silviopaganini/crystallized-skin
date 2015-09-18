@@ -1,13 +1,15 @@
-import Tabletop     from "tabletop";
-import ee           from 'event-emitter';
-import LandingPage  from './view/LandingPage';
-import UI           from './view/UI';
-import VideoOverlay from './view/VideoOverlay';
-import TweenMax     from 'gsap';
+import Tabletop       from "tabletop";
+import ee             from 'event-emitter';
+import TweenMax       from 'gsap';
+
+import LandingPage    from './view/LandingPage';
+import UI             from './view/UI';
+import VideoOverlay   from './view/VideoOverlay';
+import MobileFallback from './view/MobileFallback';
 
 class App {
   constructor(data) {
-    
+
     Tabletop.init({
         key: "1iYhvt8m8VNK4TMv6UAHt1IjG0DFksGw0GkpDhAke_FI",
         callback: (data, tabletop)=>{
@@ -19,6 +21,15 @@ class App {
 
   init(data, tabletop)
   {
+    this.browser = require('browser-detection/src/browser-detection')();
+    this.mobile  = !(this.browser.os == 'osx' || this.browser.os == 'win')
+
+    if(this.mobile)
+    {
+      this.initMobile(data, tabletop);
+      return;
+    }
+
     this.emitter       = ee({});
     this.artists       = data['artists'].elements;
     this.currentArtist = 0;
@@ -34,6 +45,12 @@ class App {
     });
 
     this.landing.init();
+  }
+
+  initMobile(data, tabletop)
+  {
+    this.mobile = new MobileFallback(data['general-copy'].elements);
+    TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0});
   }
 
   updateCurrentArtist(dir)

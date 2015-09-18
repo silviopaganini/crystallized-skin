@@ -11,7 +11,11 @@ class ScrollManager
 
     this.delay = 700;
 
-    window.onscroll = this.onScroll.bind(this);
+    // if(window.APP.browser.os == 'osx' || window.APP.browser.os == 'win')
+    // {
+    //   window.onscroll = this.onScroll.bind(this);
+    // }
+
     window.onkeydown = this.onKeyDown.bind(this);
   }
 
@@ -105,16 +109,16 @@ class ScrollManager
     {
       if(window.pageYOffset > window.innerHeight / 3)
       {
-        e.preventDefault();
-        this.scrollTo(window.innerHeight, null, true);
+        // e.preventDefault();
+        // this.scrollTo(window.innerHeight, null, true);
       }
     } else {
 
       if(window.pageYOffset < (window.innerHeight / 3) * 2)
       {
-        e.preventDefault();
+        // e.preventDefault();
         window.APP.video.stop();
-        this.scrollTo(0, null, true);
+        // this.scrollTo(0, null, true);
       }
 
     }

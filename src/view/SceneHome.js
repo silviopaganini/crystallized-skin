@@ -9,8 +9,6 @@ import TweenMax from 'gsap';
 import dat      from 'dat-gui' ;
 import URL      from 'url';
 
-const browser = require('browser-detection/src/browser-detection')();
-
 const EffectComposer = EC(THREE);
 const NoiseShader = NS(THREE);
 const RenderPass = RP(THREE);
@@ -24,7 +22,7 @@ class SceneHome
     this.renderer = renderer;
     this.clock    = clock;
 
-    this.renderPost = browser.os == 'osx';
+    this.renderPost = window.APP.browser.os == 'osx';
 
     this.startGUI( parseInt(URL.parse(window.location.href, true).query.d) );
     this.createScene();
@@ -78,8 +76,14 @@ class SceneHome
       this.light.position.set( 0, 0, 100 );
       this.scene.add(this.light);
 
-      this.nodes = this.p.nodes >> 0;
-      this.geo  = new THREE.PlaneGeometry(window.innerWidth / 2, window.innerWidth / 2, this.nodes, this.nodes);
+      // this.light = new THREE.AmbientLight(this.p.lightColor, 1);
+      // this.scene.add(this.light);
+
+      this.nodes = this.p.nodes >> (this.mobile ? 2 : 0);
+
+
+      let size = window.innerWidth >= window.innerHeight ? window.innerWidth : window.innerHeight * 1.5;
+      this.geo  = new THREE.PlaneGeometry(size / 2, size / 2, this.nodes, this.nodes);
       // this.geo.originalVertices = this.geo.vertices.slice();
       this.mesh = new THREE.Mesh(this.geo, new THREE.MeshPhongMaterial({
           color     : new THREE.Color(this.p.meshColor),
@@ -87,7 +91,6 @@ class SceneHome
           emissive  : new THREE.Color(this.p.meshEmissive),
           shininess : new THREE.Color(this.p.shininess),
           shading   : THREE.FlatShading,
-          side      : THREE.DoubleSide
       }));
 
       this.mesh.rotation.x = -20 * Math.PI / 180;
@@ -96,7 +99,7 @@ class SceneHome
 
       for (var i = 0; i < this.mesh.geometry.vertices.length; i++) {
           this.mesh.geometry.vertices[i].z = this.perlin[i] * -(Math.random() * this.p.power);
-          this.animateVertice( i );
+          // this.animateVertice( i );
       };
 
   }
