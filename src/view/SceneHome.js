@@ -99,7 +99,7 @@ class SceneHome
 
       for (var i = 0; i < this.mesh.geometry.vertices.length; i++) {
           this.mesh.geometry.vertices[i].z = this.perlin[i] * -(Math.random() * this.p.power);
-          // this.animateVertice( i );
+          this.animateVertice( i );
       };
 
   }
