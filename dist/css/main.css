@@ -1,6 +1,6 @@
 body
 {
-    font-family: Cambria, Georgia, serif;
+    font-family: 'SabonNext LT Display';
     overflow-x: hidden;
     background-color: black;
 }
@@ -49,7 +49,7 @@ div.fallback header p
 {
   background-color: #000;
   color: white;
-  font-family: monospace;
+  font-family: 'Helvetica Cond';
   padding: 10px
 }
 
@@ -97,6 +97,7 @@ header .container
   position: absolute;
   top: 50%;
   left: 50%;
+  width: 100%;
 
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
@@ -148,10 +149,10 @@ header .container-gallery div.container p
 
 header .container-gallery div.container p.piece-link span
 {
-    font-family: monospace;
+    font-family: 'Helvetica Cond';
     cursor : pointer;
     color: #ff4f4f;
-    font-size: 1.3em;
+    font-size: .8em;
     text-transform: uppercase;
 }
 
@@ -160,10 +161,17 @@ header .container-gallery div.container p.piece-link span:hover
   text-decoration: underline;
 }
 
+canvas
+{
+  pointer-events : visible;
+}
+
 h1
 {
-    font-size: 3.5em;
+    font-size: 4.5em;
     color: white;
+    font-family: 'SabonNext LT Display';
+    letter-spacing: 2.5px;
 }
 
 @media only screen and (max-width: 700px) { 
@@ -178,6 +186,7 @@ h2
     text-align: center;
     font-size: 1.2em;
     color: black;
+    font-family: 'Amerigo BT';
 }
 
 h3
@@ -186,6 +195,7 @@ h3
     color: #604fff;
     font-weight: 100;
     text-transform: uppercase;
+    font-family: 'Helvetica Cond';
 }
 
 h4
@@ -201,9 +211,10 @@ header button
     padding: 15px 20px;
     background-color: #000;
     color: white;
+    font-size: .9em;
     border: 2px solid white;
     text-transform: uppercase;
-    font-family: monospace;
+    font-family: 'Helvetica Cond';
     pointer-events: visible;
 
     -webkit-transition: all .3s;
@@ -217,8 +228,7 @@ header button:hover
 
 header button[data-disabled=true]
 {
-    background-color: #6b6b6b;
-    color: white;
+    border: 2px solid #ff4f4f;
 }
 
 div.arrow-bottom

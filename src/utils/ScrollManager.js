@@ -12,6 +12,8 @@ class ScrollManager
     this.timerToScroll = 0;
 
     this.delay = 800;
+    this.minDelay = .3;
+    this.maxDelay = 1;
 
     window.onscroll = this.onScroll.bind(this);
     window.onkeydown = this.onKeyDown.bind(this);
@@ -19,8 +21,8 @@ class ScrollManager
 
   calculateDelay(target)
   {
-    let a = ((target - window.pageYOffset) * this.delay) / window.innerHeight;
-    return Math.max(.4, Math.abs(a/1000));
+    let a = Math.abs(((target - window.pageYOffset) * this.delay) / window.innerHeight) / 1000;
+    return Math.min(this.maxDelay, Math.max(this.minDelay, a));
   }
 
   onKeyDown(e)

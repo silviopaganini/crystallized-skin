@@ -12,28 +12,35 @@ import ajax from 'ajax-request'
 class App {
   constructor(data) {
 
-    ajax({url: window.location.href + 'data/data.json', method: 'get'}, (err, res, body) => {
-      let e = JSON.parse(body);
-      TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
-    })
+    if(window.location.href.indexOf(":9966") > -1)
+    {
 
-    // Tabletop.init({
-    //     key: "1iYhvt8m8VNK4TMv6UAHt1IjG0DFksGw0GkpDhAke_FI",
-    //     callback: (data, tabletop) =>{
+      ajax({url: window.location.href + 'data/data.json', method: 'get'}, (err, res, body) => {
+        let e = JSON.parse(body);
+        TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
+      })
 
-    //       let e = {};
-    //       e.artists         = data['artists'].elements
-    //       e['general-copy'] = data['general-copy'].elements
+      return;
 
-    //       // console.log(data);
+    }
 
-    //       // var a = document.createElement('a');
-    //       // a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(e));
-    //       // a.click();
-    //       // console.log(data);
-    //       TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
-    //     } 
-    // });
+    Tabletop.init({
+        key: "1iYhvt8m8VNK4TMv6UAHt1IjG0DFksGw0GkpDhAke_FI",
+        callback: (data, tabletop) =>{
+
+          let e = {};
+          e.artists         = data['artists'].elements
+          e['general-copy'] = data['general-copy'].elements
+
+          // console.log(data);
+
+          // var a = document.createElement('a');
+          // a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(e));
+          // a.click();
+          // console.log(data);
+          TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
+        } 
+    });
 
   }
 
