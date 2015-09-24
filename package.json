@@ -16,6 +16,7 @@
     "build": "browserify -t babelify src/index.js | uglifyjs -c --screw-ie8 > dist/js/bundle.js"
   },
   "devDependencies": {
+    "ajax-request": "^1.2.1",
     "babelify": "^6.3.0",
     "browser-detection": "^0.3.3",
     "browserify": "^11.1.0",

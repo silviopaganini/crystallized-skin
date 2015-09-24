@@ -81,7 +81,6 @@ class SceneHome
 
       this.nodes = this.p.nodes >> (this.mobile ? 2 : 0);
 
-
       let size = window.innerWidth >= window.innerHeight ? window.innerWidth : window.innerHeight * 1.5;
       this.geo  = new THREE.PlaneGeometry(size / 2, size / 2, this.nodes, this.nodes);
       // this.geo.originalVertices = this.geo.vertices.slice();
@@ -101,6 +100,8 @@ class SceneHome
           this.mesh.geometry.vertices[i].z = this.perlin[i] * -(Math.random() * this.p.power);
           this.animateVertice( i );
       };
+
+      this.updateColours();
 
   }
 
@@ -131,11 +132,11 @@ class SceneHome
     var Params = function(){
         this.nodes = 20;
         this.power = 100;
-        this.lightColor = '#d7e3ff';
-        this.meshColor = '#ebf1ff';
-        this.meshSpecular = '#fff3d7';
-        this.meshEmissive = '#2d2b26';
-        this.shininess = 5;
+        this.lightColor = '#ffffff';
+        this.meshColor = '#010101';
+        this.meshSpecular = '#181818';
+        this.meshEmissive = '#000000';
+        this.shininess = 20;
         this.noiseAmount = .05;
         this.noiseSpeed = 1;
     }
@@ -166,10 +167,11 @@ class SceneHome
 
   updateColours()
   {
-      this.mesh.material.color = parseInt(this.p.meshColor, 16);
-      this.mesh.material.specular = parseInt(this.p.meshSpecular, 16);
-      this.mesh.material.emissive = parseInt(this.p.meshEmissive, 16);
+      this.mesh.material.color = new THREE.Color(this.p.meshColor);
+      this.mesh.material.specular = new THREE.Color(this.p.meshSpecular);
+      this.mesh.material.emissive = new THREE.Color(this.p.meshEmissive);
       this.mesh.material.shininess = this.p.shininess;
+      this.light.color = new THREE.Color(this.p.lightColor);
       this.mesh.material.needsUpdate = true;
   }
 

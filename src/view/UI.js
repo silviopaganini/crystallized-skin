@@ -13,18 +13,27 @@ class UI  {
     this.copy            = copy;
     this.h1              = document.querySelector('main header div.container > h1');
     
-    this.h2About         = document.querySelector('section.about div.container > h2[data-title="about"]');
-    this.h2Gallery       = document.querySelector('section.gallery > h2[data-title="gallery"]');
+    this.h3About         = document.querySelector('section.about div.container > h3');
+    this.h2About         = document.querySelector('section.about div.container > h2');
+    this.h4About         = document.querySelector('section.about div.container > h4');
+
+    this.h2Gallery       = document.querySelector('section.gallery > h2');
     
     this.h3              = document.querySelector('main header div.container > h3');
 
-    console.log(this.h2Gallery, this.h3);
+    this.sectionAbout   = document.querySelector('section.about');
+    this.sectionVideo   = document.querySelector('section.video');
+    this.sectionArtists = document.querySelector('section.artists');
+    this.sectionBottom  = document.querySelector('section.bottom');
+    
 
-    this.sectionAbout    = document.querySelector('section.about');
-    this.sectionVideo    = document.querySelector('section.video');
+    this.artistH3        = document.querySelector('section.artists div.container > h3');
+
+    this.bottomButton    = document.querySelector('section.bottom > h3');
     
     this.button          = document.querySelector('button');
-    this.copyContainer   = document.querySelector('section.about div.container > .about-copy');
+    this.copyContainer   = document.querySelector('section.about div.container > div.about-copy');
+    this.aboutCreds      = document.querySelector('section.about div.container > div.about-credits');
     
     this.containerPiece  = document.querySelector('section.gallery > div.container');
     this.pieceName       = document.querySelector('p.piece-name');
@@ -36,6 +45,7 @@ class UI  {
     this.navLeft         = document.querySelector("nav a[data-side='left']");
     this.navRight        = document.querySelector("nav a[data-side='right']");
     this.arrowBottom     = document.querySelector('main header .arrow-bottom > img');
+    this.divArrowBottom  = document.querySelector('main header .arrow-bottom');
     this.arrowUp         = document.querySelector(".arrow-up > img");
     
     this.spinner         = document.querySelector('.preloader');
@@ -50,18 +60,6 @@ class UI  {
   showLoading(show, white)
   {
     this.loadingOnScreen = show;
-
-    if(white)
-    {
-      for (var i = 0; i < this.spinnerChildren.length; i++) {
-        this.spinnerChildren[i].classList.remove('white-preloader');
-        this.spinnerChildren[i].classList.add('white-preloader');
-      };
-    } else {
-      for (var i = 0; i < this.spinnerChildren.length; i++) {
-        this.spinnerChildren[i].classList.remove('white-preloader');
-      };
-    }
     TweenMax.to(this.spinner, .4, {autoAlpha: show | 0});
   }
 
@@ -118,7 +116,14 @@ class UI  {
   setCopy()
   {
     this.setString( this.h1, 'title' );
-    this.setString( this.h2About, 'about_label' );
+    this.setString( this.h3About, 'about_label' );
+    this.setString( this.h2About, 'title' );
+    this.setString( this.h4About, 'about_sumup' );
+    this.setString( this.aboutCreds, 'credits' );
+
+    this.setString( this.artistH3, 'artists_title' );
+    this.setString( this.bottomButton, 'launch_button' );
+
     this.setString( this.h3, 'sub_header' );
     this.setString( this.button, 'launch_button' );
     this.setString( this.h2Gallery, 'title' );
@@ -138,6 +143,8 @@ class UI  {
       this.animateLanding( true,  () => {
 
         css(this.sectionAbout, {display: 'none'});
+        css(this.sectionBottom, {display: 'none'});
+        css(this.sectionArtists, {display: 'none'});
         css(this.sectionVideo, {display: 'block'});
 
         for (var i = 0; i < this.galleryEls.length; i++) {
@@ -154,8 +161,9 @@ class UI  {
     TweenMax.to(this.containerPiece, 0, {autoAlpha: 1});
 
     let data = window.APP.artists[window.APP.currentArtist];
-    this.changeCopyArtistField(this.pieceName, data.artist_name + " - " + data.piece_name + " - " + data.year, 0);
+    this.changeCopyArtistField(this.pieceName, data.artist_name + " - " + data.piece_name + ", " + data.year, 0);
     this.changeCopyArtistField(this.pieceLinkCont, null, .2);
+    TweenMax.to(this.divArrowBottom, .5, {y: 0, autoAlpha: 1,delay: .3});
     window.APP.video.addVideo(data.video_url);
   }
 
@@ -174,6 +182,9 @@ class UI  {
       out ? this.scroll.disableScroll() : this.scroll.enableScroll();
 
       css(this.sectionAbout, {display: 'table'});
+      css(this.sectionBottom, {display: 'block'});
+      css(this.sectionArtists, {display: 'table'});
+
       css(this.sectionVideo, {display: 'none'});
 
       if(callback) callback();

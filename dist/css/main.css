@@ -2,6 +2,7 @@ body
 {
     font-family: Cambria, Georgia, serif;
     overflow-x: hidden;
+    background-color: black;
 }
 
 ::-moz-selection { background: #ccc; }
@@ -94,6 +95,7 @@ header .container
 h1
 {
     font-size: 3.5em;
+    color: white;
 }
 
 @media only screen and (max-width: 700px) { 
@@ -107,13 +109,23 @@ h2
 {
     text-align: center;
     font-size: 1.2em;
+    color: black;
 }
 
 h3
 {
     font-size: 1em;
-    color: #6b6b6b;
+    color: #604fff;
     font-weight: 100;
+    text-transform: uppercase;
+}
+
+h4
+{
+    font-size: .7em;
+    color: #ff4f4f;
+    font-weight: 100;
+    text-transform: uppercase;
 }
 
 header
@@ -124,9 +136,9 @@ header
 header button
 {
     padding: 15px 20px;
-    background-color: #6b6b6b;
+    background-color: #000;
     color: white;
-    border: 0;
+    border: 2px solid white;
     text-transform: uppercase;
     font-family: monospace;
     pointer-events: visible;
@@ -137,8 +149,7 @@ header button
 
 header button:hover
 {
-    background-color: white;
-    color: #6b6b6b;
+    border: 2px solid #ff4f4f;
 }
 
 header button[data-disabled=true]
@@ -190,23 +201,50 @@ header div.arrow-bottom img
 
 section.about
 {
-    line-height: 1.8em;
-    height: 100vh;
-    display: table;
-    margin: 0 auto;
-    padding: 0 50px;
+  background-color: white;
+  line-height: 1.8em;
+  height: 100vh;
+  width: 100vw;
+  display: table;
+  
 }
 
 section.about div.container
 {
+  margin: 0 auto;
+  padding: 0 50px;
   vertical-align: middle;
   display: table-cell;
+  text-align: center;
+  width: 100%;
 }
 
-@media only screen and (min-width: 950px) { 
-    section.about div.container{
-      max-width: 950px;
-    }
+section.about div.container div.about-credits
+{
+  font-size: .8em;
+  color: #73746b;
+}
+
+section.about div.container div.about-credits > p
+{
+  padding: 0;
+  margin: 0;
+  line-height: 1.8em;
+}
+
+section.about div.container div.about-credits > p > a:hover
+{
+  text-decoration: underline;
+}
+
+section.about div.container div.about-credits > p:nth-child(even)
+{
+  color: #604fff;
+}
+
+section.about div.container div.about-credits > p:nth-child(odd)
+{
+  color: #ff4f4f;
 }
 
 section.about div.container div.about-copy
@@ -219,8 +257,16 @@ section.about div.container div.about-copy
     -moz-column-count: 2; /* Firefox */
     column-count: 2;
 
-    margin-top: 4em;
     color: #73746b;
+    text-align: left;
+    font-size: .9em;
+    margin: 3em auto 2em;
+}
+
+@media only screen and (min-width: 1200px) { 
+    section.about div.container div.about-copy {
+      max-width: 1200px;
+    }
 }
 
 @media only screen and (max-width: 700px) { 
@@ -245,6 +291,83 @@ section div.about-copy p:first-child
     -webkit-margin-before: 0;
 }
 
+/*
+
+ARTTISTS
+
+*/
+
+section.artists
+{
+  background-color: black;
+  line-height: 1.8em;
+  height: 100vh;
+  width: 100vw;
+  display: table;
+  
+}
+
+section.artists div.container
+{
+  margin: 3em auto 0;
+  text-align: center;
+  width: 100%;
+}
+
+section.artists div.container ul
+{
+  list-style: none;
+  width: 100wv;
+}
+
+section.artists div.container ul > li
+{
+  display: inline-block;
+  cursor: pointer;
+}
+
+section.artists div.container ul > li:hover p
+{
+  color: #ff4f4f;
+}
+
+section.artists div.container ul > li > p
+{
+  color: white;
+  -webkit-transition: all .2s;
+    transition: all .2s;
+}
+
+/*
+
+BOTTOM
+
+*/
+
+section.bottom
+{
+  background-color: white;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+section.bottom h3
+{
+  color: black;
+  padding: 10px;
+  margin: 0;
+  font-size: .8em;
+  cursor: pointer;
+}
+
+/*
+
+GALLERY
+
+*/
+
+
 section.gallery
 {
     position: absolute;
@@ -258,8 +381,9 @@ section.gallery
 
 section.gallery h2
 {
-    text-decoration: underline;
     cursor: pointer;
+    color: white;
+    font-size: 1.7em;
     pointer-events: visible;
     margin-top: 5%;
 }
@@ -269,16 +393,25 @@ section.gallery div.container
     position: absolute;
     pointer-events: visible;
     width: 100%;
-    bottom: 0;
+    bottom: 20px;
     visibility: hidden;
     opacity: 0;
     text-align: center;
 }
 
+section.gallery div.container p
+{
+  color: white;
+  font-size: 1.2em;
+}
+
 section.gallery div.container p.piece-link span
 {
-    text-decoration: underline;
+    font-family: monospace;
     cursor : pointer;
+    color: #ff4f4f;
+    font-size: 1.3em;
+    text-transform: uppercase;
 }
 
 section.video 
@@ -404,70 +537,4 @@ nav a[data-side='right']:hover
   z-index: 1000;
   -webkit-transform: translate(-50%, -100%);
   transform: translate(-50%, -100%);
-}
-
-.white-preloader
-{
-    background-color: white !important;
-}
-
-.sk-cube-grid {
-  width: 60px;
-  height: 60px;
-}
-
-.sk-cube-grid .sk-cube {
-  width: 33%;
-  height: 33%;
-  background-color: #333;
-  float: left;
-  -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
-          animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out; 
-}
-.sk-cube-grid .sk-cube1 {
-  -webkit-animation-delay: 0.2s;
-          animation-delay: 0.2s; }
-.sk-cube-grid .sk-cube2 {
-  -webkit-animation-delay: 0.3s;
-          animation-delay: 0.3s; }
-.sk-cube-grid .sk-cube3 {
-  -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s; }
-.sk-cube-grid .sk-cube4 {
-  -webkit-animation-delay: 0.1s;
-          animation-delay: 0.1s; }
-.sk-cube-grid .sk-cube5 {
-  -webkit-animation-delay: 0.2s;
-          animation-delay: 0.2s; }
-.sk-cube-grid .sk-cube6 {
-  -webkit-animation-delay: 0.3s;
-          animation-delay: 0.3s; }
-.sk-cube-grid .sk-cube7 {
-  -webkit-animation-delay: 0s;
-          animation-delay: 0s; }
-.sk-cube-grid .sk-cube8 {
-  -webkit-animation-delay: 0.1s;
-          animation-delay: 0.1s; }
-.sk-cube-grid .sk-cube9 {
-  -webkit-animation-delay: 0.2s;
-          animation-delay: 0.2s; }
-
-@-webkit-keyframes sk-cubeGridScaleDelay {
-  0%, 70%, 100% {
-    -webkit-transform: scale3D(1, 1, 1);
-            transform: scale3D(1, 1, 1);
-  } 35% {
-    -webkit-transform: scale3D(0, 0, 1);
-            transform: scale3D(0, 0, 1); 
-  }
-}
-
-@keyframes sk-cubeGridScaleDelay {
-  0%, 70%, 100% {
-    -webkit-transform: scale3D(1, 1, 1);
-            transform: scale3D(1, 1, 1);
-  } 35% {
-    -webkit-transform: scale3D(0, 0, 1);
-            transform: scale3D(0, 0, 1);
-  } 
 }
