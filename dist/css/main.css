@@ -174,24 +174,34 @@ h1
     letter-spacing: 2.5px;
 }
 
+h1 img
+{
+  width: 640px;
+}
+
 @media only screen and (max-width: 700px) { 
   h1
   {
       font-size: 2.8em;
   }  
+
+  h1 img
+  {
+    width: 80%;
+  }
 }
 
 h2
 {
     text-align: center;
-    font-size: 1.2em;
+    font-size: 19px;
     color: black;
     font-family: 'Amerigo BT';
 }
 
 h3
 {
-    font-size: 1em;
+    font-size: 14px;
     color: #604fff;
     font-weight: 100;
     text-transform: uppercase;
@@ -200,7 +210,7 @@ h3
 
 h4
 {
-    font-size: .7em;
+    font-size: 16px;
     color: #ff4f4f;
     font-weight: 100;
     text-transform: uppercase;
@@ -267,9 +277,9 @@ div.arrow-bottom img
 
 div.arrow-bottom img
 {
-    width: 25px;
-    -webkit-transform: rotate(-90deg);
-    transform: rotate(-90deg);
+    width: 33px;
+    -webkit-transform: rotate(-180deg);
+    transform: rotate(-180deg);
 }
 
 section.about
@@ -286,16 +296,34 @@ section.about
 section.about div.container
 {
   margin: 0 auto;
-  padding: 0 50px;
+  padding: 60px 50px;
   vertical-align: middle;
   display: table-cell;
   text-align: center;
   width: 100%;
 }
 
+section.about div.container h2
+{
+  padding: 0 0 25px 0;
+  margin: 0;
+}
+
+section.about div.container h3
+{
+  padding: 12px 0 0;
+  margin: 0;
+}
+
+section.about div.container h4
+{
+  padding: 0;
+  margin: 0;
+}
+
 section.about div.container div.about-credits
 {
-  font-size: .8em;
+  font-size: 16px;
   color: #73746b;
 }
 
@@ -333,7 +361,7 @@ section.about div.container div.about-copy
 
     color: #73746b;
     text-align: left;
-    font-size: .9em;
+    font-size: 16px;
     margin: 3em auto 2em;
 }
 
@@ -398,6 +426,7 @@ section.artists div.container ul > li
 {
   display: inline-block;
   cursor: pointer;
+  font-size: 16px;
 }
 
 section.artists div.container ul > li:hover p
@@ -491,7 +520,7 @@ nav a
 
 nav a img
 {
-    width: 30px;
+    width: 33px;
     padding: 0 20px;
 }
 

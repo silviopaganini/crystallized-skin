@@ -120,7 +120,7 @@ class UI  {
 
   setCopy()
   {
-    this.setString( this.h1, 'title' );
+    // this.setString( this.h1, 'title' );
     this.setString( this.h3About, 'about_label' );
     this.setString( this.h2About, 'title' );
     this.setString( this.h4About, 'about_sumup' );
