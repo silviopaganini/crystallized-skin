@@ -53,16 +53,36 @@
     </div>
     <main>
 
-        <div id="container-canvas">
-        </div>
+        <section class="video">
+            <div class='container'>
+                <div class="container-video"></div>
+            </div>
+            <div class="arrow-bottom"><img src='img/arrow-black.svg'></div>            
+        </section>
 
         <header>
+
+            <div id="container-canvas"></div>
+
             <div class='container'>
                 <h3 data-animation></h3>
                 <h1 data-animation></h1>
                 <button data-animation></button>
-                <div data-animation class="arrow-bottom"><img src='img/arrow-black.svg'></div>
             </div>
+
+            <div class="container-gallery">
+                <!-- <h2  data-animation></h2> -->
+                <div class="container">
+                    <p class="piece-name"></p>
+                    <p class="piece-link"><span></span></p>   
+                </div>
+                <nav data-animation>
+                    <a data-side='left'><img src='img/arrow.svg'></a>
+                    <a data-side='right'><img src='img/arrow.svg'></a>
+                </nav>
+            </div>
+
+            <div data-animation class="arrow-bottom"><img src='img/arrow-black.svg'></div>
         </header>
 
         <section class="about">
@@ -91,26 +111,6 @@
 
         <section class="bottom">
             <h3></h3>
-        </section>
-
-        <section class="gallery">
-            <h2  data-animation></h2>
-            <div class="container">
-                <p class="piece-name"></p>
-                <p class="piece-link"><span></span></p>   
-            </div>
-            <nav data-animation>
-                <a data-side='left'><img src='img/arrow.svg'></a>
-                <a data-side='right'><img src='img/arrow.svg'></a>
-            </nav>
-        </section>
-
-        <section class="video">
-            <div class="arrow-up" data-side='up'><img src='img/arrow-black.svg'></div>
-            <div class='container'>
-                <div class="container-video"></div>
-            </div>
-            
         </section>
 
     </main>

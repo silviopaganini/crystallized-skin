@@ -9,6 +9,8 @@ import TweenMax from 'gsap';
 import dat      from 'dat-gui' ;
 import URL      from 'url';
 
+import Gallery from "./Gallery";
+
 const EffectComposer = EC(THREE);
 const NoiseShader = NS(THREE);
 const RenderPass = RP(THREE);
@@ -34,7 +36,7 @@ class SceneHome
     // const OrbitControls = OC(THREE);
 
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 4000 );
-    this.camera.position.set(0, 45, 240);
+    this.camera.position.set(0, 20, 240);
     // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     // this.controls.maxDistance = 500;
 
@@ -43,11 +45,13 @@ class SceneHome
 
   addObjects()
   {
-    this.mesh   = null;
-    this.perlin = null;
-    this.nodes  = null;
-    this.light  = null;
-    this.geo    = null;
+    this.mesh    = null;
+    this.perlin  = null;
+    this.nodes   = null;
+    this.light   = null;
+    this.geo     = null;
+    
+    this.startGallery();
 
     // var gridHelper = new THREE.GridHelper( 100, 10 );        
     // this.scene.add( gridHelper );
@@ -127,6 +131,11 @@ class SceneHome
       })
   }
 
+  startGallery()
+  {
+    this.gallery = new Gallery(this.scene, this.renderer.domElement);
+  }
+
   startGUI(showGUI)
   {
     var Params = function(){
@@ -177,31 +186,14 @@ class SceneHome
 
   transitionGallery(out, callback)
   {
-    this.updateColor = true;
-    var time = 1;
-    var timeline = new TimelineMax({paused: true, onComplete: () => {
-        this.updateColor = false;
-        if(callback) callback();
-    }});
+    // todo put the gallery here 
 
-    var a = new THREE.Color(this.p.meshColor);
+    if(!out)
+    {
+      this.gallery.animateOut();
+    }
 
-    var colours = [
-      {obj : this.mesh.material.color, cl: new THREE.Color(this.p.meshColor), bl: {r: 0, g: 0, b: 0}}, 
-      {obj: this.mesh.material.specular, cl: new THREE.Color(this.p.meshSpecular), bl: {r: 0, g: 0, b: 0}}, 
-      {obj: this.mesh.material.emissive, cl: new THREE.Color(this.p.meshEmissive), bl: {r: 0, g: 0, b: 0}}
-    ];
-
-    for (var i = 0; i < colours.length; i++) {
-        timeline.add( TweenMax.to(colours[i].obj, time, { 
-          r : out ? colours[i].bl.r : colours[i].cl.r, 
-          g : out ? colours[i].bl.g : colours[i].cl.g, 
-          b : out ? colours[i].bl.b : colours[i].cl.b
-        }), 0);
-    };
-
-    timeline.play();
-
+    callback();
   }
 
   render()

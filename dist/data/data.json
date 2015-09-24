@@ -1,0 +1,95 @@
+{
+  "artists": [
+    {
+      "id": "0",
+      "artist_name": "Artist One",
+      "video_url": "https://www.youtube.com/watch?v=QAa2O_8wBUQ",
+      "model": "https://drive.google.com/open?id=0B0uHwEQ4FBZxSWo1aGk3MHBucW8",
+      "piece_name": "Piece name 1",
+      "theme": "black",
+      "year": "2012"
+    },
+    {
+      "id": "1",
+      "artist_name": "Artist Two",
+      "video_url": "https://www.youtube.com/watch?v=QAa2O_8wBUQ",
+      "model": "https://drive.google.com/open?id=0B0uHwEQ4FBZxSWo1aGk3MHBucW8",
+      "piece_name": "Piece name 2",
+      "theme": "white",
+      "year": "2013"
+    },
+    {
+      "id": "2",
+      "artist_name": "Artist Three",
+      "video_url": "https://vimeo.com/139072869",
+      "model": "https://drive.google.com/open?id=0B0uHwEQ4FBZxSWo1aGk3MHBucW8",
+      "piece_name": "Piece name 3",
+      "theme": "black",
+      "year": "2014"
+    },
+    {
+      "id": "3",
+      "artist_name": "Artist Four",
+      "video_url": "https://www.youtube.com/watch?v=QAa2O_8wBUQ",
+      "model": "https://drive.google.com/open?id=0B0uHwEQ4FBZxSWo1aGk3MHBucW8",
+      "piece_name": "Piece name 4",
+      "theme": "white",
+      "year": "2015"
+    },
+    {
+      "id": "4",
+      "artist_name": "Artist Five",
+      "video_url": "https://vimeo.com/139072870",
+      "model": "https://drive.google.com/open?id=0B0uHwEQ4FBZxSWo1aGk3MHBucW8",
+      "piece_name": "Piece name 5",
+      "theme": "black",
+      "year": "2016"
+    }
+  ],
+  "general-copy": [
+    {
+      "label": "sub_header",
+      "copy": "The Wrong Biennale"
+    },
+    {
+      "label": "title",
+      "copy": "Crystallized Skins"
+    },
+    {
+      "label": "launch_button",
+      "copy": "Launch Digital Pavillion"
+    },
+    {
+      "label": "mobile_fallback",
+      "copy": "Better experienced on a desktop"
+    },
+    {
+      "label": "about_label",
+      "copy": "About"
+    },
+    {
+      "label": "about_sumup",
+      "copy": "This sentence sum up the concept in one line"
+    },
+    {
+      "label": "about_copy",
+      "copy": "<p>Bacon ipsum dolor amet hamburger meatball landjaeger, corned beef prosciutto ground round filet mignon biltong bresaola rump shank fatback kielbasa pork belly chicken. Ham sausage picanha pork loin beef ribs meatloaf sirloin kielbasa corned beef cow pastrami beef ball tip. Jerky spare ribs beef ribs, venison sausage bacon shankle filet mignon prosciutto swine strip steak picanha cow pork belly pork loin. Prosciutto cow capicola bresaola, leberkas ball tip chicken beef ribs sausage swine sirloin.</p><p>Ham prosciutto short ribs, kevin cupim doner andouille t-bone. Turkey pork loin chuck swine sirloin shank capicola t-bone ribeye strip steak beef ribs hamburger prosciutto tri-tip. Landjaeger porchetta ham, drumstick meatball jowl cow tenderloin kevin. Picanha filet mignon boudin, strip steak sausage salami pastrami bacon ham jowl pork kielbasa. Capicola flank t-bone tail pork chop. Pancetta corned beef ham, landjaeger short loin pig alcatra meatball ham hock jowl kielbasa.</p><p>Pancetta hamburger ham hock pork belly bresaola pork chop frankfurter bacon boudin doner strip steak beef alcatra cow. Doner meatball pork belly ball tip alcatra picanha ham hock boudin leberkas prosciutto sirloin short ribs. Pancetta shoulder prosciutto cow cupim boudin. Corned beef sirloin pancetta picanha, drumstick andouille shankle. Ground round capicola tongue, tri-tip jowl cupim strip steak venison doner sausage boudin porchetta corned beef flank alcatra. Pork chop strip steak brisket landjaeger pork belly kevin.</p><p>Biltong turducken landjaeger fatback chuck. Alcatra tri-tip turkey, cow venison andouille filet mignon salami jowl kielbasa ball tip. Hamburger flank salami rump biltong, leberkas spare ribs porchetta filet mignon sirloin pancetta. Cow ham hock prosciutto jerky pastrami short ribs. Drumstick capicola pig pork pastrami flank. Pastrami pork chop biltong short ribs. Ground round tail cow hamburger swine landjaeger drumstick frankfurter pig tri-tip kevin.</p>"
+    },
+    {
+      "label": "watch_film_button",
+      "copy": "Watch the Film"
+    },
+    {
+      "label": "explore_button",
+      "copy": "Explore the Skin"
+    },
+    {
+      "label": "credits",
+      "copy": "<p>Curated by <a href=\"http://crystallizedskins.com\" target=\"_blank\">Robert Seidel</a></p><p>Development by <a href=\"http://fluuu.id\" target=\"_blank\">FLUUUID :: Silvio Paganini</a></p><p>Design by <a href=\"http://builders-club.com\" target=\"_blank\">Builder's Club :: Julien Simhauser</a></p>"
+    },
+    {
+      "label": "artists_title",
+      "copy": "Participating Artists"
+    }
+  ]
+}

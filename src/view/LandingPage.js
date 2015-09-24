@@ -4,7 +4,6 @@ import Stats from 'stats-js' ;
 import URL   from 'url';
 
 import SceneHome    from './SceneHome';
-import SceneGallery from './SceneGallery';
 
 class LandingPage {
   constructor() 
@@ -42,8 +41,8 @@ class LandingPage {
 
   showArtist(direction)
   {
-    this.sceneGallery.showArtist(direction);
-    this.sceneHome.transitionGallery( true,  ()=> {
+    this.scene.gallery.showArtist(direction);
+    this.scene.transitionGallery( true,  ()=> {
       this.state = 1;
     });
   }
@@ -51,7 +50,7 @@ class LandingPage {
   showLanding(callback)
   {
     this.state = 0;
-    this.sceneHome.transitionGallery( false, () => {
+    this.scene.transitionGallery( false, () => {
       window.APP.ui.animateLanding(false, callback);
     });
   }
@@ -60,22 +59,21 @@ class LandingPage {
   {
     this.renderer = new THREE.WebGLRenderer( {
         antialias : true,
-        clearColor: 0,
+        clearColor: 0x0000,
         alpha: false,
         gammaInput : true,
         gammeOutput : true,
         devicePixelRatio : window.devicePixelRatio
     } );
 
-    // this.renderer.setClearColor(0xFFFFFF, 1);
+    this.renderer.setClearColor(0x000000, 1);
     this.container.appendChild(this.renderer.domElement)
   }
 
   createScenes()
   {
     this.clock = new THREE.Clock();
-    this.sceneHome = new SceneHome(this.renderer, this.clock);
-    this.sceneGallery = new SceneGallery(this.renderer, this.clock);
+    this.scene = new SceneHome(this.renderer, this.clock);
   }
 
   update()
@@ -84,12 +82,7 @@ class LandingPage {
 
     // this.renderer.render(this.scene, this.camera);
 
-    if(this.state == 0)
-    {
-        this.sceneHome.render();
-    } else {
-        this.sceneGallery.render();
-    }
+    this.scene.render();
 
     this.stats.end()
 
@@ -105,9 +98,7 @@ class LandingPage {
   onResize()
   {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    
-    this.sceneHome.onResize();
-    this.sceneGallery.onResize();
+    this.scene.onResize();
   }
 }
 

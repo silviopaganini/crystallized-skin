@@ -7,50 +7,48 @@ import Scroll   from '../utils/ScrollManager';
 class UI  {
   constructor(copy) 
   {
-    this.scroll          = new Scroll();
-    this.loadingOnScreen = false;
+    this.scroll           = new Scroll();
+    this.loadingOnScreen  = false;
+    
+    this.copy             = copy;
+    this.h1               = document.querySelector('main header div.container > h1');
+    
+    this.h3About          = document.querySelector('main section.about div.container > h3');
+    this.h2About          = document.querySelector('main section.about div.container > h2');
+    this.h4About          = document.querySelector('main section.about div.container > h4');
+    
+    // this.h2Gallery     = document.querySelector('main header div.container-gallery > h2');
+    
+    this.h3               = document.querySelector('main header div.container > h3');
+    
+    this.sectionAbout     = document.querySelector('main section.about');
+    this.sectionVideo     = document.querySelector('main section.video');
+    this.sectionArtists   = document.querySelector('main section.artists');
+    this.sectionBottom    = document.querySelector('main section.bottom');
 
-    this.copy            = copy;
-    this.h1              = document.querySelector('main header div.container > h1');
+    this.artistH3         = document.querySelector('main section.artists div.container > h3');
     
-    this.h3About         = document.querySelector('section.about div.container > h3');
-    this.h2About         = document.querySelector('section.about div.container > h2');
-    this.h4About         = document.querySelector('section.about div.container > h4');
-
-    this.h2Gallery       = document.querySelector('section.gallery > h2');
+    this.bottomButton     = document.querySelector('main section.bottom > h3');
     
-    this.h3              = document.querySelector('main header div.container > h3');
-
-    this.sectionAbout   = document.querySelector('section.about');
-    this.sectionVideo   = document.querySelector('section.video');
-    this.sectionArtists = document.querySelector('section.artists');
-    this.sectionBottom  = document.querySelector('section.bottom');
+    this.button           = document.querySelector('button');
+    this.copyContainer    = document.querySelector('main section.about div.container > div.about-copy');
+    this.aboutCreds       = document.querySelector('main section.about div.container > div.about-credits');
     
-
-    this.artistH3        = document.querySelector('section.artists div.container > h3');
-
-    this.bottomButton    = document.querySelector('section.bottom > h3');
+    this.containerPiece   = document.querySelector('main header div.container-gallery > div.container');
+    this.pieceName        = document.querySelector('p.piece-name');
+    this.pieceLinkCont    = document.querySelector('p.piece-link');
+    this.pieceLink        = document.querySelector('p.piece-link span');
     
-    this.button          = document.querySelector('button');
-    this.copyContainer   = document.querySelector('section.about div.container > div.about-copy');
-    this.aboutCreds      = document.querySelector('section.about div.container > div.about-credits');
+    this.header           = document.querySelector('header');
     
-    this.containerPiece  = document.querySelector('section.gallery > div.container');
-    this.pieceName       = document.querySelector('p.piece-name');
-    this.pieceLinkCont   = document.querySelector('p.piece-link');
-    this.pieceLink       = document.querySelector('p.piece-link span');
+    this.navLeft          = document.querySelector("nav a[data-side='left']");
+    this.navRight         = document.querySelector("nav a[data-side='right']");
+    this.arrowBottom      = document.querySelector('main header .arrow-bottom > img');
+    this.divArrowBottom   = document.querySelector('main header .arrow-bottom');
+    this.arrowBottomVideo = this.sectionVideo.querySelector("div.arrow-bottom");
     
-    this.header          = document.querySelector('header');
+    this.spinner          = document.querySelector('.preloader');
     
-    this.navLeft         = document.querySelector("nav a[data-side='left']");
-    this.navRight        = document.querySelector("nav a[data-side='right']");
-    this.arrowBottom     = document.querySelector('main header .arrow-bottom > img');
-    this.divArrowBottom  = document.querySelector('main header .arrow-bottom');
-    this.arrowUp         = document.querySelector(".arrow-up > img");
-    
-    this.spinner         = document.querySelector('.preloader');
-    this.spinnerChildren = document.querySelectorAll('.sk-cube');
-
     this.initObjectsToAnimate();
 
     this.setCopy();
@@ -65,6 +63,7 @@ class UI  {
 
   showAboveTheFold()
   {
+    window.APP.video.stop();
     this.scroll.scrollTo(window.innerHeight);
   }
 
@@ -74,9 +73,13 @@ class UI  {
     this.animateOutGallery(this.showAboveTheFold.bind(this));
   }
 
+  scrollToAboutPage()
+  {
+    this.scroll.scrollTo(this.sectionAbout.offsetTop);
+  }
+
   scrollUp()
   {
-    window.APP.video.stop();
     this.scroll.scrollTo(0);
   }
 
@@ -84,12 +87,14 @@ class UI  {
   {
     eve.on(this.button, 'click', this.showArtist.bind(this));
 
-    eve.on(this.h2Gallery, 'click', this.backHome.bind(this));
+    // eve.on(this.h2Gallery, 'click', this.backHome.bind(this));
 
-    eve.on(this.arrowBottom, 'click', this.showAboveTheFold.bind(this));
-    eve.on(this.arrowUp, 'click', this.scrollUp.bind(this));
+    eve.on(this.sectionBottom, 'click', this.showArtist.bind(this));
+
+    eve.on(this.arrowBottom, 'click', this.scrollToAboutPage.bind(this));
+    eve.on(this.arrowBottomVideo, 'click', this.showAboveTheFold.bind(this));
     
-    eve.on(this.pieceLink, 'click', this.showAboveTheFold.bind(this));
+    eve.on(this.pieceLink, 'click', this.scrollUp.bind(this));
 
     eve.on(this.navLeft, 'click', this.navArtist.bind(this), true);
     eve.on(this.navRight, 'click', this.navArtist.bind(this), true);
@@ -126,7 +131,7 @@ class UI  {
 
     this.setString( this.h3, 'sub_header' );
     this.setString( this.button, 'launch_button' );
-    this.setString( this.h2Gallery, 'title' );
+    // this.setString( this.h2Gallery, 'title' );
     this.setString( this.pieceLink, 'watch_film_button' );
     this.setString( this.copyContainer, 'about_copy' );
     
@@ -139,13 +144,14 @@ class UI  {
 
   showArtist(direction)
   {
-    this.scroll.scrollTo(0, () => {
+    this.scroll.scrollTo(this.sectionVideo.offsetHeight + this.header.offsetTop, () => {
       this.animateLanding( true,  () => {
 
-        css(this.sectionAbout, {display: 'none'});
-        css(this.sectionBottom, {display: 'none'});
-        css(this.sectionArtists, {display: 'none'});
+        // css(this.sectionAbout, {display: 'none'});
+        // css(this.sectionBottom, {display: 'none'});
+
         css(this.sectionVideo, {display: 'block'});
+        this.scroll.scrollTo(window.innerHeight, null, true);
 
         for (var i = 0; i < this.galleryEls.length; i++) {
           TweenMax.to(this.galleryEls[i], .5, {y: 0, autoAlpha: 1});
@@ -179,11 +185,10 @@ class UI  {
   animateLanding(out, callback)
   {
     var timeline = new TimelineMax({paused: true, onComplete: ()=> {
-      out ? this.scroll.disableScroll() : this.scroll.enableScroll();
-
-      css(this.sectionAbout, {display: 'table'});
-      css(this.sectionBottom, {display: 'block'});
-      css(this.sectionArtists, {display: 'table'});
+      this.scroll.enableScroll();
+      // css(this.sectionAbout, {display: 'table'});
+      // css(this.sectionBottom, {display: 'block'});
+      // css(this.sectionArtists, {display: 'table'});
 
       css(this.sectionVideo, {display: 'none'});
 
@@ -201,7 +206,7 @@ class UI  {
 
   initObjectsToAnimate()
   {
-    this.galleryEls = document.querySelectorAll('section.gallery > *[data-animation]');
+    this.galleryEls = document.querySelectorAll('main header div.container-gallery > *[data-animation]');
 
     for (var i = 0; i < this.galleryEls.length; i++) {
       TweenMax.to(this.galleryEls[i], 0, {y: -15, autoAlpha: 0});

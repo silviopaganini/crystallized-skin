@@ -9,7 +9,9 @@ class ScrollManager
     this.prevScroll = 0;
     this.emitter = window.APP.emitter;
 
-    this.delay = 700;
+    this.timerToScroll = 0;
+
+    this.delay = 800;
 
     window.onscroll = this.onScroll.bind(this);
     window.onkeydown = this.onKeyDown.bind(this);
@@ -18,28 +20,41 @@ class ScrollManager
   calculateDelay(target)
   {
     let a = ((target - window.pageYOffset) * this.delay) / window.innerHeight;
-    return Math.abs(a/1000);
+    return Math.max(.4, Math.abs(a/1000));
   }
 
   onKeyDown(e)
   {
     this.preventDefaultForScrollKeys(e);
 
+    if(window.APP.landing.state == 0)
+    {
+      switch(e.keyCode)
+      {
+          case 38:
+              this.scrollTo(window.APP.ui.header.offsetTop);
+              window.APP.video.stop();
+              break;
+          case 40: 
+              this.scrollTo(window.innerHeight);
+              break;
+      }
+
+      return;
+
+    }
+
     switch(e.keyCode)
     {
         case 40:
+            this.scrollTo(window.APP.ui.sectionAbout.offsetTop);
+            window.APP.video.stop();
+            break;
+
+        case 38: 
             this.scrollTo(window.innerHeight);
             break;
-        case 38: 
-            window.APP.video.stop();
-            this.scrollTo(0);
-            break;
-    }
 
-    if(window.APP.landing.state == 0) return;
-
-    switch(e.keyCode)
-    {
         case 39:
             // right
             this.emitter.emit('changeArtist', 'right');
@@ -90,6 +105,11 @@ class ScrollManager
       window.onscroll = this.onScroll.bind(this); // modern standard
   }
 
+  scrollToHeader()
+  {
+    this.scrollTo(window.APP.ui.sectionVideo.offsetHeight + window.APP.ui.header.offsetTop, null);
+  }
+
   onScroll(e)
   {
     if(this.scrolling) {
@@ -97,37 +117,23 @@ class ScrollManager
       return;
     }
 
-    let down = window.pageYOffset > this.prevScroll;
+    clearTimeout(this.timerToScroll);
+    this.timerToScroll = 0;
 
-    this.prevScroll = window.pageYOffset;
-
-    if(down)
+    if(Math.abs((window.pageYOffset - window.APP.ui.sectionVideo.offsetHeight) - window.APP.ui.header.offsetTop) < window.innerHeight / 4)
     {
-      if(window.pageYOffset > window.innerHeight / 3)
-      {
-        e.preventDefault();
-        // this.scrollTo(window.innerHeight, null, true);
-      }
-    } else {
-
-      if(window.pageYOffset < (window.innerHeight / 3) * 2)
-      {
-        e.preventDefault();
-        window.APP.video.stop();
-        // this.scrollTo(0, null, true);
-      }
-
+      this.timerToScroll = setTimeout(this.scrollToHeader.bind(this), this.delay);
     }
   }
 
-  scrollTo(Y, callback, scrolling = false)
+  scrollTo(Y, callback, immediate = false)
   {
     this.scrolling = true;
     this.disableScroll();
 
-    TweenMax.to(window, this.calculateDelay(Y), {
+    TweenMax.to(window, immediate ? 0 : this.calculateDelay(Y), {
         scrollTo: {x: 0, y: Y},
-        ease: scrolling ? Power2.easeOut : Power2.easeInOut,
+        ease: Power2.easeInOut,
         onComplete: () => {
             if(callback) callback();
 
