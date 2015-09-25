@@ -119,8 +119,8 @@ class SceneHome
       this.scene.add(this.meshWireframe);
 
       for (var i = 0; i < this.mesh.geometry.vertices.length; i++) {
-          this.mesh.geometry.vertices[i].z = this.perlin[i] * -(Math.random() * this.p.power);
-          this.meshWireframe.geometry.vertices[i].z = this.perlin[i] * -(Math.random() * this.p.power);
+          this.mesh.geometry.vertices[i].z = this.perlin[i] * -(this.p.power / 2 - Math.random() * this.p.power);
+          this.meshWireframe.geometry.vertices[i].z = this.mesh.geometry.vertices[i].z;
           this.animateVertice( i );
       };
 
@@ -141,13 +141,12 @@ class SceneHome
   animateVertice( i )
   {
       TweenMax.to(this.mesh.geometry.vertices[i], 1.5 + Math.random() * 3, {
-          z: this.perlin[i] * -(Math.random() * this.p.power), 
-          delay: .5 + Math.random(),
-          yoyo: true,
-          ease: Linear.easeNone,
+          z: this.perlin[i] * -(this.p.power / 2 - Math.random() * this.p.power), 
+          ease: Power2.easeInOut,
           onRepeat: this.generatePerlin.bind(this),
           onUpdate: ()=>{this.meshWireframe.geometry.vertices[i].z = this.mesh.geometry.vertices[i].z},
-          repeat: -1
+          onComplete: this.animateVertice.bind(this), 
+          onCompleteParams: [i]
       })
   }
 
