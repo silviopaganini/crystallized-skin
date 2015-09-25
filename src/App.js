@@ -37,10 +37,10 @@ class App {
 
           // console.log(data);
 
-          var a = document.createElement('a');
-          a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(e));
-          a.target = "_blank";
-          a.click();
+          // var a = document.createElement('a');
+          // a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(e));
+          // a.target = "_blank";
+          // a.click();
           TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
         } 
     });
@@ -51,6 +51,8 @@ class App {
   {
     this.browser = require('browser-detection/src/browser-detection')();
     this.mobile  = !(this.browser.os == 'osx' || this.browser.os == 'win')
+    
+    this.artists = data['artists'];
 
     if(this.mobile)
     {

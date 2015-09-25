@@ -125,6 +125,7 @@ class UI  {
     eve.on(this.sectionBottom, 'click', this.showArtist.bind(this));
 
     eve.on(this.arrowBottom, 'click', this.scrollToAboutPage.bind(this));
+
     eve.on(this.arrowBottomVideo, 'click', this.showAboveTheFold.bind(this));
     
     eve.on(this.pieceLink, 'click', this.scrollUp.bind(this));

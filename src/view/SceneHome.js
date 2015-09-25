@@ -74,6 +74,7 @@ class SceneHome
   generatePlane()
   {
       if(this.mesh) this.scene.remove(this.mesh);
+      if(this.meshWireframe) this.scene.remove(this.meshWireframe);
       if(this.light) this.scene.remove(this.light);
 
       this.light = new THREE.DirectionalLight(this.p.lightColor, 1);
@@ -87,6 +88,7 @@ class SceneHome
 
       let size = window.innerWidth >= window.innerHeight ? window.innerWidth : window.innerHeight * 1.5;
       this.geo  = new THREE.PlaneGeometry(size / 2, size / 2, this.nodes, this.nodes);
+
       // this.geo.originalVertices = this.geo.vertices.slice();
       this.mesh = new THREE.Mesh(this.geo, new THREE.MeshPhongMaterial({
           color     : new THREE.Color(this.p.meshColor),
@@ -96,12 +98,19 @@ class SceneHome
           shading   : THREE.FlatShading,
       }));
 
+      this.meshWireframe = new THREE.Mesh(this.geo, new THREE.MeshPhongMaterial({color: 0x444444, wireframe: true}));
+
       this.mesh.rotation.x = -20 * Math.PI / 180;
+      this.meshWireframe.rotation.x = -20 * Math.PI / 180;
+      this.meshWireframe.position.z = 1;
+
       this.generatePerlin();
       this.scene.add(this.mesh);
+      this.scene.add(this.meshWireframe);
 
       for (var i = 0; i < this.mesh.geometry.vertices.length; i++) {
           this.mesh.geometry.vertices[i].z = this.perlin[i] * -(Math.random() * this.p.power);
+          this.meshWireframe.geometry.vertices[i].z = this.perlin[i] * -(Math.random() * this.p.power);
           this.animateVertice( i );
       };
 
@@ -127,6 +136,7 @@ class SceneHome
           yoyo: true,
           ease: Linear.easeNone,
           onRepeat: this.generatePerlin.bind(this),
+          onUpdate: ()=>{this.meshWireframe.geometry.vertices[i].z = this.mesh.geometry.vertices[i].z},
           repeat: -1
       })
   }
@@ -141,9 +151,9 @@ class SceneHome
     var Params = function(){
         this.nodes = 20;
         this.power = 100;
-        this.lightColor = '#ffffff';
-        this.meshColor = '#010101';
-        this.meshSpecular = '#181818';
+        this.lightColor = '#7f7f7f';
+        this.meshColor = '#222222';
+        this.meshSpecular = '#1e1e1e';
         this.meshEmissive = '#000000';
         this.shininess = 20;
         this.noiseAmount = .05;
@@ -201,6 +211,7 @@ class SceneHome
     if(this.updateColor) this.mesh.material.needsUpdate = true;
 
     this.mesh.geometry.verticesNeedUpdate = true;
+    this.meshWireframe.geometry.verticesNeedUpdate = true;
 
     if(this.renderPost)
     {

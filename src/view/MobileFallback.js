@@ -1,33 +1,67 @@
-import css from 'dom-css';
-import _   from 'underscore';
+import css    from 'dom-css';
+import _      from 'underscore';
+import eve    from 'dom-events';
+import Scroll from '../utils/ScrollManager';
 
 class MobileFallback {
   constructor(copy) {
 
-    console.log(copy)
-
     this.copy = copy;
 
-    this.el      = document.querySelector('div.fallback');
-    this.title   = this.el.querySelector('h1');
-    this.h2      = this.el.querySelector('h2');
-    this.sub     = this.el.querySelector('h3');
-    this.p     = this.el.querySelector('p');
-    this.content = this.el.querySelector('.content div.about-copy');
+    this.scroll  = new Scroll();
+    
+    this.el          = document.querySelector('div.fallback');
+    this.title       = this.el.querySelector('div.content > h2');
+    this.h2          = this.el.querySelector('header div.container > h3');
+    this.sub         = this.el.querySelector('div.content > h3');
+    this.h4          = this.el.querySelector('h4');
+    this.p           = this.el.querySelector('p');
+    this.content     = this.el.querySelector('.content');
+    this.contentCopy = this.el.querySelector('.content div.about-copy');
+    
+    this.aboutCreds = this.el.querySelector('.content div.about-credits');
+    this.artistsH3 = this.el.querySelector('div.artists div.container > h3');
 
     css(this.el, {display: 'block'});
 
     this.setCopy();
+    this.populateArtistsHome();
+
+    this.bottomButton = this.el.querySelector('header div.arrow-bottom');
+
+    eve.on(this.bottomButton, 'click', this.tapDownButton.bind(this));
+  }
+
+  tapDownButton(e)
+  {
+    this.scroll.scrollTo(this.content.offsetTop)
   }
 
   setCopy()
   {
     this.setString( this.title, 'title' );
-    this.setString( this.sub, 'sub_header' );
-    this.setString( this.h2, 'about_label' );
+    this.setString( this.sub, 'about_label' );
+    this.setString( this.h2, 'sub_header' );
     this.setString( this.p, 'mobile_fallback' );
-    this.setString( this.content, 'about_copy' );
+    this.setString( this.contentCopy, 'about_copy' );
+
+    this.setString( this.artistsH3, 'artists_title' );
     
+    this.setString( this.h4, 'about_sumup' );
+    this.setString( this.aboutCreds, 'credits' );
+
+  }
+
+  populateArtistsHome()
+  {
+    this.artistsUL = this.el.querySelector('div.artists div.container > ul');
+
+    for (var i = 0; i < window.APP.artists.length; i++) {
+      let li = document.createElement("li");
+      li.dataset.index = i;
+      li.innerHTML = "<img src='"+window.APP.artists[i].image+"'><p>" + window.APP.artists[i].artist_name + "</p>";
+      this.artistsUL.appendChild(li);
+    };
   }
 
   setString(el, key)

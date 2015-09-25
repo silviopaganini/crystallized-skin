@@ -41,8 +41,7 @@ div.fallback header
 {
   height: 100%;
   display: table;
-  position: inherit;
-  background-color: rgba(255, 255, 255, .4);
+  position: static;
 }
 
 div.fallback header p
@@ -56,19 +55,81 @@ div.fallback header p
 div.fallback header div.container
 {
   display: table-cell;
-  height: 100%;
   vertical-align: middle;
 }
 
 div.fallback div.content
 {
-  top: 100%;
-  position: relative;
+  background-color: white;
+  position: static;
   display: block;
   padding: 0 7% 20px;
   line-height: 1.8em;
   text-align: left;
 }
+
+div.fallback div.content h2
+{
+  padding: 0;
+  margin: 0;
+}
+
+div.fallback div.content h3 
+{
+  width: 100%;
+  text-align: center;
+  padding: 3em 0 0;
+  margin: 0;
+}
+
+div.fallback div.content h4
+{
+  font-size: 12px;
+  width: 100%;
+  text-align: center;
+}
+
+div.fallback div.about-credits
+{
+  font-size: 16px;
+  color: #73746b;
+}
+
+div.fallback div.about-credits > p
+{
+  padding: 0;
+  margin: 0;
+  line-height: 1.8em;
+}
+
+div.fallback div.about-credits > p > a:hover
+{
+  text-decoration: underline;
+}
+
+div.fallback div.about-credits > p:nth-child(even)
+{
+  color: #604fff;
+}
+
+div.fallback div.about-credits > p:nth-child(odd)
+{
+  color: #ff4f4f;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 main
 {
@@ -399,47 +460,65 @@ ARTTISTS
 
 */
 
-section.artists
+.artists
 {
   background-color: black;
   line-height: 1.8em;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   display: table;
   
 }
 
-section.artists div.container
+.artists div.container
 {
   margin: 3em auto 0;
   text-align: center;
-  width: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  width: 100vw;
 }
 
-section.artists div.container ul
+.artists div.container h3
+{
+  padding: 0 0 3em;
+}
+
+div.fallback div.artists div.container h3
+{
+  padding: 1em 0 1em;
+}
+
+.artists div.container ul
 {
   list-style: none;
-  width: 100wv;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
 }
 
-section.artists div.container ul > li
+.artists div.container ul > li
 {
   display: inline-block;
+  width: 100wv;
   cursor: pointer;
   font-size: 16px;
 }
 
-section.artists div.container ul > li > img 
+.artists div.container ul > li > img 
 {
+  width: 100%;
   pointer-events: none; 
 }
 
-section.artists div.container ul > li:hover p
+.artists div.container ul > li:hover p
 {
   color: #ff4f4f;
+  width: 100%;
+  text-align: center;
 }
 
-section.artists div.container ul > li > p
+.artists div.container ul > li > p
 {
   color: white;
   pointer-events: none;

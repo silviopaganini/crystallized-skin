@@ -107,9 +107,15 @@ class ScrollManager
       window.onscroll = this.onScroll.bind(this); // modern standard
   }
 
+  getSectionHeight(section)
+  {
+    if(window.APP.ui) return window.APP.ui[section].offsetHeight;
+    return 0;
+  }
+
   scrollToHeader()
   {
-    this.scrollTo(window.APP.ui.sectionVideo.offsetHeight + window.APP.ui.header.offsetTop, null);
+    this.scrollTo(this.getSectionHeight('sectionVideo') + this.getSectionHeight('header'), null);
   }
 
   onScroll(e)
@@ -122,7 +128,7 @@ class ScrollManager
     clearTimeout(this.timerToScroll);
     this.timerToScroll = 0;
 
-    if(Math.abs((window.pageYOffset - window.APP.ui.sectionVideo.offsetHeight) - window.APP.ui.header.offsetTop) < window.innerHeight / 4)
+    if(Math.abs((window.pageYOffset - this.getSectionHeight('sectionVideo')) - this.getSectionHeight('header')) < window.innerHeight / 4)
     {
       this.timerToScroll = setTimeout(this.scrollToHeader.bind(this), this.delay);
     }
