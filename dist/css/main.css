@@ -510,10 +510,24 @@ div.fallback div.artists div.container h3
 .artists div.container ul > li
 {
   display: inline-block;
-  width: 50%;
+  width: 100%;
   text-align: center;
   cursor: pointer;
   font-size: 16px;
+}
+
+@media only screen and (min-width: 1280px) { 
+  .artists div.container ul > li
+  {
+   width: 50%; 
+  }
+}
+
+@media only screen and (min-width: 1920px) { 
+  .artists div.container ul > li
+  {
+   width: 33%; 
+  }
 }
 
 div.fallback div.artists div.container ul > li
