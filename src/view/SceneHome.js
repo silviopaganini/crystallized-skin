@@ -26,8 +26,10 @@ class SceneHome
 
     this.renderPost = window.APP.browser.os == 'osx';
 
-    this.startGUI( parseInt(URL.parse(window.location.href, true).query.d) );
     this.createScene();
+
+    this.startGUI( parseInt(URL.parse(window.location.href, true).query.d) );
+
     this.addObjects();
   }
 
@@ -39,6 +41,9 @@ class SceneHome
     this.camera.position.set(0, 20, 240);
     // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     // this.controls.maxDistance = 500;
+
+    // this.camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, -500, 500 );
+    // this.camera.position.set(0, 20, 0);
 
     this.scene = new THREE.Scene();
   }
@@ -102,7 +107,12 @@ class SceneHome
 
       this.mesh.rotation.x = -20 * Math.PI / 180;
       this.meshWireframe.rotation.x = -20 * Math.PI / 180;
-      this.meshWireframe.position.z = 1;
+
+      this.mesh.scale.set(2, 2, 2);
+      this.meshWireframe.scale.set(2, 2, 2);
+
+      this.mesh.position.z = -200;
+      this.meshWireframe.position.z = -199;
 
       this.generatePerlin();
       this.scene.add(this.mesh);
@@ -174,14 +184,20 @@ class SceneHome
     folderColors.addColor(this.p, 'meshSpecular').onChange(this.updateColours.bind(this));
     folderColors.addColor(this.p, 'meshEmissive').onChange(this.updateColours.bind(this));
     folderColors.add(this.p, 'shininess', 0, 50).step(1).onChange(this.updateColours.bind(this));
-    folderColors.open();
+    folderColors.close();
 
     var folderNoise = gui.addFolder('Postprocessing Noise');
     folderNoise.add(this.p, 'noiseAmount', 0, .2);
     folderNoise.add(this.p, 'noiseSpeed', 0, 10);
-    folderNoise.open();
+    folderNoise.close();
 
-    gui.close();
+    var folderCamera = gui.addFolder('Camera');
+    folderCamera.add(this.camera.position, 'x', 0, 1500);
+    folderCamera.add(this.camera.position, 'y', 0, 1500);
+    folderCamera.add(this.camera.position, 'z', -1500, 1500);
+    folderCamera.open();
+
+    // gui.close();
   }
 
   updateColours()
@@ -235,6 +251,12 @@ class SceneHome
     }
     this.generatePlane();
     this.camera.aspect = window.innerWidth / window.innerHeight;
+
+    // this.camera.left = window.innerWidth / - 2;
+    // this.camera.right = window.innerWidth / 2;
+    // this.camera.top = window.innerHeight / 2;
+    // this.camera.bottom = window.innerHeight / - 2;
+
     this.camera.updateProjectionMatrix();
   }
 }
