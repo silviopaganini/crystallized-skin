@@ -103,7 +103,7 @@ class SceneHome
           shading   : THREE.FlatShading,
       }));
 
-      this.meshWireframe = new THREE.Mesh(this.geo, new THREE.MeshPhongMaterial({color: 0x444444, wireframe: true}));
+      this.meshWireframe = new THREE.Mesh(this.geo, new THREE.MeshPhongMaterial({color: this.p.wireColour, wireframe: true}));
 
       this.mesh.rotation.x = -20 * Math.PI / 180;
       this.meshWireframe.rotation.x = -20 * Math.PI / 180;
@@ -164,6 +164,7 @@ class SceneHome
         this.meshColor = '#222222';
         this.meshSpecular = '#1e1e1e';
         this.meshEmissive = '#000000';
+        this.wireColour = '#444444';
         this.shininess = 20;
         this.noiseAmount = .05;
         this.noiseSpeed = 1;
@@ -182,6 +183,7 @@ class SceneHome
     folderColors.addColor(this.p, 'meshColor').onChange(this.updateColours.bind(this));
     folderColors.addColor(this.p, 'meshSpecular').onChange(this.updateColours.bind(this));
     folderColors.addColor(this.p, 'meshEmissive').onChange(this.updateColours.bind(this));
+    folderColors.addColor(this.p, 'wireColour').onChange(this.updateColours.bind(this));
     folderColors.add(this.p, 'shininess', 0, 50).step(1).onChange(this.updateColours.bind(this));
     folderColors.close();
 
@@ -206,7 +208,10 @@ class SceneHome
       this.mesh.material.emissive = new THREE.Color(this.p.meshEmissive);
       this.mesh.material.shininess = this.p.shininess;
       this.light.color = new THREE.Color(this.p.lightColor);
+      this.meshWireframe.material.color = new THREE.Color(this.p.wireColour);
+
       this.mesh.material.needsUpdate = true;
+      this.meshWireframe.geometry.verticesNeedUpdate = true;
   }
 
   transitionGallery(out, callback)
@@ -223,8 +228,6 @@ class SceneHome
 
   render()
   {
-    if(this.updateColor) this.mesh.material.needsUpdate = true;
-
     this.mesh.geometry.verticesNeedUpdate = true;
     this.meshWireframe.geometry.verticesNeedUpdate = true;
 
