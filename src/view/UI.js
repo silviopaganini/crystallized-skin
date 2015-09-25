@@ -10,6 +10,8 @@ class UI  {
   {
     this.scroll           = new Scroll();
     this.loadingOnScreen  = false;
+
+    this.canvas = document.querySelector('#container-canvas');
     
     this.copy             = copy;
     this.h1               = document.querySelector('main header div.container > h1');
@@ -225,6 +227,9 @@ class UI  {
       // css(this.sectionArtists, {display: 'table'});
 
       css(this.sectionVideo, {display: 'none'});
+      // css(this.canvas, {
+      //   position : 'fixed'
+      // });
 
       if(callback) callback();
     }});

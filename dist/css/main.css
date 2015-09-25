@@ -142,6 +142,7 @@ main
 {
   position: fixed;
   height: 100%;
+  top: 0;
 }
 
 header
@@ -467,6 +468,7 @@ ARTTISTS
   width: 100vw;
   display: table;
   position: relative;
+  background-color: rgba(0,0,0,.5);
   
 }
 
@@ -575,6 +577,8 @@ section.video
 {
     display: none;
     height: 100vh;
+    position: relative;
+    z-index: 2;
 }
 
 section.video div.container
