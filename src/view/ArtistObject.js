@@ -2,7 +2,7 @@ import eve from 'dom-events';
 import css from 'dom-css';
 
 class ArtistObject {
-  constructor(data) 
+  constructor(data, index) 
   {
     this.totalFrames = 6;
     this.frameWidth  = 640;
@@ -12,6 +12,7 @@ class ArtistObject {
     this.image     = data.image;
     this.el        = document.createElement('li');
     this.container = document.createElement('div');
+    this.el.dataset.index = index;
     
 
     css(this.container, {
@@ -33,9 +34,14 @@ class ArtistObject {
     eve.on(this.el, 'mousemove', this.onMouseMove.bind(this));
   }
 
+  getFrame(offset)
+  {
+    return Math.min(this.totalFrames, Math.max(0, (offset / this.ratio + .5) >> 0));
+  }
+
   onMouseMove(e)
   {
-    let frame = (e.offsetX / this.ratio + .5) >> 0;
+    let frame = this.getFrame(e.offsetX);
     let pos = this.frameHeight * frame;
     css(this.container, {
         'background-position' : '0 -' + pos + "px"

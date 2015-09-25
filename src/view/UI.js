@@ -78,14 +78,15 @@ class UI  {
   {
     for (var i = 0; i < window.APP.artists.length; i++) {
 
-      let art = new ArtistObject(window.APP.artists[i]);
+      let art = new ArtistObject(window.APP.artists[i], i);
       this.artistsUL.appendChild(art.el);
-      
+      eve.on(art.el, 'click', this.artistClick.bind(this));
     };
   }
 
   artistClick(e)
   {
+    console.log(e)
     window.APP.currentArtist = Number(e.target.dataset.index);
     this.showArtist();
   }

@@ -482,10 +482,10 @@ div.fallback div.artists
 .artists div.container
 {
   margin: 3em auto 0;
-  text-align: center;
+  /*text-align: center;*/
   display: table-cell;
   vertical-align: middle;
-  width: 100vw;
+  width: 100%;
 }
 
 .artists div.container h3
@@ -501,7 +501,7 @@ div.fallback div.artists div.container h3
 .artists div.container ul
 {
   list-style: none;
-  width: 100vw;
+  width: 100%;
   margin: 0;
   padding: 0;
 }
@@ -509,16 +509,15 @@ div.fallback div.artists div.container h3
 .artists div.container ul > li
 {
   display: inline-block;
-  /*width: 100wv;*/
+  width: 50%;
+  text-align: center;
   cursor: pointer;
   font-size: 16px;
-  /*border: 1px solid red;*/
 }
 
 div.fallback div.artists div.container ul > li
 {
   display: block;
-  width: 100wv;
   cursor: pointer;
   font-size: 16px;
 }
@@ -527,6 +526,7 @@ div.fallback div.artists div.container ul > li
 {
   /*width: 100%;*/
   pointer-events: none; 
+  margin: 0 auto;
 }
 
 .artists div.container ul > li:hover p
