@@ -140,7 +140,7 @@ main
 
 #container-canvas
 {
-  position: absolute;
+  position: fixed;
   height: 100%;
 }
 
@@ -462,11 +462,11 @@ ARTTISTS
 
 .artists
 {
-  background-color: black;
   line-height: 1.8em;
   min-height: 100vh;
   width: 100vw;
   display: table;
+  position: relative;
   
 }
 
@@ -507,9 +507,10 @@ div.fallback div.artists div.container h3
 .artists div.container ul > li
 {
   display: inline-block;
-  width: 100wv;
+  /*width: 100wv;*/
   cursor: pointer;
   font-size: 16px;
+  /*border: 1px solid red;*/
 }
 
 div.fallback div.artists div.container ul > li
@@ -520,9 +521,9 @@ div.fallback div.artists div.container ul > li
   font-size: 16px;
 }
 
-.artists div.container ul > li > img 
+.artists div.container ul > li > div 
 {
-  width: 100%;
+  /*width: 100%;*/
   pointer-events: none; 
 }
 
@@ -551,6 +552,7 @@ BOTTOM
 {
   background-color: white;
   text-align: center;
+  position: relative;
   padding: 0;
   margin: 0;
 }

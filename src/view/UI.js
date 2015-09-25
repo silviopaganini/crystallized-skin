@@ -1,8 +1,9 @@
-import _        from 'underscore';
-import TweenMax from 'gsap';
-import eve      from 'dom-events';
-import css      from 'dom-css';
-import Scroll   from '../utils/ScrollManager';
+import _            from 'underscore';
+import TweenMax     from 'gsap';
+import eve          from 'dom-events';
+import css          from 'dom-css';
+import Scroll       from '../utils/ScrollManager';
+import ArtistObject from './ArtistObject';
 
 class UI  {
   constructor(copy) 
@@ -74,11 +75,10 @@ class UI  {
   populateArtistsHome()
   {
     for (var i = 0; i < window.APP.artists.length; i++) {
-      let li = document.createElement("li");
-      li.dataset.index = i;
-      li.innerHTML = "<img src='"+window.APP.artists[i].image+"'><p>" + window.APP.artists[i].artist_name + "</p>";
-      eve.on(li, "click", this.artistClick.bind(this), true);
-      this.artistsUL.appendChild(li);
+
+      let art = new ArtistObject(window.APP.artists[i]);
+      this.artistsUL.appendChild(art.el);
+      
     };
   }
 
