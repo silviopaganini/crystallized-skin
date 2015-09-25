@@ -7,12 +7,15 @@ import UI             from './view/UI';
 import VideoOverlay   from './view/VideoOverlay';
 import MobileFallback from './view/MobileFallback';
 
-import ajax from 'ajax-request'
+import ajax           from 'ajax-request'
+import URL            from 'url';
 
 class App {
   constructor(data) {
 
-    if(window.location.href.indexOf(":9966") > -1)
+    let parsedURL = URL.parse(window.location.href, true);
+
+    if(parsedURL.port != "80" && !parsedURL.query.d)
     {
 
       ajax({url: window.location.href + 'data/data.json', method: 'get'}, (err, res, body) => {
@@ -34,10 +37,10 @@ class App {
 
           // console.log(data);
 
-          // var a = document.createElement('a');
-          // a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(e));
-          // a.click();
-          // console.log(data);
+          var a = document.createElement('a');
+          a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(e));
+          a.target = "_blank";
+          a.click();
           TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
         } 
     });

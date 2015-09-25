@@ -48,11 +48,44 @@ class UI  {
     this.arrowBottomVideo = this.sectionVideo.querySelector("div.arrow-bottom");
     
     this.spinner          = document.querySelector('.preloader');
+
+
+    /*
+  
+    artists list 
+
+    */
+
+    this.artistsUL = this.sectionArtists.querySelector('ul');
+    this.populateArtistsHome();
+
+    /*
+
+    list objects to animate
+    
+    */
     
     this.initObjectsToAnimate();
 
     this.setCopy();
     this.listen();
+  }
+
+  populateArtistsHome()
+  {
+    for (var i = 0; i < window.APP.artists.length; i++) {
+      let li = document.createElement("li");
+      li.dataset.index = i;
+      li.innerHTML = "<img src='"+window.APP.artists[i].image+"'><p>" + window.APP.artists[i].artist_name + "</p>";
+      eve.on(li, "click", this.artistClick.bind(this), true);
+      this.artistsUL.appendChild(li);
+    };
+  }
+
+  artistClick(e)
+  {
+    window.APP.currentArtist = Number(e.target.dataset.index);
+    this.showArtist();
   }
 
   showLoading(show, white)

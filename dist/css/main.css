@@ -429,6 +429,11 @@ section.artists div.container ul > li
   font-size: 16px;
 }
 
+section.artists div.container ul > li > img 
+{
+  pointer-events: none; 
+}
+
 section.artists div.container ul > li:hover p
 {
   color: #ff4f4f;
@@ -437,6 +442,7 @@ section.artists div.container ul > li:hover p
 section.artists div.container ul > li > p
 {
   color: white;
+  pointer-events: none;
   -webkit-transition: all .2s;
     transition: all .2s;
 }
