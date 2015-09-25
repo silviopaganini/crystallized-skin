@@ -10,17 +10,17 @@ class MobileFallback {
 
     this.scroll  = new Scroll();
     
-    this.el          = document.querySelector('div.fallback');
-    this.title       = this.el.querySelector('div.content > h2');
-    this.h2          = this.el.querySelector('header div.container > h3');
-    this.sub         = this.el.querySelector('div.content > h3');
-    this.h4          = this.el.querySelector('h4');
-    this.p           = this.el.querySelector('p');
-    this.content     = this.el.querySelector('.content');
-    this.contentCopy = this.el.querySelector('.content div.about-copy');
-    
-    this.aboutCreds = this.el.querySelector('.content div.about-credits');
-    this.artistsH3 = this.el.querySelector('div.artists div.container > h3');
+    this.el           = document.querySelector('div.fallback');
+    this.title        = this.el.querySelector('div.content > h2');
+    this.h2           = this.el.querySelector('header div.container > h3');
+    this.sub          = this.el.querySelector('div.content > h3');
+    this.h4           = this.el.querySelector('h4');
+    this.p            = this.el.querySelector('p');
+    this.content      = this.el.querySelector('.content');
+    this.contentCopy  = this.el.querySelector('.content div.about-copy');
+    // this.bottomButton = this.el.querySelector('div.bottom > h3');
+    this.aboutCreds   = this.el.querySelector('.content div.about-credits');
+    this.artistsH3    = this.el.querySelector('div.artists div.container > h3');
 
     css(this.el, {display: 'block'});
 
@@ -44,9 +44,8 @@ class MobileFallback {
     this.setString( this.h2, 'sub_header' );
     this.setString( this.p, 'mobile_fallback' );
     this.setString( this.contentCopy, 'about_copy' );
-
+    // this.setString( this.bottomButton, 'launch_button' );
     this.setString( this.artistsH3, 'artists_title' );
-    
     this.setString( this.h4, 'about_sumup' );
     this.setString( this.aboutCreds, 'credits' );
 
@@ -59,7 +58,13 @@ class MobileFallback {
     for (var i = 0; i < window.APP.artists.length; i++) {
       let li = document.createElement("li");
       li.dataset.index = i;
-      li.innerHTML = "<img src='"+window.APP.artists[i].image+"'><p>" + window.APP.artists[i].artist_name + "</p>";
+      li.innerHTML = "<p>" + window.APP.artists[i].artist_name + "</p>";
+
+      eve.on(li, 'click', (e)=>{
+        let url = window.APP.artists[e.target.dataset.index].video_url;
+        window.open(url);
+      })
+
       this.artistsUL.appendChild(li);
     };
   }

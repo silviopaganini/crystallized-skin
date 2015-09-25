@@ -28,6 +28,7 @@ class ScrollManager
   onKeyDown(e)
   {
     this.preventDefaultForScrollKeys(e);
+    if(!window.APP.landing) return;
 
     if(window.APP.landing.state == 0)
     {

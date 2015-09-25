@@ -91,7 +91,7 @@ div.fallback div.content h4
 
 div.fallback div.about-credits
 {
-  font-size: 16px;
+  font-size: 14px;
   color: #73746b;
 }
 
@@ -470,6 +470,13 @@ ARTTISTS
   
 }
 
+div.fallback div.artists
+{
+  background: url('../img/background-backup.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .artists div.container
 {
   margin: 3em auto 0;
@@ -505,6 +512,14 @@ div.fallback div.artists div.container h3
   font-size: 16px;
 }
 
+div.fallback div.artists div.container ul > li
+{
+  display: block;
+  width: 100wv;
+  cursor: pointer;
+  font-size: 16px;
+}
+
 .artists div.container ul > li > img 
 {
   width: 100%;
@@ -532,7 +547,7 @@ BOTTOM
 
 */
 
-section.bottom
+.bottom
 {
   background-color: white;
   text-align: center;
@@ -540,7 +555,7 @@ section.bottom
   margin: 0;
 }
 
-section.bottom h3
+.bottom h3
 {
   color: black;
   padding: 10px;
