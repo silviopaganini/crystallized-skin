@@ -490,7 +490,8 @@ div.fallback div.artists
 
 .artists div.container h3
 {
-  padding: 0 0 3em;
+  padding: 3em 0 3em;
+  text-align: center;
 }
 
 div.fallback div.artists div.container h3
