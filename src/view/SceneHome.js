@@ -8,6 +8,7 @@ import noise    from 'perlin-noise';
 import TweenMax from 'gsap';
 import dat      from 'dat-gui' ;
 import URL      from 'url';
+import css      from 'dom-css';
 
 import Gallery from "./Gallery";
 
@@ -165,6 +166,7 @@ class SceneHome
         this.meshSpecular = '#1e1e1e';
         this.meshEmissive = '#000000';
         this.wireColour = '#444444';
+        this.modelWireColour = '#e1e1e1';
         this.shininess = 20;
         this.noiseAmount = .05;
         this.noiseSpeed = 1;
@@ -174,9 +176,10 @@ class SceneHome
 
     if(showGUI == 0 || isNaN(showGUI)) return;
 
-    var gui = new dat.GUI()
-    gui.add(this.p, 'nodes', 1, 25).onChange(this.generatePlane.bind(this));
-    gui.add(this.p, 'power', 0, 200).onChange(this.generatePlane.bind(this));
+    var gui = new dat.GUI({autoPlace: false});
+    var folderParams = gui.addFolder("Params");
+    folderParams.add(this.p, 'nodes', 1, 25).onChange(this.generatePlane.bind(this));
+    folderParams.add(this.p, 'power', 0, 200).onChange(this.generatePlane.bind(this));
 
     var folderColors = gui.addFolder('Colours');
     folderColors.addColor(this.p, 'lightColor').onChange(this.updateColours.bind(this));
@@ -184,19 +187,24 @@ class SceneHome
     folderColors.addColor(this.p, 'meshSpecular').onChange(this.updateColours.bind(this));
     folderColors.addColor(this.p, 'meshEmissive').onChange(this.updateColours.bind(this));
     folderColors.addColor(this.p, 'wireColour').onChange(this.updateColours.bind(this));
+    folderColors.addColor(this.p, 'modelWireColour').onChange(this.updateColours.bind(this));
     folderColors.add(this.p, 'shininess', 0, 50).step(1).onChange(this.updateColours.bind(this));
-    folderColors.close();
+    folderColors.open();
 
     var folderNoise = gui.addFolder('Postprocessing Noise');
     folderNoise.add(this.p, 'noiseAmount', 0, .2);
     folderNoise.add(this.p, 'noiseSpeed', 0, 10);
-    folderNoise.close();
+    // folderNoise.close();
 
     var folderCamera = gui.addFolder('Camera');
     folderCamera.add(this.camera.position, 'x', 0, 1500);
     folderCamera.add(this.camera.position, 'y', 0, 1500);
     folderCamera.add(this.camera.position, 'z', -1500, 1500);
-    folderCamera.open();
+    // folderCamera.open();
+
+    css(gui.domElement, {position: 'fixed', top: 0, right: 0, 'z-index': 100});
+    document.body.appendChild(gui.domElement);
+    // console.log()
 
     // gui.close();
   }
@@ -209,6 +217,11 @@ class SceneHome
       this.mesh.material.shininess = this.p.shininess;
       this.light.color = new THREE.Color(this.p.lightColor);
       this.meshWireframe.material.color = new THREE.Color(this.p.wireColour);
+
+      if(this.gallery)
+      {
+        this.gallery.updateWireColour(this.p.modelWireColour);
+      }
 
       this.mesh.material.needsUpdate = true;
       this.meshWireframe.geometry.verticesNeedUpdate = true;

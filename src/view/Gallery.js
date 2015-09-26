@@ -96,8 +96,14 @@ class Gallery
             if ( child instanceof THREE.Mesh ) {
 
                 child.geometry.computeFaceNormals();
-                child.material.shading = THREE.FlatShading;
 
+                child.material = new THREE.MeshBasicMaterial({
+                  color     : new THREE.Color(window.APP.landing.scene.p.modelWireColour),
+                  shading   : THREE.FlatShading,
+                  wireframe : true
+                });
+
+                child.material.needsUpdate = true;
             }
 
         } );
@@ -128,6 +134,19 @@ class Gallery
         timeline.play()
 
         // this.container.add(this.dae);
+    }
+
+    updateWireColour(c)
+    {
+        if(!this.dae) return;
+        this.dae.traverse( function ( child ) {
+
+            if ( child instanceof THREE.Mesh ) {
+                let a = new THREE.Color(c);
+                child.material.color = a;
+                child.material.needsUpdate = true;
+            }
+        } );
     }
 
     getURL(url)

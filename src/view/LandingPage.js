@@ -30,7 +30,7 @@ class LandingPage {
   {
     this.stats = new Stats(); 
     css(this.stats.domElement, {
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         left: 0,
         display: parseInt(URL.parse(window.location.href, true).query.d) == 1 ? 'block' : 'none'

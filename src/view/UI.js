@@ -86,12 +86,11 @@ class UI  {
 
   artistClick(e)
   {
-    console.log(e)
     window.APP.currentArtist = Number(e.target.dataset.index);
     this.showArtist();
   }
 
-  showLoading(show, white)
+  showLoading(show)
   {
     this.loadingOnScreen = show;
     TweenMax.to(this.spinner, .4, {autoAlpha: show | 0});
