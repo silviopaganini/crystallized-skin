@@ -25,23 +25,47 @@ a
 
 div.fallback
 {
+  text-align: center;
+  display: none;
+}
+
+body
+{
+ /*background: url('../img/background-backup.png') no-repeat center center fixed; 
+ background-attachment: fixed;
+ background-position: 0 0;
+ -webkit-background-size: 100vw 100vw;
+ background-size: 100vw 100*/vh;
+ height: 100%;
+}
+
+div.fallback div.background
+{
+  background: url('../img/background-backup.png') no-repeat center center fixed;
+  -moz-background-size: 100vw 100vh;
+  -webkit-background-size: 100vw 100vh;
+  -o-background-size: 100vw 100vh;
+  background-size: 100vw 100vh;
+  background-position: top left;
+
+  width: 100%;
+  height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  background: url('../img/background-backup.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  display: none;
+  z-index: -1;
+
+  -webkit-transform: rotateZ(0);
+  transform: rotateZ(0);
+
 }
 
 div.fallback header
 {
-  height: 100%;
+  min-height: 100%;
   display: table;
-  position: static;
+  z-index: 110;
+  /*position: static;*/
 }
 
 div.fallback header p
@@ -61,11 +85,14 @@ div.fallback header div.container
 div.fallback div.content
 {
   background-color: white;
-  position: static;
+  position: relative;
   display: block;
   padding: 0 7% 20px;
   line-height: 1.8em;
   text-align: left;
+  z-index: 150;
+  /*min-height: 100vh;*/
+  /*top: 100vh;*/
 }
 
 div.fallback div.content h2
@@ -89,30 +116,30 @@ div.fallback div.content h4
   text-align: center;
 }
 
-div.fallback div.about-credits
+div.fallback div.content div.about-credits
 {
   font-size: 14px;
   color: #73746b;
 }
 
-div.fallback div.about-credits > p
+div.fallback div.content div.about-credits > p
 {
   padding: 0;
   margin: 0;
   line-height: 1.8em;
 }
 
-div.fallback div.about-credits > p > a:hover
+div.fallback div.content div.about-credits > p > a:hover
 {
   text-decoration: underline;
 }
 
-div.fallback div.about-credits > p:nth-child(even)
+div.fallback div.content div.about-credits > p:nth-child(even)
 {
   color: #604fff;
 }
 
-div.fallback div.about-credits > p:nth-child(odd)
+div.fallback div.content div.about-credits > p:nth-child(odd)
 {
   color: #ff4f4f;
 }
@@ -465,18 +492,17 @@ ARTTISTS
 {
   line-height: 1.8em;
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: table;
   position: relative;
-  background-color: rgba(0,0,0,.5);
-  
+  z-index: 200;
 }
 
-div.fallback div.artists
+.fallback .artists
 {
-  background: url('../img/background-backup.png');
-  background-size: cover;
-  background-repeat: no-repeat;
+  position: static;
+  min-height: 100%;
+  z-index: 200;
 }
 
 .artists div.container
@@ -514,6 +540,7 @@ div.fallback div.artists div.container h3
   text-align: center;
   cursor: pointer;
   font-size: 16px;
+  /*border: 1px solid red;*/
 }
 
 @media only screen and (min-width: 1280px) { 
@@ -535,6 +562,10 @@ div.fallback div.artists div.container ul > li
   display: block;
   cursor: pointer;
   font-size: 16px;
+  width: 100vw;
+  height: 100vh;
+  display: table;
+
 }
 
 .artists div.container ul > li > div 
@@ -542,6 +573,13 @@ div.fallback div.artists div.container ul > li
   /*width: 100%;*/
   pointer-events: none; 
   margin: 0 auto;
+}
+
+div.fallback .artists div.container ul > li > div 
+{
+  vertical-align: middle;
+  display: table-cell;
+  /*border: 1px solid green;*/
 }
 
 .artists div.container ul > li:hover p

@@ -1,5 +1,6 @@
 import eve from 'dom-events';
 import css from 'dom-css';
+import utils from 'utils-perf';
 
 class ArtistObject {
   constructor(data, index) 
@@ -32,6 +33,36 @@ class ArtistObject {
     this.el.appendChild(this.p);
 
     eve.on(this.el, 'mousemove', this.onMouseMove.bind(this));
+  }
+
+  scale()
+  {
+    let scale = window.innerWidth / 640 ;
+    css(this.container, {
+      'width': window.innerWidth,
+      'background-position': 'center',
+      'margin-top' : (window.innerHeight - this.frameHeight) / 2
+    })
+  }
+
+  accelerometer()
+  {
+    eve.off(this.el, 'mousemove', this.onMouseMove.bind(this));
+
+    if(window.DeviceOrientationEvent){
+      window.addEventListener("deviceorientation", this.orientation.bind(this), false);
+    }else{
+      console.log("DeviceOrientationEvent is not supported");
+    }
+  }
+
+  orientation(e)
+  {
+    let a = utils.round(utils.map(e.gamma, -10, 10, 0, this.totalFrames));
+    let pos = this.frameHeight * a;
+    css(this.container, {
+        'background-position' : 'center -' + pos + "px"
+    })
   }
 
   getFrame(offset)

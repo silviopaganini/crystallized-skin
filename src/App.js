@@ -60,6 +60,8 @@ class App {
       return;
     }
 
+    document.querySelector('div.fallback').remove();
+
     this.emitter       = ee({});
     this.artists       = data['artists'];
     this.currentArtist = 0;
@@ -79,8 +81,9 @@ class App {
 
   initMobile(data, tabletop)
   {
-    this.mobile = new MobileFallback(data['general-copy']);
+    this.mobilefb = new MobileFallback(data['general-copy']);
     TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0});
+    document.querySelector('main').remove();
   }
 
   updateCurrentArtist(dir)

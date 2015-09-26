@@ -1,7 +1,8 @@
-import css    from 'dom-css';
-import _      from 'underscore';
-import eve    from 'dom-events';
-import Scroll from '../utils/ScrollManager';
+import css          from 'dom-css';
+import _            from 'underscore';
+import eve          from 'dom-events';
+import Scroll       from '../utils/ScrollManager';
+import ArtistObject from './ArtistObject';
 
 class MobileFallback {
   constructor(copy) {
@@ -54,19 +55,31 @@ class MobileFallback {
   populateArtistsHome()
   {
     this.artistsUL = this.el.querySelector('div.artists div.container > ul');
+    let offs = [];
 
     for (var i = 0; i < window.APP.artists.length; i++) {
-      let li = document.createElement("li");
-      li.dataset.index = i;
-      li.innerHTML = "<p>" + window.APP.artists[i].artist_name + "</p>";
 
-      eve.on(li, 'click', (e)=>{
+      let art = new ArtistObject(window.APP.artists[i], i);
+      this.artistsUL.appendChild(art.el);
+
+      art.scale();
+      art.accelerometer();
+
+      // let li = document.createElement("li");
+      // li.dataset.index = i;
+      // li.innerHTML = "<p>" + window.APP.artists[i].artist_name + "</p>";
+
+      eve.on(art.el, 'click', (e)=>{
         let url = window.APP.artists[e.target.dataset.index].video_url;
         window.open(url);
       })
 
-      this.artistsUL.appendChild(li);
+      offs.push(art.el);
+
+      // this.artistsUL.appendChild(li);
     };
+
+    this.scroll.listArtistsOffsetY(offs);
   }
 
   setString(el, key)

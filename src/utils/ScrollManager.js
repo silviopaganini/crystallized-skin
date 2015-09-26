@@ -133,6 +133,25 @@ class ScrollManager
     {
       this.timerToScroll = setTimeout(this.scrollToHeader.bind(this), this.delay);
     }
+
+    for (var i = 0; i < this.offsets.length; i++) {
+      // console.log(window.pageYOffset, window.pageYOffset - this.offsets[i])
+      if(Math.abs(window.pageYOffset - this.offsets[i].offsetTop) < window.innerHeight / 2)
+      {
+        this.timerToScroll = setTimeout((a) =>{
+          this.scrollTo(this.offsets[a].offsetTop);
+        }.bind(this), this.delay, [i]);
+      }
+    };
+  }
+
+  listArtistsOffsetY(of)
+  {
+    this.offsets = of
+    // this.offsets = [];
+    // for (var i = 0; i < window.APP.mobile.artistsUL.length; i++) {
+    //   window.APP.mobile.artistsUL[i]
+    // };
   }
 
   scrollTo(Y, callback, immediate = false)
