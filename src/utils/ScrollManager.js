@@ -144,10 +144,10 @@ class ScrollManager
 
     for (var i = 0; i < this.offsets.length; i++) {
       // console.log(window.pageYOffset, window.pageYOffset - this.offsets[i])
-      if(Math.abs(window.pageYOffset - this.offsets[i].offsetTop) < window.innerHeight / 2)
+      if(Math.abs(window.pageYOffset - this.offsets[i].offsetTop + (this.offsets[i].querySelector('p').offsetHeight / 2)) < window.innerHeight / 2)
       {
         this.timerToScroll = setTimeout((a) =>{
-          this.scrollTo(this.offsets[a].offsetTop);
+          this.scrollTo(this.offsets[a].offsetTop + (this.offsets[a].querySelector('p').offsetHeight / 2));
         }.bind(this), this.delay, [i]);
       }
     };

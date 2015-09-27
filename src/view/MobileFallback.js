@@ -59,7 +59,7 @@ class MobileFallback {
 
     for (var i = 0; i < window.APP.artists.length; i++) {
 
-      let art = new ArtistObject(window.APP.artists[i], i);
+      let art = new ArtistObject(window.APP.artists[i], i, _.findWhere(this.copy, {label : 'watch_film_button'}).copy);
       this.artistsUL.appendChild(art.el);
 
       art.scale();

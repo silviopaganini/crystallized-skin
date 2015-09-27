@@ -3,8 +3,10 @@ import css from 'dom-css';
 import utils from 'utils-perf';
 
 class ArtistObject {
-  constructor(data, index) 
+  constructor(data, index, watch_copy) 
   {
+    this.watch_copy  = watch_copy;
+
     this.totalFrames = 6;
     this.frameWidth  = 640;
     this.frameHeight = 360;
@@ -43,6 +45,12 @@ class ArtistObject {
       'background-position' : 'center',
       'margin-top'          : (window.innerHeight - this.frameHeight) / 2
     })
+
+    this.span = document.createElement('p');
+    this.span.classList.add('fallback-watch-video');
+    this.span.innerHTML = this.watch_copy;
+    // this.span.innerHTML = ;
+    this.p.appendChild(this.span);
   }
 
   accelerometer()
@@ -72,7 +80,6 @@ class ArtistObject {
 
   onMouseMove(e)
   {
-    console.log(e);
     let frame = this.getFrame(e.offsetX);
     let pos = this.frameHeight * frame;
     css(this.container, {

@@ -253,6 +253,15 @@ header .container-gallery div.container p.piece-link span
     text-transform: uppercase;
 }
 
+.fallback-watch-video
+{
+  font-family: 'Helvetica Cond';
+    cursor : pointer;
+    color: #ff4f4f;
+    font-size: .8em;
+    text-transform: uppercase;
+}
+
 header .container-gallery div.container p.piece-link span:hover
 {
   text-decoration: underline;
