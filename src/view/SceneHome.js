@@ -206,7 +206,7 @@ class SceneHome
     document.body.appendChild(gui.domElement);
     // console.log()
 
-    // gui.close();
+    gui.close();
   }
 
   updateColours()

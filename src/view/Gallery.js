@@ -3,7 +3,7 @@ import URL    from 'url';
 import eve    from 'dom-events';
 import UtilsP from 'utils-perf';
 
-const collada = require('three-loaders-collada')(THREE);
+const objLoaders = require('../utils/OBJLoader')(THREE);
 
 class Gallery 
 {
@@ -24,8 +24,8 @@ class Gallery
         this.container = new THREE.Object3D();
         this.scene.add(this.container);
 
-        this.loader = new THREE.ColladaLoader();
-        this.loader.options.convertUpAxis = true;
+        this.loader = new THREE.OBJLoader();
+        // this.loader.options.convertUpAxis = true;
 
         this.dae = null;
     }
@@ -83,19 +83,21 @@ class Gallery
         this.loader.load(url, this.onLoaded.bind(this));
     }
 
-    onLoaded(collada)
+    onLoaded(obj)
     {
         // if(this.dae) this.container.remove(this.dae);
 
         let offset = this.direction == 1 ? 300 : -300;
 
-        let tempDae = collada.scene;
-        tempDae = tempDae;
+        let tempDae = obj;
+        let scale = 1;
+
         tempDae.traverse( function ( child ) {
 
             if ( child instanceof THREE.Mesh ) {
 
                 child.geometry.computeFaceNormals();
+                child.geometry.computeBoundingSphere();
 
                 child.material = new THREE.MeshBasicMaterial({
                   color     : new THREE.Color(window.APP.landing.scene.p.modelWireColour),
@@ -103,12 +105,13 @@ class Gallery
                   wireframe : true
                 });
 
+                scale = ((window.innerWidth * .5) * .4) / (child.geometry.boundingSphere.radius * 2);
                 child.material.needsUpdate = true;
             }
 
         } );
 
-        tempDae.scale.x = tempDae.scale.y = tempDae.scale.z = 100.0;
+        tempDae.scale.x = tempDae.scale.y = tempDae.scale.z = scale;
         tempDae.position.x = offset;
 
         tempDae.updateMatrix();
@@ -152,6 +155,7 @@ class Gallery
     getURL(url)
     {
         let parsed = URL.parse(url, true);
+        if(parsed.host === null) return url;
         return "https://googledrive.com/host/" + parsed.query.id + "?r=" + UtilsP.rrandom(9999);
     }
 

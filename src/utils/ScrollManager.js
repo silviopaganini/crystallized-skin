@@ -114,9 +114,15 @@ class ScrollManager
     return 0;
   }
 
+  getSectionOffset(section)
+  {
+    if(window.APP.ui) return window.APP.ui[section].offsetTop;
+    return 0;
+  }
+
   scrollToHeader()
   {
-    this.scrollTo(this.getSectionHeight('sectionVideo') + this.getSectionHeight('header'), null);
+    this.scrollTo(this.getSectionHeight('sectionVideo') + this.getSectionOffset('header'), null);
   }
 
   onScroll(e)
@@ -129,10 +135,12 @@ class ScrollManager
     clearTimeout(this.timerToScroll);
     this.timerToScroll = 0;
 
-    if(Math.abs((window.pageYOffset - this.getSectionHeight('sectionVideo')) - this.getSectionHeight('header')) < window.innerHeight / 4)
+    if(Math.abs((window.pageYOffset - this.getSectionHeight('sectionVideo')) - this.getSectionOffset('header')) < window.innerHeight / 3)
     {
       this.timerToScroll = setTimeout(this.scrollToHeader.bind(this), this.delay);
     }
+
+    if(!this.offsets) return;
 
     for (var i = 0; i < this.offsets.length; i++) {
       // console.log(window.pageYOffset, window.pageYOffset - this.offsets[i])

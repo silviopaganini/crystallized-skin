@@ -180,7 +180,7 @@ class UI  {
 
   showArtist(direction)
   {
-    this.scroll.scrollTo(this.sectionVideo.offsetHeight + this.header.offsetTop, () => {
+    this.scroll.scrollTo(this.sectionVideo.offsetHeight, () => {
       this.animateLanding( true,  () => {
 
         // css(this.sectionAbout, {display: 'none'});
