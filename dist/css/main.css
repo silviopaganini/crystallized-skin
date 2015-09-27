@@ -78,10 +78,11 @@ div.fallback header
 
 div.fallback header p
 {
-  background-color: #000;
+  /*background-color: #000;*/
   color: white;
-  font-family: 'Helvetica Cond';
-  padding: 10px
+  font-size: 16px;
+  font-family: 'SabonNext LT Display';
+  padding: 10px;
 }
 
 div.fallback header div.container
@@ -324,7 +325,7 @@ h4
 
 header button
 {
-    padding: 15px 20px;
+    padding: 17px 20px 15px 20px;
     background-color: #000;
     color: white;
     font-size: .9em;
@@ -332,6 +333,7 @@ header button
     text-transform: uppercase;
     font-family: 'Helvetica Cond';
     pointer-events: visible;
+    letter-spacing: 2px;
 
     -webkit-transition: all .3s;
     transition: all .3s;
@@ -513,7 +515,7 @@ ARTTISTS
   display: table;
   position: relative;
   z-index: 200;
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.7);
 }
 
 .fallback .artists
@@ -698,7 +700,7 @@ nav a
 nav a img
 {
     width: 33px;
-    padding: 0 20px;
+    padding: 0 60px;
 }
 
 nav a[data-side='left']

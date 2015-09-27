@@ -14,7 +14,11 @@ class ScrollManager
     this.delay = 800;
     this.minDelay = .3;
     this.maxDelay = 1;
+  }
 
+  init(desktop = true)
+  {
+    if(desktop) this.sections = [window.APP.ui.sectionVideo, window.APP.ui.header, window.APP.ui.sectionAbout, window.APP.ui.sectionArtists];
     window.onscroll = this.onScroll.bind(this);
     window.onkeydown = this.onKeyDown.bind(this);
   }
@@ -25,46 +29,56 @@ class ScrollManager
     return Math.min(this.maxDelay, Math.max(this.minDelay, a));
   }
 
+  getNextSectionOffsetY(down = true)
+  {
+    let c = window.scrollY;
+    let i = 0;
+
+    if(down)
+    {
+      for (i = 0; i < this.sections.length - 1; i++) {
+        if(c >= this.sections[i].offsetTop && c < this.sections[i + 1].offsetTop)
+        {
+          return this.sections[i + 1].offsetTop;
+        }
+      };
+    } else {
+      for (i = 1; i < this.sections.length; i++) {
+        if(c > this.sections[i-1].offsetTop && c <= this.sections[i].offsetTop)
+        {
+          return this.sections[i - 1].offsetTop;
+        }
+      };
+    }
+
+    
+  }
+
   onKeyDown(e)
   {
     this.preventDefaultForScrollKeys(e);
     if(!window.APP.landing) return;
 
-    if(window.APP.landing.state == 0)
-    {
-      switch(e.keyCode)
-      {
-          case 38:
-              this.scrollTo(window.APP.ui.header.offsetTop);
-              window.APP.video.stop();
-              break;
-          case 40: 
-              this.scrollTo(window.innerHeight);
-              break;
-      }
-
-      return;
-
-    }
-
     switch(e.keyCode)
     {
         case 40:
-            this.scrollTo(window.APP.ui.sectionAbout.offsetTop);
+            this.scrollTo(this.getNextSectionOffsetY(true));
             window.APP.video.stop();
             break;
 
         case 38: 
-            this.scrollTo(window.innerHeight);
+            this.scrollTo(this.getNextSectionOffsetY(false));
             break;
 
         case 39:
             // right
-            this.emitter.emit('changeArtist', 'right');
+            if(window.APP.landing.state != 0)
+              this.emitter.emit('changeArtist', 'right');
             break;
         case 37:
             // left 
-            this.emitter.emit('changeArtist', 'left');
+            if(window.APP.landing.state != 0)
+              this.emitter.emit('changeArtist', 'left');
             break;
     }
   }
@@ -148,7 +162,7 @@ class ScrollManager
       {
         this.timerToScroll = setTimeout((a) =>{
           this.scrollTo(this.offsets[a].offsetTop + (this.offsets[a].querySelector('p').offsetHeight / 2));
-        }.bind(this), this.delay, [i]);
+        }.bind(this), this.delay / 1.8, [i]);
       }
     };
   }

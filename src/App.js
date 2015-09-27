@@ -1,11 +1,13 @@
-import Tabletop       from "tabletop";
-import ee             from 'event-emitter';
-import TweenMax       from 'gsap';
+import Tabletop        from "tabletop";
+import ee              from 'event-emitter';
+import TweenMax        from 'gsap';
 
-import LandingPage    from './view/LandingPage';
-import UI             from './view/UI';
-import VideoOverlay   from './view/VideoOverlay';
-import MobileFallback from './view/MobileFallback';
+import LandingPage     from './view/LandingPage';
+import UI              from './view/UI';
+import VideoOverlay    from './view/VideoOverlay';
+import MobileFallback  from './view/MobileFallback';
+import SoundController from './utils/SoundController';
+
 
 import ajax           from 'ajax-request'
 import URL            from 'url';
@@ -62,12 +64,15 @@ class App {
 
     document.querySelector('div.fallback').remove();
 
+
     this.emitter       = ee({});
     this.artists       = data['artists'];
     this.currentArtist = 0;
+    this.video         = new VideoOverlay();
     this.ui            = new UI(data['general-copy']);
     this.landing       = new LandingPage();
-    this.video         = new VideoOverlay();
+
+    this.soundManager = new SoundController();
 
     this.emitter.on('updateArtist', this.updateCurrentArtist.bind(this));
     this.emitter.on('ready', () => {
@@ -77,6 +82,7 @@ class App {
     });
 
     this.landing.init();
+    this.ui.scroll.init();
   }
 
   initMobile(data, tabletop)

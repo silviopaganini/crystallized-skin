@@ -71,9 +71,9 @@ class VideoOverlay {
     {
         this.player = this.container.querySelector('iframe');
 
-        if(!this.player && !this.ytPlayer) return;
+        if(!this.player || !this.ytPlayer) return;
 
-        this.type == "vimeo" ? this.post('pause') : this.ytPlayer.pauseVideo();
+        this.type == "vimeo" ? this.post('pause') : (this.ytPlayer.pauseVideo ? this.ytPlayer.pauseVideo() : 0);
     }
 }
 

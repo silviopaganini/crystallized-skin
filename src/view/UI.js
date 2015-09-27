@@ -8,7 +8,6 @@ import ArtistObject from './ArtistObject';
 class UI  {
   constructor(copy) 
   {
-    this.scroll           = new Scroll();
     this.loadingOnScreen  = false;
 
     this.canvas = document.querySelector('#container-canvas');
@@ -27,11 +26,11 @@ class UI  {
     this.sectionAbout     = document.querySelector('main section.about');
     this.sectionVideo     = document.querySelector('main section.video');
     this.sectionArtists   = document.querySelector('main section.artists');
-    this.sectionBottom    = document.querySelector('main section.bottom');
+    // this.sectionBottom    = document.querySelector('main section.bottom');
 
     this.artistH3         = document.querySelector('main section.artists div.container > h3');
     
-    this.bottomButton     = document.querySelector('main section.bottom > h3');
+    // this.bottomButton     = document.querySelector('main section.bottom > h3');
     
     this.button           = document.querySelector('button');
     this.copyContainer    = document.querySelector('main section.about div.container > div.about-copy');
@@ -51,6 +50,8 @@ class UI  {
     this.arrowBottomVideo = this.sectionVideo.querySelector("div.arrow-bottom");
     
     this.spinner          = document.querySelector('.preloader');
+
+    this.scroll           = new Scroll();
 
 
     /*
@@ -124,7 +125,7 @@ class UI  {
 
     // eve.on(this.h2Gallery, 'click', this.backHome.bind(this));
 
-    eve.on(this.sectionBottom, 'click', this.showArtist.bind(this));
+    // eve.on(this.sectionBottom, 'click', this.showArtist.bind(this));
 
     eve.on(this.arrowBottom, 'click', this.scrollToAboutPage.bind(this));
 
@@ -163,7 +164,7 @@ class UI  {
     this.setString( this.aboutCreds, 'credits' );
 
     this.setString( this.artistH3, 'artists_title' );
-    this.setString( this.bottomButton, 'launch_button' );
+    // this.setString( this.bottomButton, 'launch_button' );
 
     this.setString( this.h3, 'sub_header' );
     this.setString( this.button, 'launch_button' );

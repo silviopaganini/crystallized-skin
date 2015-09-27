@@ -30,6 +30,8 @@ class MobileFallback {
 
     this.bottomButton = this.el.querySelector('header div.arrow-bottom');
 
+    this.scroll.init(false);
+
     eve.on(this.bottomButton, 'click', this.tapDownButton.bind(this));
   }
 
@@ -59,7 +61,7 @@ class MobileFallback {
 
     for (var i = 0; i < window.APP.artists.length; i++) {
 
-      let art = new ArtistObject(window.APP.artists[i], i, _.findWhere(this.copy, {label : 'watch_film_button'}).copy);
+      let art = new ArtistObject(window.APP.artists[i], i, _.findWhere(this.copy, {label : 'watch_film_button'}).copy, true);
       this.artistsUL.appendChild(art.el);
 
       art.scale();

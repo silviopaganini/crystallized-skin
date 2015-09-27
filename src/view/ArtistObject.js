@@ -3,7 +3,7 @@ import css from 'dom-css';
 import utils from 'utils-perf';
 
 class ArtistObject {
-  constructor(data, index, watch_copy) 
+  constructor(data, index, watch_copy, mobile) 
   {
     this.watch_copy  = watch_copy;
 
@@ -31,8 +31,17 @@ class ArtistObject {
     //
 
     this.p = document.createElement('p');
-    this.p.innerHTML = data.artist_name;
+    this.p.innerHTML = !mobile ? data.artist_name : data.artist_name + " - " + data.piece_name + ", " + data.year;
     this.el.appendChild(this.p);
+
+    if(mobile)
+    {
+      this.span = document.createElement('p');
+      this.span.classList.add('fallback-watch-video');
+      this.span.innerHTML = this.watch_copy;
+      // this.span.innerHTML = ;
+      this.p.appendChild(this.span);
+    }
 
     eve.on(this.container, 'mousemove', this.onMouseMove.bind(this));
   }
@@ -45,12 +54,6 @@ class ArtistObject {
       'background-position' : 'center',
       'margin-top'          : (window.innerHeight - this.frameHeight) / 2
     })
-
-    this.span = document.createElement('p');
-    this.span.classList.add('fallback-watch-video');
-    this.span.innerHTML = this.watch_copy;
-    // this.span.innerHTML = ;
-    this.p.appendChild(this.span);
   }
 
   accelerometer()
