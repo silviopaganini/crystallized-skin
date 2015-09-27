@@ -12,14 +12,26 @@ class SoundController
         'https://drive.google.com/open?id=0B0uHwEQ4FBZxdHE3dm1FMWplLWs'
     ]
 
-    let i = MathP.rrandom(this.sounds.length-1);
-    this.sound = new buzz.sound( this.getURL(this.sounds[i]), {
+    this.currentSound = 0;
+    this.sounds = MathP.randomArray(this.sounds);
+    this.playSound();
+  }
+
+  playSound()
+  {
+    if(this.sound) this.sound.stop();
+
+    this.sound = new buzz.sound( this.getURL(this.sounds[this.currentSound]), {
         autoplay : false,
-        loop: true,
+        loop: false,
         volume: 0
     } );
 
-    this.sound.load().play().fadeTo(25, 5000);
+    this.sound.bindOnce('ended', this.playSound.bind(this));
+    this.sound.load().play().fadeTo(20, 5000);
+
+    this.currentSound++;
+    this.currentSound %= this.sounds.length;
   }
 
   getURL(url)
