@@ -504,6 +504,7 @@ ARTTISTS
   display: table;
   position: relative;
   z-index: 200;
+  background: rgba(0,0,0,.5);
 }
 
 .fallback .artists
@@ -554,7 +555,7 @@ div.fallback div.artists div.container h3
 @media only screen and (min-width: 1280px) { 
   .artists div.container ul > li
   {
-   width: 50%; 
+   width: 49%; 
   }
 }
 
@@ -579,7 +580,7 @@ div.fallback div.artists div.container ul > li
 .artists div.container ul > li > div 
 {
   /*width: 100%;*/
-  pointer-events: none; 
+  /*pointer-events: none; */
   margin: 0 auto;
 }
 

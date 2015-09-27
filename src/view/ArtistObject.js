@@ -32,22 +32,22 @@ class ArtistObject {
     this.p.innerHTML = data.artist_name;
     this.el.appendChild(this.p);
 
-    eve.on(this.el, 'mousemove', this.onMouseMove.bind(this));
+    eve.on(this.container, 'mousemove', this.onMouseMove.bind(this));
   }
 
   scale()
   {
     let scale = window.innerWidth / 640 ;
     css(this.container, {
-      'width': window.innerWidth,
-      'background-position': 'center',
-      'margin-top' : (window.innerHeight - this.frameHeight) / 2
+      'width'               : window.innerWidth,
+      'background-position' : 'center',
+      'margin-top'          : (window.innerHeight - this.frameHeight) / 2
     })
   }
 
   accelerometer()
   {
-    eve.off(this.el, 'mousemove', this.onMouseMove.bind(this));
+    eve.off(this.container, 'mousemove', this.onMouseMove.bind(this));
 
     if(window.DeviceOrientationEvent){
       window.addEventListener("deviceorientation", this.orientation.bind(this), false);
@@ -72,6 +72,7 @@ class ArtistObject {
 
   onMouseMove(e)
   {
+    console.log(e);
     let frame = this.getFrame(e.offsetX);
     let pos = this.frameHeight * frame;
     css(this.container, {
