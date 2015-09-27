@@ -3,9 +3,10 @@ import css from 'dom-css';
 import utils from 'utils-perf';
 
 class ArtistObject {
-  constructor(data, index, watch_copy, mobile) 
+  constructor(data, index, watch_copy, new_window, mobile) 
   {
-    this.watch_copy  = watch_copy;
+    this.watch_copy = watch_copy;
+    this.new_window = new_window;
 
     this.totalFrames = 6;
     this.frameWidth  = 640;
@@ -38,7 +39,7 @@ class ArtistObject {
     {
       this.span = document.createElement('p');
       this.span.classList.add('fallback-watch-video');
-      this.span.innerHTML = this.watch_copy;
+      this.span.innerHTML = this.watch_copy + "<br><span>" + this.new_window + "</span>";
       // this.span.innerHTML = ;
       this.p.appendChild(this.span);
     }

@@ -259,8 +259,18 @@ header .container-gallery div.container p.piece-link span
   font-family: 'Helvetica Cond';
     cursor : pointer;
     color: #ff4f4f;
-    font-size: .8em;
+    font-size: .9em;
     text-transform: uppercase;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    letter-spacing: 1.5px;
+}
+
+.fallback-watch-video span
+{
+  font-size: .7em;
+  letter-spacing: .8px;
+  color: #604fff;
 }
 
 header .container-gallery div.container p.piece-link span:hover
