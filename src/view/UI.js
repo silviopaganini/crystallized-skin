@@ -2,6 +2,7 @@ import _            from 'underscore';
 import TweenMax     from 'gsap';
 import eve          from 'dom-events';
 import css          from 'dom-css';
+import URL          from 'url';
 import Scroll       from '../utils/ScrollManager';
 import ArtistObject from './ArtistObject';
 
@@ -187,8 +188,12 @@ class UI  {
         // css(this.sectionAbout, {display: 'none'});
         // css(this.sectionBottom, {display: 'none'});
 
-        css(this.sectionVideo, {display: 'block'});
-        this.scroll.scrollTo(window.innerHeight, null, true);
+
+        if(!URL.parse(window.location.href, true).query.d)
+        {
+          css(this.sectionVideo, {display: 'block'});
+          this.scroll.scrollTo(window.innerHeight, null, true);
+        }
 
         for (var i = 0; i < this.galleryEls.length; i++) {
           TweenMax.to(this.galleryEls[i], .5, {y: 0, autoAlpha: 1});

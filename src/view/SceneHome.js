@@ -36,17 +36,19 @@ class SceneHome
 
   createScene()
   {
-    const OrbitControls = OC(THREE);
+    // const OrbitControls = OC(THREE);
 
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 4000 );
-    this.camera.position.set(0, 20, 240);
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.maxDistance = 4000;
+    this.camera.position.set(0, 0, 0);
+    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    // this.controls.maxDistance = 4000;
 
     // this.camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, -500, 500 );
     // this.camera.position.set(0, 20, 0);
 
     this.scene = new THREE.Scene();
+
+    this.gallery = new Gallery(this.scene, this.renderer.domElement);
   }
 
   addObjects()
@@ -57,8 +59,6 @@ class SceneHome
     this.light   = null;
     this.geo     = null;
     
-    this.startGallery();
-
     // var gridHelper = new THREE.GridHelper( 100, 10 );        
     // this.scene.add( gridHelper );
 
@@ -87,7 +87,7 @@ class SceneHome
       this.light.position.set( 0, 0, 100 );
       this.light.castShadow = true;
       this.light.shadowCameraNear  = 0.01; 
-      this.light.shadowDarkness = 1;
+      this.light.shadowDarkness = .5;
       // this.light.shadowCameraVisible = true;
       this.scene.add(this.light);
 
@@ -121,8 +121,8 @@ class SceneHome
       this.mesh.scale.set(2, 2, 2);
       this.meshWireframe.scale.set(2, 2, 2);
 
-      this.mesh.position.z = -200;
-      this.meshWireframe.position.z = -199;
+      this.mesh.position.z = -400;
+      this.meshWireframe.position.z = -399;
 
       this.generatePerlin();
       this.scene.add(this.mesh);
@@ -160,11 +160,6 @@ class SceneHome
       })
   }
 
-  startGallery()
-  {
-    this.gallery = new Gallery(this.scene, this.renderer.domElement);
-  }
-
   startGUI(showGUI)
   {
     var Params = function(){
@@ -174,9 +169,14 @@ class SceneHome
         this.meshColor = '#222222';
         this.meshSpecular = '#1e1e1e';
         this.meshEmissive = '#000000';
-        this.wireColour = '#1e1e1e';
-        this.modelWireColour = '#e1e1e1';
+        this.wireColour = '#222222';
         this.shininess = 20;
+
+        this.modelMeshColor = '#3b3c3a';
+        this.modelMeshSpecular = '#FFFFFF';
+        this.modelMeshEmissive = '#3f4138';
+        this.modelShininess = 4;        
+
         this.noiseAmount = .05;
         this.noiseSpeed = 1;
     }
@@ -196,9 +196,14 @@ class SceneHome
     folderColors.addColor(this.p, 'meshSpecular').onChange(this.updateColours.bind(this));
     folderColors.addColor(this.p, 'meshEmissive').onChange(this.updateColours.bind(this));
     folderColors.addColor(this.p, 'wireColour').onChange(this.updateColours.bind(this));
-    folderColors.addColor(this.p, 'modelWireColour').onChange(this.updateColours.bind(this));
     folderColors.add(this.p, 'shininess', 0, 50).step(1).onChange(this.updateColours.bind(this));
-    folderColors.open();
+
+    var folderModel = gui.addFolder('Model');
+    folderModel.addColor(this.p, "modelMeshColor").onChange(this.gallery.updateColours.bind(this.gallery));
+    folderModel.addColor(this.p, "modelMeshSpecular").onChange(this.gallery.updateColours.bind(this.gallery));
+    folderModel.addColor(this.p, "modelMeshEmissive").onChange(this.gallery.updateColours.bind(this.gallery));
+    folderModel.add(this.p, "modelShininess", 0, 50).step(1).onChange(this.gallery.updateColours.bind(this.gallery));
+    folderModel.open();
 
     var folderNoise = gui.addFolder('Postprocessing Noise');
     folderNoise.add(this.p, 'noiseAmount', 0, .2);
@@ -211,11 +216,11 @@ class SceneHome
     folderCamera.add(this.camera.position, 'z', -1500, 1500);
     // folderCamera.open();
 
-    css(gui.domElement, {position: 'fixed', top: 0, right: 0, 'z-index': 100});
+    css(gui.domElement, {position: 'fixed', top: 0, right: 0, 'z-index': 400});
     document.body.appendChild(gui.domElement);
     // console.log()
 
-    gui.close();
+    // gui.close();
   }
 
   updateColours()
@@ -226,11 +231,6 @@ class SceneHome
       this.mesh.material.shininess = this.p.shininess;
       this.light.color = new THREE.Color(this.p.lightColor);
       this.meshWireframe.material.color = new THREE.Color(this.p.wireColour);
-
-      if(this.gallery)
-      {
-        this.gallery.updateWireColour(this.p.modelWireColour);
-      }
 
       this.mesh.material.needsUpdate = true;
       this.meshWireframe.geometry.verticesNeedUpdate = true;
@@ -252,6 +252,7 @@ class SceneHome
   {
     this.mesh.geometry.verticesNeedUpdate = true;
     this.meshWireframe.geometry.verticesNeedUpdate = true;
+    this.gallery.update();
 
     if(this.renderPost)
     {

@@ -17,10 +17,10 @@ class App {
 
     let parsedURL = URL.parse(window.location.href, true);
 
-    if(parsedURL.port != "80" && !parsedURL.query.d)
+    if(parsedURL.port == "80" || parsedURL.query.d == '1')
     {
 
-      ajax({url: window.location.href + 'data/data.json', method: 'get'}, (err, res, body) => {
+      ajax({url: window.location.origin + '/data/data.json', method: 'get'}, (err, res, body) => {
         let e = JSON.parse(body);
         TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
       })
@@ -37,12 +37,7 @@ class App {
           e.artists         = data['artists'].elements
           e['general-copy'] = data['general-copy'].elements
 
-          // console.log(data);
-
-          // var a = document.createElement('a');
-          // a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(e));
-          // a.target = "_blank";
-          // a.click();
+          // window.open("data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(e)));
           TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
         } 
     });
@@ -98,7 +93,7 @@ class App {
 
     if(this.currentArtist < 0)
     {
-      this.currentArtist == this.artists.length - 1;
+      this.currentArtist = this.artists.length - 1;
     } else if(this.currentArtist > this.artists.length - 1)
     {
       this.currentArtist = 0;

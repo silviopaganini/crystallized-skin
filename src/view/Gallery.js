@@ -9,9 +9,19 @@ class Gallery
 {
     constructor(scene, renderDom) {
 
-        this.mouseDown = false;
-        this.mouse     = new THREE.Vector2(0, 0);
-        this.delta     = new THREE.Vector2(0, 0);
+        this.targetRotationX = 0;
+        this.targetRotationOnMouseDownX = 0;
+         
+        this.targetRotationY = 0;
+        this.targetRotationOnMouseDownY = 0;
+         
+        this.mouseX = 0;
+        this.mouseXOnMouseDown = 0;
+         
+        this.mouseY = 0;
+        this.mouseYOnMouseDown = 0;
+         
+        this.finalRotationY = 0;
         
         this.scene     = scene;
         this.renderDom = renderDom;
@@ -35,9 +45,9 @@ class Gallery
 
     listen(on = 'on')
     {
-        // eve[on](this.renderDom, 'mousedown', this.onMouseDown.bind(this));
-        // eve[on](this.renderDom, 'mouseup', this.onMouseUp.bind(this));
-        // eve[on](this.renderDom, 'mousemove', this.onMouseMove.bind(this));
+        eve[on](this.renderDom, 'mousedown', this.onMouseDown.bind(this));
+        eve[on](this.renderDom, 'mouseup', this.onMouseUp.bind(this));
+        eve[on](this.renderDom, 'mousemove', this.onMouseMove.bind(this));
     }
 
     animateOut()
@@ -62,31 +72,49 @@ class Gallery
     {
         e.preventDefault();
         if(!this.mouseDown) return;
-
-        this.delta.x = e.clientX - this.mouse.x;
-        this.delta.y = e.clientY - this.mouse.y;
-
-        this.rotateObject();
+        this.mouseX = event.clientX - (window.innerWidth / 2);
+        this.mouseY = event.clientY - (window.innerHeight / 2);
+ 
+        this.targetRotationY = this.targetRotationOnMouseDownY + (this.mouseY - this.mouseYOnMouseDown) * 0.02;
+        this.targetRotationX = this.targetRotationOnMouseDownX + (this.mouseX - this.mouseXOnMouseDown) * 0.02;
     }
 
     onMouseDown(e)
     {
-        e.preventDefault();
         this.mouseDown = true;
-        this.mouse.x = e.clientX;
-        this.mouse.y = e.clientY;
+        e.preventDefault();
+
+        this.mouseXOnMouseDown = event.clientX - (window.innerWidth / 2);
+        this.targetRotationOnMouseDownX = this.targetRotationX;
+ 
+        this.mouseYOnMouseDown = event.clientY - (window.innerHeight / 2);
+        this.targetRotationOnMouseDownY = this.targetRotationY;
+
     }
 
     showArtist(direction)
     {
-        this.materials = new THREE.MeshPhongMaterial({
-          // color     : new THREE.Color(window.APP.landing.scene.p.modelWireColour),
+        this.material = new THREE.MeshPhongMaterial({
           shading   : THREE.FlatShading,
-          color     : 0x4e514e,
-          specular  : 0xfffefe,
-          emissive  : 0x101110,
-          shininess : 30,
+          color     : new THREE.Color(window.APP.landing.scene.p.modelMeshColor),
+          specular  : new THREE.Color(window.APP.landing.scene.p.modelMeshSpecular),
+          emissive  : new THREE.Color(window.APP.landing.scene.p.modelMeshEmissive),
+          shininess : window.APP.landing.scene.p.modelShininess,
         })
+
+        this.targetRotationX = 0;
+        this.targetRotationOnMouseDownX = 0;
+         
+        this.targetRotationY = 0;
+        this.targetRotationOnMouseDownY = 0;
+         
+        this.mouseX = 0;
+        this.mouseXOnMouseDown = 0;
+         
+        this.mouseY = 0;
+        this.mouseYOnMouseDown = 0;
+         
+        this.finalRotationY = 0;
 
         this.direction = direction;
         let data = window.APP.artists[window.APP.currentArtist];
@@ -99,10 +127,10 @@ class Gallery
     {
         // if(this.dae) this.container.remove(this.dae);
 
-        let offset = this.direction == 1 ? 300 : -300;
-
+        let offset  = this.direction == 1 ? 1 : -1;
+        let radius  = 0
         let tempDae = obj;
-        let scale = 1;
+        let scale   = 1;
         // let mesh = null
 
         tempDae.traverse( function ( child ) {
@@ -114,19 +142,23 @@ class Gallery
 
                 // mesh = THREE.SceneUtils.createMultiMaterialObject(child.geometry, );
                 
-                child.material = this.materials
+                child.material = this.material
                 child.castShadow = true;
                 child.receiveShadow = true;
 
-                scale = ((window.innerWidth * .5) * .4) / (child.geometry.boundingSphere.radius * 2);
+                radius = child.geometry.boundingSphere.radius
+                scale  = (window.innerHeight * .25) / (radius * 2);
+                console.log(radius, scale)
+
                 child.material.needsUpdate = true;
             }
 
         }.bind(this) );
 
         tempDae.scale.x = tempDae.scale.y = tempDae.scale.z = scale;
-        tempDae.position.x = offset;
-        tempDae.position.y = -20;
+        tempDae.position.x = (window.innerWidth / 2) * offset;
+        // tempDae.position.y = (radius * scale);
+        tempDae.position.z = -250;
 
         tempDae.updateMatrix();
         this.container.add(tempDae);
@@ -143,7 +175,7 @@ class Gallery
 
         if(this.dae)
         {
-            timeline.add( TweenMax.to(this.dae.position, 1.8, {ease: Quart.easeInOut, x: -offset}) , 0);
+            timeline.add( TweenMax.to(this.dae.position, 1.8, {ease: Quart.easeInOut, x: -(window.innerWidth / 2) * offset}) , 0);
         }
 
         timeline.add( TweenMax.to(tempDae.position, 1.8, {ease: Quart.easeInOut, x: 0}), 0);
@@ -153,17 +185,25 @@ class Gallery
         // this.container.add(this.dae);
     }
 
-    updateWireColour(c)
+    updateColours()
     {
         if(!this.dae) return;
+
         this.dae.traverse( function ( child ) {
 
             if ( child instanceof THREE.Mesh ) {
-                let a = new THREE.Color(c);
-                child.material.color = a;
+
+                child.material.color = new THREE.Color(window.APP.landing.scene.p.modelMeshColor);
+                child.material.specular = new THREE.Color(window.APP.landing.scene.p.modelMeshSpecular);
+                child.material.emissive = new THREE.Color(window.APP.landing.scene.p.modelMeshEmissive);
+                child.material.shininess = window.APP.landing.scene.p.modelShininess;
+                child.material.needsUpdate = true;
+
                 child.material.needsUpdate = true;
             }
-        } );
+
+        }.bind(this) );
+        
     }
 
     getURL(url)
@@ -173,10 +213,28 @@ class Gallery
         return "https://googledrive.com/host/" + parsed.query.id + "?r=" + UtilsP.rrandom(9999);
     }
 
-    render()
+    update()
     {
-        this.particleSystem.rotation.y -= .0005;
-        this.renderer.render(this.container, this.camera);
+        if(!this.dae) return;
+
+        this.dae.rotation.y += ( this.targetRotationX - this.dae.rotation.y ) * 0.05;
+        this.finalRotationY = (this.targetRotationY - this.dae.rotation.x); 
+        this.dae.rotation.x += this.finalRotationY * 0.05;
+
+        this.dae.rotation.x %= 360;
+        this.dae.rotation.y %= 360;
+
+        // if (this.dae.rotation.x  <= 1 && this.dae.rotation.x >= -1 ) {
+            
+        //     }
+
+         // if (this.dae.rotation.x  > 1 ) {
+         //    this.dae.rotation.x = 1
+         //    }
+     
+         // if (this.dae.rotation.x  < -1 ) {
+         //    this.dae.rotation.x = -1
+         //    }
     }
 
     onResize()
