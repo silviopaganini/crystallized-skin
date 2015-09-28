@@ -14,7 +14,7 @@ class UI  {
     
     this.copy             = copy;
     this.h1               = document.querySelector('main header div.container > h1');
-    
+
     this.h3About          = document.querySelector('main section.about div.container > h3');
     this.h2About          = document.querySelector('main section.about div.container > h2');
     this.h4About          = document.querySelector('main section.about div.container > h4');

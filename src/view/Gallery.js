@@ -22,6 +22,9 @@ class Gallery
     createScene()
     {
         this.container = new THREE.Object3D();
+        this.container.castShadow = true;
+        this.container.receiveShadow = true;
+
         this.scene.add(this.container);
 
         this.loader = new THREE.OBJLoader();
@@ -32,9 +35,9 @@ class Gallery
 
     listen(on = 'on')
     {
-        eve[on](this.renderDom, 'mousedown', this.onMouseDown.bind(this));
-        eve[on](this.renderDom, 'mouseup', this.onMouseUp.bind(this));
-        eve[on](this.renderDom, 'mousemove', this.onMouseMove.bind(this));
+        // eve[on](this.renderDom, 'mousedown', this.onMouseDown.bind(this));
+        // eve[on](this.renderDom, 'mouseup', this.onMouseUp.bind(this));
+        // eve[on](this.renderDom, 'mousemove', this.onMouseMove.bind(this));
     }
 
     animateOut()
@@ -76,6 +79,15 @@ class Gallery
 
     showArtist(direction)
     {
+        this.materials = new THREE.MeshPhongMaterial({
+          // color     : new THREE.Color(window.APP.landing.scene.p.modelWireColour),
+          shading   : THREE.FlatShading,
+          color     : 0x4e514e,
+          specular  : 0xfffefe,
+          emissive  : 0x101110,
+          shininess : 30,
+        })
+
         this.direction = direction;
         let data = window.APP.artists[window.APP.currentArtist];
         let url = this.getURL(data.model);
@@ -91,6 +103,7 @@ class Gallery
 
         let tempDae = obj;
         let scale = 1;
+        // let mesh = null
 
         tempDae.traverse( function ( child ) {
 
@@ -99,20 +112,21 @@ class Gallery
                 child.geometry.computeFaceNormals();
                 child.geometry.computeBoundingSphere();
 
-                child.material = new THREE.MeshBasicMaterial({
-                  color     : new THREE.Color(window.APP.landing.scene.p.modelWireColour),
-                  shading   : THREE.FlatShading,
-                  wireframe : true
-                });
+                // mesh = THREE.SceneUtils.createMultiMaterialObject(child.geometry, );
+                
+                child.material = this.materials
+                child.castShadow = true;
+                child.receiveShadow = true;
 
                 scale = ((window.innerWidth * .5) * .4) / (child.geometry.boundingSphere.radius * 2);
                 child.material.needsUpdate = true;
             }
 
-        } );
+        }.bind(this) );
 
         tempDae.scale.x = tempDae.scale.y = tempDae.scale.z = scale;
         tempDae.position.x = offset;
+        tempDae.position.y = -20;
 
         tempDae.updateMatrix();
         this.container.add(tempDae);

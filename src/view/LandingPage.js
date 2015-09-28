@@ -58,13 +58,17 @@ class LandingPage {
   createRender()
   {
     this.renderer = new THREE.WebGLRenderer( {
-        antialias : true,
-        clearColor: 0x0000,
-        alpha: false,
-        gammaInput : true,
-        gammeOutput : true,
+        antialias        : true,
+        clearColor       : 0x000000,
+        alpha            : false,
+        // autoClear        : false,
+        gammaInput       : true,
+        gammeOutput      : true,
         devicePixelRatio : window.devicePixelRatio
     } );
+
+    this.renderer.shadowMapEnabled = true;
+    this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
     this.renderer.setClearColor(0x000000, 1);
     this.container.appendChild(this.renderer.domElement)

@@ -1,6 +1,7 @@
 import URL   from 'url';
 import buzz  from '../libs/buzz';
 import MathP from 'utils-perf';
+import eve   from 'dom-events';
 
 class SoundController 
 {
@@ -12,14 +13,38 @@ class SoundController
         'https://drive.google.com/open?id=0B0uHwEQ4FBZxdHE3dm1FMWplLWs'
     ]
 
+    this.playing = false;
+
+    this.soundButton = document.querySelector('.sound-container');
+    eve.on(this.soundButton, 'click', this.toggleSound.bind(this));
+
     this.currentSound = 0;
     this.sounds = MathP.randomArray(this.sounds);
     this.playSound();
   }
 
+  toggleSound()
+  {
+    if(this.playing)
+    {
+      this.soundButton.dataset.state = 'off';
+      this.sound.fadeTo(0, 1000, ()=>{
+        this.sound.pause();
+        this.playing = false;
+      });
+    } else {
+      this.soundButton.dataset.state = 'on';
+      this.sound.play().fadeTo(20, 1000, ()=>{
+        this.playing = true;
+      });
+    }
+  }
+
   playSound()
   {
     if(this.sound) this.sound.stop();
+
+    this.playing = true;
 
     this.sound = new buzz.sound( this.getURL(this.sounds[this.currentSound]), {
         autoplay : false,

@@ -1,7 +1,7 @@
 import EC from '../postprocessing/core/EffectComposer';
 import NS from '../postprocessing/Noise';
 import RP from '../postprocessing/core/RenderPass';
-// import OC from 'three-orbit-controls';
+import OC from 'three-orbit-controls';
 
 import THREE    from 'three'; 
 import noise    from 'perlin-noise';
@@ -36,12 +36,12 @@ class SceneHome
 
   createScene()
   {
-    // const OrbitControls = OC(THREE);
+    const OrbitControls = OC(THREE);
 
-    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 4000 );
+    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 4000 );
     this.camera.position.set(0, 20, 240);
-    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    // this.controls.maxDistance = 500;
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.maxDistance = 4000;
 
     // this.camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, -500, 500 );
     // this.camera.position.set(0, 20, 0);
@@ -85,6 +85,10 @@ class SceneHome
 
       this.light = new THREE.DirectionalLight(this.p.lightColor, 1);
       this.light.position.set( 0, 0, 100 );
+      this.light.castShadow = true;
+      this.light.shadowCameraNear  = 0.01; 
+      this.light.shadowDarkness = 1;
+      // this.light.shadowCameraVisible = true;
       this.scene.add(this.light);
 
       // this.light = new THREE.AmbientLight(this.p.lightColor, 1);
@@ -104,7 +108,12 @@ class SceneHome
           shading   : THREE.FlatShading,
       }));
 
+      this.mesh.castShadow = true;
+      this.mesh.receiveShadow = false;
+
       this.meshWireframe = new THREE.Mesh(this.geo, new THREE.MeshPhongMaterial({color: this.p.wireColour, wireframe: true}));
+      this.meshWireframe.castShadow = true;
+      this.meshWireframe.receiveShadow = false;
 
       this.mesh.rotation.x = -20 * Math.PI / 180;
       this.meshWireframe.rotation.x = -20 * Math.PI / 180;
@@ -161,11 +170,11 @@ class SceneHome
     var Params = function(){
         this.nodes = 20;
         this.power = 100;
-        this.lightColor = '#7f7f7f';
+        this.lightColor = '#acacac';
         this.meshColor = '#222222';
         this.meshSpecular = '#1e1e1e';
         this.meshEmissive = '#000000';
-        this.wireColour = '#444444';
+        this.wireColour = '#1e1e1e';
         this.modelWireColour = '#e1e1e1';
         this.shininess = 20;
         this.noiseAmount = .05;
