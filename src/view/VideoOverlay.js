@@ -55,13 +55,12 @@ class VideoOverlay {
 
     post(action, value) 
     {
+        this.player = this.container.querySelector('iframe');
+
         var data = {
-          method: action
+          method: action,
+          value : value
         };
-        
-        if (value) {
-            data.value = value;
-        }
         
         var message = JSON.stringify(data);
         this.player.contentWindow.postMessage(data, "*");
@@ -71,9 +70,11 @@ class VideoOverlay {
     {
         this.player = this.container.querySelector('iframe');
 
-        if(!this.player || !this.ytPlayer) return;
+        window.APP.soundManager.toggleSoundVideo(false);
 
-        this.type == "vimeo" ? this.post('pause') : (this.ytPlayer.pauseVideo ? this.ytPlayer.pauseVideo() : 0);
+        if(this.player && this.type == 'vimeo') this.post('pause');
+        if(this.ytPlayer)
+            this.ytPlayer.pauseVideo ? this.ytPlayer.pauseVideo() : 0;
     }
 }
 

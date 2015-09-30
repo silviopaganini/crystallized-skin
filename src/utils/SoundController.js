@@ -14,6 +14,7 @@ class SoundController
     ]
 
     this.playing = false;
+    this.wasPlaying = false;
 
     this.soundButton = document.querySelector('.sound-container');
     eve.on(this.soundButton, 'click', this.toggleSound.bind(this));
@@ -23,21 +24,40 @@ class SoundController
     this.playSound();
   }
 
+  toggleSoundVideo(pause = true)
+  {
+    if(this.wasPlaying) this.resumeSound();
+    if(!this.playing) return;
+    if(pause) {this.pauseSound(); return;}
+  }
+
   toggleSound()
   {
     if(this.playing)
     {
-      this.soundButton.dataset.state = 'off';
-      this.sound.fadeTo(0, 1000, ()=>{
-        this.sound.pause();
-        this.playing = false;
-      });
+      this.wasPlaying = false;
+      this.pauseSound();
     } else {
-      this.soundButton.dataset.state = 'on';
-      this.sound.play().fadeTo(20, 1000, ()=>{
-        this.playing = true;
-      });
+      this.resumeSound();
     }
+  }
+
+  pauseSound()
+  {
+    this.soundButton.dataset.state = 'off';
+    this.sound.fadeTo(0, 1000, ()=>{
+      this.sound.pause();
+      this.playing = false;
+    });
+  }
+
+  resumeSound()
+  {
+    this.wasPlaying = true;
+    this.soundButton.dataset.state = 'on';
+    this.sound.play().fadeTo(20, 1000, ()=>{
+      this.playing = true;
+    });
   }
 
   playSound()
@@ -45,6 +65,7 @@ class SoundController
     if(this.sound) this.sound.stop();
 
     this.playing = true;
+    this.wasPlaying = true;
 
     this.sound = new buzz.sound( this.getURL(this.sounds[this.currentSound]), {
         autoplay : false,

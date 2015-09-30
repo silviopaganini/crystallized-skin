@@ -118,6 +118,7 @@ class UI  {
   scrollUp()
   {
     this.scroll.scrollTo(0);
+    window.APP.soundManager.toggleSoundVideo();
   }
 
   listen()
