@@ -136,7 +136,7 @@ class ScrollManager
 
   scrollToHeader()
   {
-    this.scrollTo(this.getSectionHeight('sectionVideo') + this.getSectionOffset('header'), null);
+    this.scrollTo(this.getSectionHeight('sectionVideo'), null);
   }
 
   onScroll(e)
@@ -149,7 +149,9 @@ class ScrollManager
     clearTimeout(this.timerToScroll);
     this.timerToScroll = 0;
 
-    if(Math.abs((window.pageYOffset - this.getSectionHeight('sectionVideo')) - this.getSectionOffset('header')) < window.innerHeight / 3)
+    let a = Math.abs(window.pageYOffset - this.getSectionHeight('sectionVideo'));
+
+    if(a < window.innerHeight / 2)
     {
       this.timerToScroll = setTimeout(this.scrollToHeader.bind(this), this.delay);
     }
