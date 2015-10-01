@@ -32,8 +32,8 @@ class Gallery
     createScene()
     {
         this.container = new THREE.Object3D();
-        this.container.castShadow = true;
-        this.container.receiveShadow = true;
+        // this.container.castShadow = true;
+        // this.container.receiveShadow = true;
 
         this.scene.add(this.container);
 

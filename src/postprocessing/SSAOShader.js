@@ -11,7 +11,9 @@
  * - refactoring and optimizations
  */
 
-module.exports = function(THREE){
+ module.exports = function(THREE)
+ {
+
 
 
 THREE.SSAOShader = {
@@ -67,10 +69,10 @@ THREE.SSAOShader = {
         // user variables
 
         "const int samples = 8;",     // ao sample count
-        "const float radius = 5.0;",  // ao radius
+        "const float radius = 10.0;",  // ao radius
 
         "const bool useNoise = false;",      // use noise instead of pattern for sample dithering
-        "const float noiseAmount = 0.0003;", // dithering amount
+        "const float noiseAmount = 0.003;", // dithering amount
 
         "const float diffArea = 0.4;",   // self-shadowing reduction
         "const float gDisplace = 0.4;",  // gauss bell center

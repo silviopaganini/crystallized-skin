@@ -16,6 +16,8 @@ const EffectComposer = EC(THREE);
 const NoiseShader = NS(THREE);
 const RenderPass = RP(THREE);
 
+const SSAOShader     = require('../postprocessing/SSAOShader')(THREE);
+
 class SceneHome 
 {
   constructor(renderer, clock) 
@@ -70,11 +72,37 @@ class SceneHome
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass( new THREE.RenderPass( this.scene, this.camera ) );
 
-    this.noisePass = new THREE.ShaderPass( NoiseShader );
-    this.noisePass.uniforms['amount'].value = .08;
-    this.noisePass.uniforms['speed'].value = 1;
-    this.noisePass.renderToScreen = true;
-    this.composer.addPass( this.noisePass );
+    var renderPass = new THREE.RenderPass( this.scene, this.camera );
+    var depthShader = THREE.ShaderLib[ "depthRGBA" ];
+    var depthUniforms = THREE.UniformsUtils.clone( depthShader.uniforms );
+
+    this.depthMaterial = new THREE.ShaderMaterial( { fragmentShader: depthShader.fragmentShader, vertexShader: depthShader.vertexShader,
+      uniforms: depthUniforms, blending: THREE.NoBlending } );
+
+    var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter };
+    this.depthRenderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, pars );
+
+    // Setup SSAO pass
+    this.ssaoPass = new THREE.ShaderPass( THREE.SSAOShader );
+    this.ssaoPass.renderToScreen = true;
+    //this.ssaoPass.uniforms[ "tDiffuse" ].value will be set by ShaderPass
+    this.ssaoPass.uniforms[ "tDepth" ].value = this.depthRenderTarget;
+    this.ssaoPass.uniforms[ 'size' ].value.set( window.innerWidth, window.innerHeight );
+    this.ssaoPass.uniforms[ 'cameraNear' ].value = this.camera.near;
+    this.ssaoPass.uniforms[ 'cameraFar' ].value = this.camera.far;
+    this.ssaoPass.uniforms[ 'onlyAO' ].value = false;
+    this.ssaoPass.uniforms[ 'aoClamp' ].value = 100.5;
+    this.ssaoPass.uniforms[ 'lumInfluence' ].value = 1.5;
+
+    this.composer.addPass( this.ssaoPass );
+
+    // this.noisePass = new THREE.ShaderPass( NoiseShader );
+    // this.noisePass.uniforms['amount'].value = .08;
+    // this.noisePass.uniforms['speed'].value = 1;
+    // this.noisePass.renderToScreen = true;
+    // this.composer.addPass( this.noisePass );
+
+
   }
 
   generatePlane()
@@ -85,9 +113,9 @@ class SceneHome
 
       this.light = new THREE.DirectionalLight(this.p.lightColor, 1);
       this.light.position.set( 0, 0, 100 );
-      this.light.castShadow = true;
-      this.light.shadowCameraNear  = 0.01; 
-      this.light.shadowDarkness = .5;
+      // this.light.castShadow = true;
+      // this.light.shadowCameraNear  = 0.01; 
+      // this.light.shadowDarkness = .5;
       // this.light.shadowCameraVisible = true;
       this.scene.add(this.light);
 
@@ -175,7 +203,7 @@ class SceneHome
         this.modelMeshColor = '#3b3c3a';
         this.modelMeshSpecular = '#FFFFFF';
         this.modelMeshEmissive = '#3f4138';
-        this.modelShininess = 4;        
+        this.modelShininess = 2;        
 
         this.noiseAmount = .05;
         this.noiseSpeed = 1;
@@ -256,9 +284,14 @@ class SceneHome
 
     if(this.renderPost)
     {
-      this.noisePass.uniforms['amount'].value = this.p.noiseAmount;
-      this.noisePass.uniforms['speed'].value = this.p.noiseSpeed;
-      this.noisePass.uniforms['time'].value = this.clock.getElapsedTime();  
+      this.scene.overrideMaterial = this.depthMaterial;
+      this.renderer.render( this.scene, this.camera, this.depthRenderTarget, true );
+
+      // this.noisePass.uniforms['amount'].value = this.p.noiseAmount;
+      // this.noisePass.uniforms['speed'].value = this.p.noiseSpeed;
+      // this.noisePass.uniforms['time'].value = this.clock.getElapsedTime();  
+
+      this.scene.overrideMaterial = null;
       this.composer.render();
     } else {
       this.renderer.render(this.scene, this.camera);

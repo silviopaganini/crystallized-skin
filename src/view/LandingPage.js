@@ -67,8 +67,8 @@ class LandingPage {
         devicePixelRatio : window.devicePixelRatio
     } );
 
-    this.renderer.shadowMapEnabled = true;
-    this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
+    // this.renderer.shadowMapEnabled = true;
+    // this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
     this.renderer.setClearColor(0x000000, 1);
     this.container.appendChild(this.renderer.domElement)
