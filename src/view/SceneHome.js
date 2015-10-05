@@ -17,7 +17,7 @@ const NoiseShader = NS(THREE);
 const RenderPass = RP(THREE);
 
 const SSAOShader     = require('../postprocessing/SSAOShader')(THREE);
-const OrbitControls = require('three-orbit-controls')(THREE);
+const OrbitControls = require('../utils/OrbitControls')(THREE);
 
 class SceneHome 
 {
@@ -60,7 +60,7 @@ class SceneHome
     this.controls.maxAzimuthAngle= 25 * Math.PI / 180;
     // this.controls.rotateStart.set( window.innerWidth / 2, window.innerHeight / 2);
 
-    this.gallery = new Gallery(this.scene, this.renderer.domElement);
+    this.gallery = new Gallery(this.scene, this.renderer.domElement, this.camera);
   }
 
 

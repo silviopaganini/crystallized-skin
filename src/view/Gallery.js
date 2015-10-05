@@ -7,26 +7,23 @@ const objLoaders = require('../utils/OBJLoader')(THREE);
 
 class Gallery 
 {
-    constructor(scene, renderDom) {
+    constructor(scene, renderDom, camera) {
 
-        this.targetRotationX = 0;
-        this.targetRotationOnMouseDownX = 0;
-         
-        this.targetRotationY = 0;
-        this.targetRotationOnMouseDownY = 0;
+        this.objectMesh = null;
+
+        this.camera = camera;
          
         this.mouseX = 0;
-        this.mouseXOnMouseDown = 0;
-         
         this.mouseY = 0;
-        this.mouseYOnMouseDown = 0;
          
-        this.finalRotationY = 0;
-
         this.wireframeAnim = null;
         
         this.scene     = scene;
         this.renderDom = renderDom;
+
+        this.wireframeIn = false;
+
+        this.flickring = [1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 1, 1, 2, 1, 2];
 
         this.createScene();
     }
@@ -34,8 +31,7 @@ class Gallery
     createScene()
     {
         this.container = new THREE.Object3D();
-        // this.container.castShadow = true;
-        // this.container.receiveShadow = true;
+        this.raycaster = new THREE.Raycaster();
 
         this.scene.add(this.container);
 
@@ -49,32 +45,16 @@ class Gallery
     {
         if(on == 'off') {
             window.APP.landing.scene.controls.enabled = false;
+            eve.off(this.renderDom, 'mousemove', this.onMouseMoveRaycaster.bind(this));
         } else {
             eve.once(this.renderDom, 'mousemove', this.onMouseMove.bind(this));
         }
-        // window.APP.landing.scene.controls.enabled = on == 'on';
-        // return;
-        // eve[on](this.renderDom, 'mousedown', this.onMouseDown.bind(this));
-        // eve[on](this.renderDom, 'mouseup', this.onMouseUp.bind(this));
     }
 
     animateOut()
     {
         TweenMax.to(this.container, .6, {z: 200});
     }
-
-    rotateObject()
-    {
-        let amount = 180;
-        this.dae.rotation.x += (this.delta.y / amount) * .05;
-        this.dae.rotation.y += (this.delta.x / amount) * .05;
-    }
-
-    // onMouseUp(e)
-    // {
-    //     e.preventDefault();
-    //     this.mouseDown = false;
-    // }
 
     onMouseMove(e)
     {
@@ -83,29 +63,32 @@ class Gallery
         // console.log(e.clientX, e.clientY)
         window.APP.landing.scene.controls.enabled = true;
         window.APP.landing.scene.controls.rotateStart.set( e.clientX, e.clientY );
-        // eve.off(this.renderDom, 'mousemove', this.onMouseMove.bind(this));
 
-        // 
-        // if(!this.mouseDown) return;
-        // this.mouseX = event.clientX - (window.innerWidth / 2);
-        // this.mouseY = event.clientY - (window.innerHeight / 2);
- 
-        // this.targetRotationY = this.targetRotationOnMouseDownY + (this.mouseY - this.mouseYOnMouseDown) * 0.02;
-        // this.targetRotationX = this.targetRotationOnMouseDownX + (this.mouseX - this.mouseXOnMouseDown) * 0.02;
+        eve.on(this.renderDom, 'mousemove', this.onMouseMoveRaycaster.bind(this));
     }
 
-    // onMouseDown(e)
-    // {
-    //     this.mouseDown = true;
-    //     e.preventDefault();
+    onMouseMoveRaycaster()
+    {
+        if(!this.dae) return;
 
-    //     this.mouseXOnMouseDown = event.clientX - (window.innerWidth / 2);
-    //     this.targetRotationOnMouseDownX = this.targetRotationX;
- 
-    //     this.mouseYOnMouseDown = event.clientY - (window.innerHeight / 2);
-    //     this.targetRotationOnMouseDownY = this.targetRotationY;
+        var mouse = new THREE.Vector2();
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
-    // }
+        this.raycaster.setFromCamera( mouse, this.camera )
+
+        var intersects = this.raycaster.intersectObjects( [this.dae, this.dae.children[0]] );
+
+        if(intersects.length < 1)
+        {
+            if(this.intervalBackToMaterial == 0) this.intervalBackToMaterial = setTimeout(this.toggleWireframe.bind(this), 300, false);
+            return;
+        }
+
+        clearTimeout(this.intervalBackToMaterial);
+        this.intervalBackToMaterial = 0;
+        this.toggleWireframe(true);
+    }
 
     showArtist(direction)
     {
@@ -117,7 +100,7 @@ class Gallery
           shininess          : window.APP.landing.scene.p.modelShininess,
           wireframe          : false,
           transparent        : true,
-          wireframeLinewidth : 1
+          wireframeLinewidth : .1
         })
 
         this.targetRotationX = 0;
@@ -143,56 +126,81 @@ class Gallery
 
     toggleWireframe(on = true)
     {
-        if(!this.dae) return;
+        if(!this.dae && !this.objectMesh) return;
 
-        this.dae.traverse( function ( child ) {
-
-            if ( child instanceof THREE.Mesh ) {
-
-                child.material.wireframe = on
-
-                if(on) {
-                    // this.material.shading = THREE.SmoothShading;
-                    this.animateWireframe();
-                } else {
-                    // this.material.shading = THREE.FlatShading;
-                    this.updateColours();
-                    this.wireframeAnim.pause();
-                }
-
-                child.material.needsUpdate = true;
+        if(on) {
+            if(!this.wireframeIn) {
+                this.hoverCallback = this.animateWireframe;
+                this.animateInShader();
             }
 
-        }.bind(this) );
+        } else {
+
+            if(this.wireframeIn) {
+                if(this.wireframeAnim) this.wireframeAnim.pause();
+                this.hoverCallback = null;
+                this.animateInShader();
+            }
+        }
+
+        this.objectMesh.material.needsUpdate = true;
     }
 
     animateWireframe()
     {
-        if(!this.dae) return;
+        if(!this.dae && !this.objectMesh) return;
 
-        this.dae.traverse( function ( child ) {
-            if ( child instanceof THREE.Mesh ) {
+        this.makeItWireframe();
 
-                child.material.emissive = new THREE.Color(0xBCBFB4);
-                child.material.specular = new THREE.Color(0xFFFFFF);
+        this.wireframeAnim = new TimelineMax({onUpdate: () => {this.objectMesh.material.needsUpdate = true;}});
+        this.wireframeAnim.add( TweenMax.to(this.objectMesh.material, .7, { opacity: .3, yoyo: true, repeat: -1, ease: Linear.easeNone}), 0 )
+    }
 
-                this.wireframeAnim = TweenMax.to(child.material, 1, {
-                    opacity  : .4,
-                    wireframeLinewidth : 5
-                    // specular : {}, 
-                    // emissive : {r: 1, g: 1, b: 1},
+    animateInShader()
+    {
+        clearTimeout(this.intervFlick);
+        this.intervFlick = 0;
 
-                    // r: b.r, g: b.g, b: b.b
+        this.animFlick = [];
 
-                    ,ease: Linear.easeNone
-
-                    ,onUpdate : () => {
-                        child.material.needsUpdate = true;
-                    }, 
-                    yoyo: true, repeat: -1, delay: .2
-                });
+        for (var i = 0; i < this.flickring.length; i++) {
+            if(this.flickring[i] % 2 == 0)
+            {
+                this.animFlick.push("makeItWireframe"); 
+            } else {
+                this.animFlick.push("updateColours"); 
             }
-        }.bind(this) );
+        };
+
+        this.animFlick.push("updateColours");
+        this.processQueue();
+    }
+
+    processQueue()
+    {
+        if(this.animFlick.length < 1) {
+            // console.log(this.hoverCallback)
+            if(this.hoverCallback) this.hoverCallback();
+            this.hoverCallback = null
+            // console.log('flickring finished');
+            return;
+        };
+
+        let action = this[this.animFlick[0]].bind(this);
+
+        this.intervFlick = setTimeout( action , 32, this.processQueue.bind(this) );
+        this.animFlick.shift();
+        
+    }
+
+    makeItWireframe(callback)
+    {
+        this.objectMesh.material.wireframe = true;
+        this.objectMesh.material.emissive = new THREE.Color(0xBCBFB4);
+        this.objectMesh.material.specular = new THREE.Color(0xFFFFFF);
+        this.objectMesh.material.needsUpdate = true;
+        this.wireframeIn = true;
+        if(callback) callback();
     }
 
     onLoaded(obj)
@@ -203,26 +211,29 @@ class Gallery
         let radius  = 0
         let tempDae = obj;
         let scale   = 1;
+        this.wireframeAnim = null;
         // let mesh = null
 
         tempDae.traverse( function ( child ) {
 
             if ( child instanceof THREE.Mesh ) {
 
-                child.geometry.computeFaceNormals();
-                child.geometry.computeBoundingSphere();
+                this.objectMesh = child;
 
-                // mesh = THREE.SceneUtils.createMultiMaterialObject(child.geometry, );
+                this.objectMesh.geometry.computeFaceNormals();
+                this.objectMesh.geometry.computeBoundingSphere();
+
+                // mesh = THREE.SceneUtils.createMultiMaterialObject(this.objectMesh.geometry, );
                 
-                child.material = this.material
-                // child.castShadow = true;
-                // child.receiveShadow = true;
+                this.objectMesh.material = this.material
+                // this.objectMesh.castShadow = true;
+                // this.objectMesh.receiveShadow = true;
 
-                radius = child.geometry.boundingSphere.radius
+                radius = this.objectMesh.geometry.boundingSphere.radius
                 scale  = (window.innerHeight * .25) / (radius * 2);
                 // console.log(radius, scale)
 
-                child.material.needsUpdate = true;
+                this.objectMesh.material.needsUpdate = true;
             }
 
         }.bind(this) );
@@ -257,25 +268,22 @@ class Gallery
         // this.container.add(this.dae);
     }
 
-    updateColours()
+    updateColours(callback)
     {
-        if(!this.dae) return;
+        if(!this.dae && !this.objectMesh) return;
 
-        this.dae.traverse( function ( child ) {
+        this.objectMesh.material.color = new THREE.Color(window.APP.landing.scene.p.modelMeshColor);
+        this.objectMesh.material.specular = new THREE.Color(window.APP.landing.scene.p.modelMeshSpecular);
+        this.objectMesh.material.emissive = new THREE.Color(window.APP.landing.scene.p.modelMeshEmissive);
+        this.objectMesh.material.shininess = window.APP.landing.scene.p.modelShininess;
+        this.objectMesh.material.opacity = 1;
+        this.objectMesh.material.wireframe = false;
 
-            if ( child instanceof THREE.Mesh ) {
+        this.wireframeIn = false;
 
-                child.material.color = new THREE.Color(window.APP.landing.scene.p.modelMeshColor);
-                child.material.specular = new THREE.Color(window.APP.landing.scene.p.modelMeshSpecular);
-                child.material.emissive = new THREE.Color(window.APP.landing.scene.p.modelMeshEmissive);
-                child.material.shininess = window.APP.landing.scene.p.modelShininess;
-                child.material.opacity = 1;
+        this.objectMesh.material.needsUpdate = true;
 
-                child.material.needsUpdate = true;
-            }
-
-        }.bind(this) );
-        
+        if(callback) callback();
     }
 
     getURL(url)
@@ -287,26 +295,6 @@ class Gallery
 
     update()
     {
-        if(!this.dae) return;
-
-        this.dae.rotation.y += ( this.targetRotationX - this.dae.rotation.y ) * 0.05;
-        this.finalRotationY = (this.targetRotationY - this.dae.rotation.x); 
-        this.dae.rotation.x += this.finalRotationY * 0.05;
-
-        this.dae.rotation.x %= 360;
-        this.dae.rotation.y %= 360;
-
-        // if (this.dae.rotation.x  <= 1 && this.dae.rotation.x >= -1 ) {
-            
-        //     }
-
-         // if (this.dae.rotation.x  > 1 ) {
-         //    this.dae.rotation.x = 1
-         //    }
-     
-         // if (this.dae.rotation.x  < -1 ) {
-         //    this.dae.rotation.x = -1
-         //    }
     }
 
     onResize()
