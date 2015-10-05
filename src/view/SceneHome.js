@@ -49,15 +49,15 @@ class SceneHome
 
     // eve.on(this.renderer.domElement, "mousemove", this.onMouseMove.bind(this));
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.target = this.center;
-    this.controls.noZoom = true;
-    this.controls.noKeys = true;
-    this.controls.enabled = false;
-    this.controls.rotateSpeed = .35;
-    this.controls.minPolarAngle = 30 * Math.PI / 180;
-    this.controls.maxPolarAngle = 110 * Math.PI / 180;
-    this.controls.minAzimuthAngle= -25 * Math.PI / 180;
-    this.controls.maxAzimuthAngle= 25 * Math.PI / 180;
+    this.controls.target          = this.center;
+    this.controls.noZoom          = true;
+    this.controls.noKeys          = true;
+    this.controls.enabled         = false;
+    this.controls.rotateSpeed     = .35;
+    this.controls.minPolarAngle   = 30 * Math.PI / 180;
+    this.controls.maxPolarAngle   = 110 * Math.PI / 180;
+    this.controls.minAzimuthAngle = -25 * Math.PI / 180;
+    this.controls.maxAzimuthAngle = 25 * Math.PI / 180;
     // this.controls.rotateStart.set( window.innerWidth / 2, window.innerHeight / 2);
 
     this.gallery = new Gallery(this.scene, this.renderer.domElement, this.camera);
