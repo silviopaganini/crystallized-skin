@@ -1,4 +1,4 @@
-import THREE from 'three'; 
+import THREE from 'three.js'; 
 import css   from 'dom-css';
 import Stats from 'stats-js' ;
 import URL   from 'url';

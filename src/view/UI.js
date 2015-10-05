@@ -80,9 +80,8 @@ class UI  {
   {
     for (var i = 0; i < window.APP.artists.length; i++) {
 
-      let art = new ArtistObject(window.APP.artists[i], i);
+      let art = new ArtistObject(window.APP.artists[i], i, null,null,null,this.artistClick.bind(this));
       this.artistsUL.appendChild(art.el);
-      eve.on(art.el, 'click', this.artistClick.bind(this));
     };
   }
 
@@ -129,6 +128,9 @@ class UI  {
 
     // eve.on(this.sectionBottom, 'click', this.showArtist.bind(this));
 
+    eve.on(this.pieceName, 'mouseover', this.hoverLink.bind(this));
+    eve.on(this.pieceName, 'mouseout', this.hoverLink.bind(this));
+
     eve.on(this.arrowBottom, 'click', this.scrollToAboutPage.bind(this));
 
     eve.on(this.arrowBottomVideo, 'click', this.showAboveTheFold.bind(this));
@@ -139,6 +141,11 @@ class UI  {
     eve.on(this.navRight, 'click', this.navArtist.bind(this), true);
 
     this.scroll.emitter.on('changeArtist', this.navArtist.bind(this));
+  }
+
+  hoverLink(e)
+  {
+    window.APP.landing.scene.gallery.toggleWireframe(e.type == 'mouseover');
   }
 
   navArtist(e)

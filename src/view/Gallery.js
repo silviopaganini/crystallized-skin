@@ -1,4 +1,4 @@
-import THREE  from 'three'; 
+import THREE  from 'three.js'; 
 import URL    from 'url';
 import eve    from 'dom-events';
 import UtilsP from 'utils-perf';
@@ -22,6 +22,8 @@ class Gallery
         this.mouseYOnMouseDown = 0;
          
         this.finalRotationY = 0;
+
+        this.wireframeAnim = null;
         
         this.scene     = scene;
         this.renderDom = renderDom;
@@ -45,9 +47,15 @@ class Gallery
 
     listen(on = 'on')
     {
-        eve[on](this.renderDom, 'mousedown', this.onMouseDown.bind(this));
-        eve[on](this.renderDom, 'mouseup', this.onMouseUp.bind(this));
-        eve[on](this.renderDom, 'mousemove', this.onMouseMove.bind(this));
+        if(on == 'off') {
+            window.APP.landing.scene.controls.enabled = false;
+        } else {
+            eve.once(this.renderDom, 'mousemove', this.onMouseMove.bind(this));
+        }
+        // window.APP.landing.scene.controls.enabled = on == 'on';
+        // return;
+        // eve[on](this.renderDom, 'mousedown', this.onMouseDown.bind(this));
+        // eve[on](this.renderDom, 'mouseup', this.onMouseUp.bind(this));
     }
 
     animateOut()
@@ -62,44 +70,54 @@ class Gallery
         this.dae.rotation.y += (this.delta.x / amount) * .05;
     }
 
-    onMouseUp(e)
-    {
-        e.preventDefault();
-        this.mouseDown = false;
-    }
+    // onMouseUp(e)
+    // {
+    //     e.preventDefault();
+    //     this.mouseDown = false;
+    // }
 
     onMouseMove(e)
     {
         e.preventDefault();
-        if(!this.mouseDown) return;
-        this.mouseX = event.clientX - (window.innerWidth / 2);
-        this.mouseY = event.clientY - (window.innerHeight / 2);
+
+        // console.log(e.clientX, e.clientY)
+        window.APP.landing.scene.controls.enabled = true;
+        window.APP.landing.scene.controls.rotateStart.set( e.clientX, e.clientY );
+        // eve.off(this.renderDom, 'mousemove', this.onMouseMove.bind(this));
+
+        // 
+        // if(!this.mouseDown) return;
+        // this.mouseX = event.clientX - (window.innerWidth / 2);
+        // this.mouseY = event.clientY - (window.innerHeight / 2);
  
-        this.targetRotationY = this.targetRotationOnMouseDownY + (this.mouseY - this.mouseYOnMouseDown) * 0.02;
-        this.targetRotationX = this.targetRotationOnMouseDownX + (this.mouseX - this.mouseXOnMouseDown) * 0.02;
+        // this.targetRotationY = this.targetRotationOnMouseDownY + (this.mouseY - this.mouseYOnMouseDown) * 0.02;
+        // this.targetRotationX = this.targetRotationOnMouseDownX + (this.mouseX - this.mouseXOnMouseDown) * 0.02;
     }
 
-    onMouseDown(e)
-    {
-        this.mouseDown = true;
-        e.preventDefault();
+    // onMouseDown(e)
+    // {
+    //     this.mouseDown = true;
+    //     e.preventDefault();
 
-        this.mouseXOnMouseDown = event.clientX - (window.innerWidth / 2);
-        this.targetRotationOnMouseDownX = this.targetRotationX;
+    //     this.mouseXOnMouseDown = event.clientX - (window.innerWidth / 2);
+    //     this.targetRotationOnMouseDownX = this.targetRotationX;
  
-        this.mouseYOnMouseDown = event.clientY - (window.innerHeight / 2);
-        this.targetRotationOnMouseDownY = this.targetRotationY;
+    //     this.mouseYOnMouseDown = event.clientY - (window.innerHeight / 2);
+    //     this.targetRotationOnMouseDownY = this.targetRotationY;
 
-    }
+    // }
 
     showArtist(direction)
     {
         this.material = new THREE.MeshPhongMaterial({
-          shading   : THREE.FlatShading,
-          color     : new THREE.Color(window.APP.landing.scene.p.modelMeshColor),
-          specular  : new THREE.Color(window.APP.landing.scene.p.modelMeshSpecular),
-          emissive  : new THREE.Color(window.APP.landing.scene.p.modelMeshEmissive),
-          shininess : window.APP.landing.scene.p.modelShininess,
+          shading            : THREE.FlatShading,
+          color              : new THREE.Color(window.APP.landing.scene.p.modelMeshColor),
+          specular           : new THREE.Color(window.APP.landing.scene.p.modelMeshSpecular),
+          emissive           : new THREE.Color(window.APP.landing.scene.p.modelMeshEmissive),
+          shininess          : window.APP.landing.scene.p.modelShininess,
+          wireframe          : false,
+          transparent        : true,
+          wireframeLinewidth : 1
         })
 
         this.targetRotationX = 0;
@@ -123,6 +141,60 @@ class Gallery
         this.loader.load(url, this.onLoaded.bind(this));
     }
 
+    toggleWireframe(on = true)
+    {
+        if(!this.dae) return;
+
+        this.dae.traverse( function ( child ) {
+
+            if ( child instanceof THREE.Mesh ) {
+
+                child.material.wireframe = on
+
+                if(on) {
+                    // this.material.shading = THREE.SmoothShading;
+                    this.animateWireframe();
+                } else {
+                    // this.material.shading = THREE.FlatShading;
+                    this.updateColours();
+                    this.wireframeAnim.pause();
+                }
+
+                child.material.needsUpdate = true;
+            }
+
+        }.bind(this) );
+    }
+
+    animateWireframe()
+    {
+        if(!this.dae) return;
+
+        this.dae.traverse( function ( child ) {
+            if ( child instanceof THREE.Mesh ) {
+
+                child.material.emissive = new THREE.Color(0xBCBFB4);
+                child.material.specular = new THREE.Color(0xFFFFFF);
+
+                this.wireframeAnim = TweenMax.to(child.material, 1, {
+                    opacity  : .4,
+                    wireframeLinewidth : 5
+                    // specular : {}, 
+                    // emissive : {r: 1, g: 1, b: 1},
+
+                    // r: b.r, g: b.g, b: b.b
+
+                    ,ease: Linear.easeNone
+
+                    ,onUpdate : () => {
+                        child.material.needsUpdate = true;
+                    }, 
+                    yoyo: true, repeat: -1, delay: .2
+                });
+            }
+        }.bind(this) );
+    }
+
     onLoaded(obj)
     {
         // if(this.dae) this.container.remove(this.dae);
@@ -143,12 +215,12 @@ class Gallery
                 // mesh = THREE.SceneUtils.createMultiMaterialObject(child.geometry, );
                 
                 child.material = this.material
-                child.castShadow = true;
-                child.receiveShadow = true;
+                // child.castShadow = true;
+                // child.receiveShadow = true;
 
                 radius = child.geometry.boundingSphere.radius
                 scale  = (window.innerHeight * .25) / (radius * 2);
-                console.log(radius, scale)
+                // console.log(radius, scale)
 
                 child.material.needsUpdate = true;
             }
@@ -197,7 +269,7 @@ class Gallery
                 child.material.specular = new THREE.Color(window.APP.landing.scene.p.modelMeshSpecular);
                 child.material.emissive = new THREE.Color(window.APP.landing.scene.p.modelMeshEmissive);
                 child.material.shininess = window.APP.landing.scene.p.modelShininess;
-                child.material.needsUpdate = true;
+                child.material.opacity = 1;
 
                 child.material.needsUpdate = true;
             }

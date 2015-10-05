@@ -1,9 +1,9 @@
-import eve from 'dom-events';
-import css from 'dom-css';
-import utils from 'utils-perf';
+import eve    from 'dom-events';
+import css    from 'dom-css';
+import utils  from 'utils-perf';
 
 class ArtistObject {
-  constructor(data, index, watch_copy, new_window, mobile) 
+  constructor(data, index, watch_copy, new_window, mobile, click) 
   {
     this.watch_copy = watch_copy;
     this.new_window = new_window;
@@ -16,8 +16,7 @@ class ArtistObject {
     this.image     = data.image;
     this.el        = document.createElement('li');
     this.container = document.createElement('div');
-    this.el.dataset.index = index;
-    
+    this.index     = index;
 
     css(this.container, {
         'background-repeat' : 'no-repeat',
@@ -28,6 +27,11 @@ class ArtistObject {
     })
 
     this.el.appendChild(this.container);
+
+    this.container.dataset.index = this.index;
+
+    eve.on(this.container, 'mousemove', this.onMouseMove.bind(this));
+    eve.on(this.container, 'click', click);
 
     //
 
@@ -43,8 +47,6 @@ class ArtistObject {
       // this.span.innerHTML = ;
       this.p.appendChild(this.span);
     }
-
-    eve.on(this.container, 'mousemove', this.onMouseMove.bind(this));
   }
 
   scale()

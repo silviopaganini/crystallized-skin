@@ -8,7 +8,6 @@ import VideoOverlay    from './view/VideoOverlay';
 import MobileFallback  from './view/MobileFallback';
 import SoundController from './utils/SoundController';
 
-
 import ajax           from 'ajax-request'
 import URL            from 'url';
 
@@ -17,7 +16,7 @@ class App {
 
     let parsedURL = URL.parse(window.location.href, true);
 
-    if(parsedURL.port == "80" || parsedURL.query.d == '1')
+    if(parsedURL.port == "" || parsedURL.query.d == '1')
     {
 
       ajax({url: window.location.origin + '/data/data.json', method: 'get'}, (err, res, body) => {

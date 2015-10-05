@@ -1,14 +1,14 @@
 import EC from '../postprocessing/core/EffectComposer';
 import NS from '../postprocessing/Noise';
 import RP from '../postprocessing/core/RenderPass';
-import OC from 'three-orbit-controls';
 
-import THREE    from 'three'; 
+import THREE    from 'three.js'; 
 import noise    from 'perlin-noise';
 import TweenMax from 'gsap';
 import dat      from 'dat-gui' ;
 import URL      from 'url';
 import css      from 'dom-css';
+import eve      from 'dom-events';
 
 import Gallery from "./Gallery";
 
@@ -17,6 +17,7 @@ const NoiseShader = NS(THREE);
 const RenderPass = RP(THREE);
 
 const SSAOShader     = require('../postprocessing/SSAOShader')(THREE);
+const OrbitControls = require('three-orbit-controls')(THREE);
 
 class SceneHome 
 {
@@ -26,6 +27,7 @@ class SceneHome
     this.scene    = null;
     this.renderer = renderer;
     this.clock    = clock;
+    this.center = new THREE.Vector3(0, 0, -240);
 
     this.renderPost = window.APP.browser.os == 'osx';
 
@@ -38,20 +40,29 @@ class SceneHome
 
   createScene()
   {
-    // const OrbitControls = OC(THREE);
-
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 4000 );
-    this.camera.position.set(0, 0, 0);
-    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    // this.controls.maxDistance = 4000;
-
-    // this.camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, -500, 500 );
-    // this.camera.position.set(0, 20, 0);
+    this.camera.position.set(0, 0, 1);
 
     this.scene = new THREE.Scene();
 
+    let angleOffset = 20;
+
+    // eve.on(this.renderer.domElement, "mousemove", this.onMouseMove.bind(this));
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.target = this.center;
+    this.controls.noZoom = true;
+    this.controls.noKeys = true;
+    this.controls.enabled = false;
+    this.controls.rotateSpeed = .35;
+    this.controls.minPolarAngle = 30 * Math.PI / 180;
+    this.controls.maxPolarAngle = 110 * Math.PI / 180;
+    this.controls.minAzimuthAngle= -25 * Math.PI / 180;
+    this.controls.maxAzimuthAngle= 25 * Math.PI / 180;
+    // this.controls.rotateStart.set( window.innerWidth / 2, window.innerHeight / 2);
+
     this.gallery = new Gallery(this.scene, this.renderer.domElement);
   }
+
 
   addObjects()
   {
@@ -92,7 +103,7 @@ class SceneHome
     this.ssaoPass.uniforms[ 'cameraFar' ].value = this.camera.far;
     this.ssaoPass.uniforms[ 'onlyAO' ].value = false;
     this.ssaoPass.uniforms[ 'aoClamp' ].value = 100.5;
-    this.ssaoPass.uniforms[ 'lumInfluence' ].value = 1.5;
+    this.ssaoPass.uniforms[ 'lumInfluence' ].value = 2.5;
 
     this.composer.addPass( this.ssaoPass );
 
@@ -122,7 +133,7 @@ class SceneHome
       // this.light = new THREE.AmbientLight(this.p.lightColor, 1);
       // this.scene.add(this.light);
 
-      this.nodes = this.p.nodes >> (this.mobile ? 2 : 0);
+      this.nodes = this.p.nodes >> 0;
 
       let size = window.innerWidth >= window.innerHeight ? window.innerWidth : window.innerHeight * 1.5;
       this.geo  = new THREE.PlaneGeometry(size / 2, size / 2, this.nodes, this.nodes);
@@ -239,9 +250,9 @@ class SceneHome
     // folderNoise.close();
 
     var folderCamera = gui.addFolder('Camera');
-    folderCamera.add(this.camera.position, 'x', 0, 1500);
-    folderCamera.add(this.camera.position, 'y', 0, 1500);
-    folderCamera.add(this.camera.position, 'z', -1500, 1500);
+    // folderCamera.add(this.camera.position, 'x', 0, 1500);
+    // folderCamera.add(this.camera.position, 'y', 0, 1500);
+    // folderCamera.add(this.camera.position, 'z', -1500, 1500);
     // folderCamera.open();
 
     css(gui.domElement, {position: 'fixed', top: 0, right: 0, 'z-index': 400});
@@ -266,8 +277,6 @@ class SceneHome
 
   transitionGallery(out, callback)
   {
-    // todo put the gallery here 
-
     if(!out)
     {
       this.gallery.animateOut();
@@ -281,6 +290,7 @@ class SceneHome
     this.mesh.geometry.verticesNeedUpdate = true;
     this.meshWireframe.geometry.verticesNeedUpdate = true;
     this.gallery.update();
+    // this.controls.update()
 
     if(this.renderPost)
     {

@@ -273,6 +273,11 @@ header .container-gallery div.container p
   font-size: 1.2em;
 }
 
+header .container-gallery div.container p.piece-name
+{
+  cursor: pointer;
+}
+
 header .container-gallery div.container p.piece-link span
 {
     font-family: 'Helvetica Cond';
