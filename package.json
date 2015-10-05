@@ -32,8 +32,6 @@
     "perlin-noise": "0.0.1",
     "stats-js": "^1.0.0-alpha1",
     "tabletop": "^1.4.2",
-    "three-loaders-collada": "^1.0.1",
-    "three-orbit-controls": "^69.0.4",
     "three.js": "^0.72.0",
     "uglifyjs": "^2.4.10",
     "underscore": "^1.8.3",
