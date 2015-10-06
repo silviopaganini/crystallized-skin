@@ -100,6 +100,7 @@ class Gallery
           shininess          : window.APP.landing.scene.p.modelShininess,
           wireframe          : false,
           transparent        : true,
+          metal : true,
           wireframeLinewidth : .1
         })
 
@@ -153,7 +154,7 @@ class Gallery
         this.makeItWireframe();
 
         this.wireframeAnim = new TimelineMax({onUpdate: () => {this.objectMesh.material.needsUpdate = true;}});
-        this.wireframeAnim.add( TweenMax.to(this.objectMesh.material, .7, { opacity: .3, yoyo: true, repeat: -1, ease: Linear.easeNone}), 0 )
+        this.wireframeAnim.add( TweenMax.to(this.objectMesh.material, 1.8, { opacity: .1, yoyo: true, repeat: -1, ease: Linear.easeNone}), 0 )
     }
 
     animateInShader()
@@ -195,9 +196,10 @@ class Gallery
 
     makeItWireframe(callback)
     {
+        window.APP.soundManager.flickPlay();
         this.objectMesh.material.wireframe = true;
-        this.objectMesh.material.emissive = new THREE.Color(0xBCBFB4);
-        this.objectMesh.material.specular = new THREE.Color(0xFFFFFF);
+        this.objectMesh.material.emissive = new THREE.Color(0xFFFFFF);
+        // this.objectMesh.material.specular = new THREE.Color(0xFFFFFF);
         this.objectMesh.material.needsUpdate = true;
         this.wireframeIn = true;
         if(callback) callback();
@@ -283,7 +285,7 @@ class Gallery
 
         this.objectMesh.material.needsUpdate = true;
 
-        if(callback) callback();
+        if(callback && typeof(callback) == 'function') callback();
     }
 
     getURL(url)

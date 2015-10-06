@@ -80,7 +80,7 @@ class MobileFallback {
 
       eve.on(art.el, 'click', (e)=>{
         let url = window.APP.artists[e.target.dataset.index].video_url;
-        window.open(url);
+        window.location.href = url;
       })
 
       offs.push(art.el);

@@ -95,23 +95,22 @@ class SceneHome
 
     // Setup SSAO pass
     this.ssaoPass = new THREE.ShaderPass( THREE.SSAOShader );
-    this.ssaoPass.renderToScreen = true;
-    //this.ssaoPass.uniforms[ "tDiffuse" ].value will be set by ShaderPass
+    // this.ssaoPass.renderToScreen = true;
     this.ssaoPass.uniforms[ "tDepth" ].value = this.depthRenderTarget;
     this.ssaoPass.uniforms[ 'size' ].value.set( window.innerWidth, window.innerHeight );
     this.ssaoPass.uniforms[ 'cameraNear' ].value = this.camera.near;
     this.ssaoPass.uniforms[ 'cameraFar' ].value = this.camera.far;
     this.ssaoPass.uniforms[ 'onlyAO' ].value = false;
-    this.ssaoPass.uniforms[ 'aoClamp' ].value = 100.5;
-    this.ssaoPass.uniforms[ 'lumInfluence' ].value = 2.5;
+    this.ssaoPass.uniforms[ 'aoClamp' ].value = .05;
+    this.ssaoPass.uniforms[ 'lumInfluence' ].value = .5;
 
     this.composer.addPass( this.ssaoPass );
 
-    // this.noisePass = new THREE.ShaderPass( NoiseShader );
-    // this.noisePass.uniforms['amount'].value = .08;
-    // this.noisePass.uniforms['speed'].value = 1;
-    // this.noisePass.renderToScreen = true;
-    // this.composer.addPass( this.noisePass );
+    this.noisePass = new THREE.ShaderPass( NoiseShader );
+    this.noisePass.uniforms['amount'].value = .08;
+    this.noisePass.uniforms['speed'].value = 1;
+    this.noisePass.renderToScreen = true;
+    this.composer.addPass( this.noisePass );
 
 
   }
@@ -151,8 +150,8 @@ class SceneHome
       this.mesh.receiveShadow = false;
 
       this.meshWireframe = new THREE.Mesh(this.geo, new THREE.MeshPhongMaterial({color: this.p.wireColour, wireframe: true}));
-      this.meshWireframe.castShadow = true;
-      this.meshWireframe.receiveShadow = false;
+      // this.meshWireframe.castShadow = true;
+      // this.meshWireframe.receiveShadow = false;
 
       this.mesh.rotation.x = -20 * Math.PI / 180;
       this.meshWireframe.rotation.x = -20 * Math.PI / 180;
@@ -165,7 +164,7 @@ class SceneHome
 
       this.generatePerlin();
       this.scene.add(this.mesh);
-      this.scene.add(this.meshWireframe);
+      // this.scene.add(this.meshWireframe);
 
       for (var i = 0; i < this.mesh.geometry.vertices.length; i++) {
           this.mesh.geometry.vertices[i].z = this.perlin[i] * -(this.p.power / 2 - Math.random() * this.p.power);
@@ -189,9 +188,9 @@ class SceneHome
 
   animateVertice( i )
   {
-      TweenMax.to(this.mesh.geometry.vertices[i], 1.5 + Math.random() * 3, {
+      TweenMax.to(this.mesh.geometry.vertices[i], 2 + Math.random() * 3, {
           z: this.perlin[i] * -(this.p.power / 2 - Math.random() * this.p.power), 
-          ease: Power2.easeInOut,
+          ease: Linear.easeNone,
           onRepeat: this.generatePerlin.bind(this),
           onUpdate: ()=>{this.meshWireframe.geometry.vertices[i].z = this.mesh.geometry.vertices[i].z},
           onComplete: this.animateVertice.bind(this), 
@@ -211,13 +210,16 @@ class SceneHome
         this.wireColour = '#222222';
         this.shininess = 20;
 
-        this.modelMeshColor = '#3b3c3a';
-        this.modelMeshSpecular = '#FFFFFF';
-        this.modelMeshEmissive = '#3f4138';
-        this.modelShininess = 2;        
+        this.modelMeshColor = '#989898';
+        this.modelMeshSpecular = '#9d9d9d';
+        this.modelMeshEmissive = '#4a4a4a';
+        this.modelShininess = 10;        
 
         this.noiseAmount = .05;
         this.noiseSpeed = 1;
+        this.clamp = .05;
+        this.lumInfluence = .5;
+        this.onlySSAO = false;
     }
 
     this.p = new Params();
@@ -242,17 +244,20 @@ class SceneHome
     folderModel.addColor(this.p, "modelMeshSpecular").onChange(this.gallery.updateColours.bind(this.gallery));
     folderModel.addColor(this.p, "modelMeshEmissive").onChange(this.gallery.updateColours.bind(this.gallery));
     folderModel.add(this.p, "modelShininess", 0, 50).step(1).onChange(this.gallery.updateColours.bind(this.gallery));
-    folderModel.open();
+    // folderModel.open();
 
     var folderNoise = gui.addFolder('Postprocessing Noise');
     folderNoise.add(this.p, 'noiseAmount', 0, .2);
     folderNoise.add(this.p, 'noiseSpeed', 0, 10);
-    // folderNoise.close();
+    folderNoise.add(this.p, 'clamp', 0, 1).step(.005);
+    folderNoise.add(this.p, 'lumInfluence', -50, 200).step(.005);
+    folderNoise.add(this.p, 'onlySSAO');
+    folderNoise.open();
 
-    var folderCamera = gui.addFolder('Camera');
-    // folderCamera.add(this.camera.position, 'x', 0, 1500);
-    // folderCamera.add(this.camera.position, 'y', 0, 1500);
-    // folderCamera.add(this.camera.position, 'z', -1500, 1500);
+    // var folderCamera = gui.addFolder('Camera');
+    // folderCamera.add(this.camera, 'fov', 0, 1500);
+    // folderCamera.add(this.camera, 'near', 0, 1500);
+    // folderCamera.add(this.camera, 'far', -1500, 1500);
     // folderCamera.open();
 
     css(gui.domElement, {position: 'fixed', top: 0, right: 0, 'z-index': 400});
@@ -295,11 +300,16 @@ class SceneHome
     if(this.renderPost)
     {
       this.scene.overrideMaterial = this.depthMaterial;
+
+      this.ssaoPass.uniforms[ 'aoClamp' ].value = this.p.clamp;
+      this.ssaoPass.uniforms[ 'lumInfluence' ].value = this.p.lumInfluence;
+      this.ssaoPass.uniforms[ 'onlyAO' ].value = this.p.onlySSAO;
+
       this.renderer.render( this.scene, this.camera, this.depthRenderTarget, true );
 
-      // this.noisePass.uniforms['amount'].value = this.p.noiseAmount;
-      // this.noisePass.uniforms['speed'].value = this.p.noiseSpeed;
-      // this.noisePass.uniforms['time'].value = this.clock.getElapsedTime();  
+      this.noisePass.uniforms['amount'].value = this.p.noiseAmount;
+      this.noisePass.uniforms['speed'].value = this.p.noiseSpeed;
+      this.noisePass.uniforms['time'].value = this.clock.getElapsedTime();  
 
       this.scene.overrideMaterial = null;
       this.composer.render();

@@ -24,6 +24,16 @@ class SoundController
     this.playSound();
   }
 
+  flickPlay()
+  {
+    if(!this.playing) return;
+
+    let flickSound = new buzz.sound('assets/flick.mp3', {
+        autoplay : true,
+        volume: 40
+    } );
+  }
+
   toggleSoundVideo(pause = true)
   {
     if(this.wasPlaying) this.resumeSound();
