@@ -19,7 +19,7 @@ class App {
     if(parsedURL.port == "" || parsedURL.query.d == '1')
     {
 
-      ajax({url: window.location.origin + '/data/data.json', method: 'get'}, (err, res, body) => {
+      ajax({url: window.location.origin + '/data/data.txt', method: 'get'}, (err, res, body) => {
         let e = JSON.parse(body);
         TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
       })
