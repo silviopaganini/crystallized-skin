@@ -37,7 +37,7 @@ class SoundController
 
     let flickSound = new buzz.sound('assets/flick.mp3', {
         autoplay : true,
-        volume: 5
+        volume: 1
     } );
   }
 
