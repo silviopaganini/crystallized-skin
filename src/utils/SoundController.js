@@ -19,6 +19,13 @@ class SoundController
     this.soundButton = document.querySelector('.sound-container');
     eve.on(this.soundButton, 'click', this.toggleSound.bind(this));
 
+    this.zoomSound = new buzz.sound('assets/zoom.mp3', {
+        autoplay : false,
+        volume: 40
+    } );
+
+    this.zoomSound.load();
+
     this.currentSound = 0;
     this.sounds = MathP.randomArray(this.sounds);
     this.playSound();
@@ -30,8 +37,23 @@ class SoundController
 
     let flickSound = new buzz.sound('assets/flick.mp3', {
         autoplay : true,
-        volume: 40
+        volume: 10
     } );
+  }
+
+  zoomPlay(zoom)
+  {
+    if(zoom)
+    {
+      if(!this.zoomSound.isPaused()) return;
+      console.log('play zoom');
+      this.zoomSound.play().fadeTo(60, 500);
+      return;
+    }
+
+    this.zoomSound.fadeTo(0, 500, ()=>{
+      this.zoomSound.stop();
+    });
   }
 
   toggleSoundVideo(pause = true)
@@ -65,7 +87,7 @@ class SoundController
   {
     this.wasPlaying = true;
     this.soundButton.dataset.state = 'on';
-    this.sound.play().fadeTo(20, 1000, ()=>{
+    this.sound.play().fadeTo(5, 1000, ()=>{
       this.playing = true;
     });
   }
@@ -84,7 +106,7 @@ class SoundController
     } );
 
     this.sound.bindOnce('ended', this.playSound.bind(this));
-    this.sound.load().play().fadeTo(20, 5000);
+    this.sound.load().play().fadeTo(5, 1000);
 
     this.currentSound++;
     this.currentSound %= this.sounds.length;

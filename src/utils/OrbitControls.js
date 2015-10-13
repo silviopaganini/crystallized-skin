@@ -101,9 +101,9 @@ module.exports = function(THREE) {
 
         var offset = new THREE.Vector3();
 
-        var dollyStart = new THREE.Vector2();
-        var dollyEnd = new THREE.Vector2();
-        var dollyDelta = new THREE.Vector2();
+        this.dollyStart = new THREE.Vector2();
+        this.dollyEnd = new THREE.Vector2();
+        this.dollyDelta = new THREE.Vector2();
 
         var theta;
         var phi;
@@ -372,7 +372,7 @@ module.exports = function(THREE) {
 
                 state = STATE.DOLLY;
 
-                dollyStart.set( event.clientX, event.clientY );
+                this.dollyStart.set( event.clientX, event.clientY );
 
             } else if ( event.button === scope.mouseButtons.PAN ) {
                 if ( scope.noPan === true ) return;
@@ -424,10 +424,10 @@ module.exports = function(THREE) {
 
                 if ( scope.noZoom === true ) return;
 
-                dollyEnd.set( event.clientX, event.clientY );
-                dollyDelta.subVectors( dollyEnd, dollyStart );
+                this.dollyEnd.set( event.clientX, event.clientY );
+                this.dollyDelta.subVectors( this.dollyEnd, this.dollyStart );
 
-                if ( dollyDelta.y > 0 ) {
+                if ( this.dollyDelta.y > 0 ) {
 
                     scope.dollyIn();
 
@@ -437,7 +437,7 @@ module.exports = function(THREE) {
 
                 }
 
-                dollyStart.copy( dollyEnd );
+                this.dollyStart.copy( this.dollyEnd );
 
             } else if ( state === STATE.PAN ) {
 
@@ -453,6 +453,216 @@ module.exports = function(THREE) {
             }
 
             if ( state !== STATE.NONE ) scope.update();
+
+        }
+
+        function onMouseUp( event ) {
+
+            if ( scope.enabled === false ) return;
+
+            document.removeEventListener( 'mousemove', onMouseMove, false );
+            document.removeEventListener( 'mouseup', onMouseUp, false );
+            scope.dispatchEvent( endEvent );
+            state = STATE.NONE;
+
+        }
+
+        function onMouseWheel( event ) {
+
+            if ( scope.enabled === false || scope.noZoom === true || state !== STATE.NONE ) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            var delta = 0;
+
+            if ( event.wheelDelta !== undefined ) { // WebKit / Opera / Explorer 9
+
+                delta = event.wheelDelta;
+
+            } else if ( event.detail !== undefined ) { // Firefox
+
+                delta = - event.detail;
+
+            }
+
+            if ( delta > 0 ) {
+
+                scope.dollyOut();
+
+            } else {
+
+                scope.dollyIn();
+
+            }
+
+            scope.update();
+            scope.dispatchEvent( startEvent );
+            scope.dispatchEvent( endEvent );
+
+        }
+
+        function onKeyDown( event ) {
+
+            if ( scope.enabled === false || scope.noKeys === true || scope.noPan === true ) return;
+
+            switch ( event.keyCode ) {
+
+                case scope.keys.UP:
+                    scope.pan( 0, scope.keyPanSpeed );
+                    scope.update();
+                    break;
+
+                case scope.keys.BOTTOM:
+                    scope.pan( 0, - scope.keyPanSpeed );
+                    scope.update();
+                    break;
+
+                case scope.keys.LEFT:
+                    scope.pan( scope.keyPanSpeed, 0 );
+                    scope.update();
+                    break;
+
+                case scope.keys.RIGHT:
+                    scope.pan( - scope.keyPanSpeed, 0 );
+                    scope.update();
+                    break;
+
+            }
+
+        }
+
+        function touchstart( event ) {
+
+            if ( scope.enabled === false ) return;
+
+            switch ( event.touches.length ) {
+
+                case 1: // one-fingered touch: rotate
+
+                    if ( scope.noRotate === true ) return;
+
+                    state = STATE.TOUCH_ROTATE;
+
+                    scope.rotateStart.set( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY );
+                    break;
+
+                case 2: // two-fingered touch: dolly
+
+                    if ( scope.noZoom === true ) return;
+
+                    state = STATE.TOUCH_DOLLY;
+
+                    var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+                    var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+                    var distance = Math.sqrt( dx * dx + dy * dy );
+                    this.dollyStart.set( 0, distance );
+                    break;
+
+                case 3: // three-fingered touch: pan
+
+                    if ( scope.noPan === true ) return;
+
+                    state = STATE.TOUCH_PAN;
+
+                    panStart.set( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY );
+                    break;
+
+                default:
+
+                    state = STATE.NONE;
+
+            }
+
+            if ( state !== STATE.NONE ) scope.dispatchEvent( startEvent );
+
+        }
+
+        function touchmove( event ) {
+
+            if ( scope.enabled === false ) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
+
+            switch ( event.touches.length ) {
+
+                case 1: // one-fingered touch: rotate
+
+                    if ( scope.noRotate === true ) return;
+                    if ( state !== STATE.TOUCH_ROTATE ) return;
+
+                    scope.rotateEnd.set( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY );
+                    scope.rotateDelta.subVectors( scope.rotateEnd, scope.rotateStart );
+
+                    // rotating across whole screen goes 360 degrees around
+                    scope.rotateLeft( 2 * Math.PI * scope.rotateDelta.x / element.clientWidth * scope.rotateSpeed );
+                    // rotating up and down along whole screen attempts to go 360, but limited to 180
+                    scope.rotateUp( 2 * Math.PI * scope.rotateDelta.y / element.clientHeight * scope.rotateSpeed );
+
+                    scope.rotateStart.copy( scope.rotateEnd );
+
+                    scope.update();
+                    break;
+
+                case 2: // two-fingered touch: dolly
+
+                    if ( scope.noZoom === true ) return;
+                    if ( state !== STATE.TOUCH_DOLLY ) return;
+
+                    var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+                    var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+                    var distance = Math.sqrt( dx * dx + dy * dy );
+
+                    this.dollyEnd.set( 0, distance );
+                    this.dollyDelta.subVectors( this.dollyEnd, this.dollyStart );
+
+                    if ( this.dollyDelta.y > 0 ) {
+
+                        scope.dollyOut();
+
+                    } else {
+
+                        scope.dollyIn();
+
+                    }
+
+                    this.dollyStart.copy( this.dollyEnd );
+
+                    scope.update();
+                    break;
+
+                case 3: // three-fingered touch: pan
+
+                    if ( scope.noPan === true ) return;
+                    if ( state !== STATE.TOUCH_PAN ) return;
+
+                    panEnd.set( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY );
+                    panDelta.subVectors( panEnd, panStart );
+
+                    scope.pan( panDelta.x, panDelta.y );
+
+                    panStart.copy( panEnd );
+
+                    scope.update();
+                    break;
+
+                default:
+
+                    state = STATE.NONE;
+
+            }
+
+        }
+
+        function touchend( /* event */ ) {
+
+            if ( scope.enabled === false ) return;
+
+            scope.dispatchEvent( endEvent );
+            state = STATE.NONE;
 
         }
 

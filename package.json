@@ -12,7 +12,7 @@
   "version": "0.0.1",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "budo --dir dist/ src/index.js:js/bundle.js --host 192.168.1.79 -v --live -- -t babelify | garnish",
+    "start": "budo --dir dist/ src/index.js:js/bundle.js --host localhost -v --live -- -t babelify | garnish",
     "build": "browserify -t babelify src/index.js | uglifyjs -c --screw-ie8 > dist/js/bundle.js"
   },
   "devDependencies": {

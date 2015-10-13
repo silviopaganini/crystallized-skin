@@ -13,8 +13,11 @@ class Gallery
 
         this.camera = camera;
          
+        this.mouseDown = false;
         this.mouseX = 0;
         this.mouseY = 0;
+
+        this.inGallery = false;
          
         this.wireframeAnim = null;
         
@@ -23,7 +26,7 @@ class Gallery
 
         this.wireframeIn = false;
 
-        this.flickring = [1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 1, 1, 2, 1, 2];
+        this.flickring = [1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 2];
 
         this.createScene();
     }
@@ -36,7 +39,6 @@ class Gallery
         this.scene.add(this.container);
 
         this.loader = new THREE.OBJLoader();
-        // this.loader.options.convertUpAxis = true;
 
         this.dae = null;
     }
@@ -53,6 +55,7 @@ class Gallery
 
     animateOut()
     {
+        this.inGallery = false;
         TweenMax.to(this.container, .6, {z: 200});
     }
 
@@ -65,7 +68,12 @@ class Gallery
         window.APP.landing.scene.controls.rotateStart.set( e.clientX, e.clientY );
 
         eve.on(this.renderDom, 'mousemove', this.onMouseMoveRaycaster.bind(this));
+        eve.on(this.renderDom, 'mousedown', this.onMouseDown.bind(this));
+        eve.on(this.renderDom, 'mouseup', this.onMouseUp.bind(this));
     }
+
+    onMouseDown() { this.mouseDown = true; }
+    onMouseUp() { this.mouseDown = false; }
 
     onMouseMoveRaycaster()
     {
@@ -100,7 +108,7 @@ class Gallery
           shininess          : window.APP.landing.scene.p.modelShininess,
           wireframe          : false,
           transparent        : true,
-          metal : true,
+          // metal : true,
           wireframeLinewidth : .1
         })
 
@@ -153,8 +161,11 @@ class Gallery
 
         this.makeItWireframe();
 
+        this.objectMesh.material.opacity = .8;
+        this.objectMesh.material.needsUpdate = true;
+
         this.wireframeAnim = new TimelineMax({onUpdate: () => {this.objectMesh.material.needsUpdate = true;}});
-        this.wireframeAnim.add( TweenMax.to(this.objectMesh.material, 1.8, { opacity: .1, yoyo: true, repeat: -1, ease: Linear.easeNone}), 0 )
+        this.wireframeAnim.add( TweenMax.to(this.objectMesh.material, 3, { repeatDelay: 1, opacity: .1, yoyo: true, repeat: -1, ease: Power2.easeOut}), 0 )
     }
 
     animateInShader()
@@ -189,7 +200,7 @@ class Gallery
 
         let action = this[this.animFlick[0]].bind(this);
 
-        this.intervFlick = setTimeout( action , 32, this.processQueue.bind(this) );
+        this.intervFlick = setTimeout( action , 16, this.processQueue.bind(this) );
         this.animFlick.shift();
         
     }
@@ -199,7 +210,6 @@ class Gallery
         window.APP.soundManager.flickPlay();
         this.objectMesh.material.wireframe = true;
         this.objectMesh.material.emissive = new THREE.Color(0xFFFFFF);
-        // this.objectMesh.material.specular = new THREE.Color(0xFFFFFF);
         this.objectMesh.material.needsUpdate = true;
         this.wireframeIn = true;
         if(callback) callback();
@@ -225,11 +235,10 @@ class Gallery
                 this.objectMesh.geometry.computeFaceNormals();
                 this.objectMesh.geometry.computeBoundingSphere();
 
-                // mesh = THREE.SceneUtils.createMultiMaterialObject(this.objectMesh.geometry, );
-                
-                this.objectMesh.material = this.material
                 // this.objectMesh.castShadow = true;
-                // this.objectMesh.receiveShadow = true;
+                // this.objectMesh.receiveShadow = false;
+
+                this.objectMesh.material = this.material
 
                 radius = this.objectMesh.geometry.boundingSphere.radius
                 scale  = (window.innerHeight * .25) / (radius * 2);
@@ -240,6 +249,7 @@ class Gallery
 
         }.bind(this) );
 
+        tempDae.initialScale = scale;
         tempDae.scale.x = tempDae.scale.y = tempDae.scale.z = scale;
         tempDae.position.x = (window.innerWidth / 2) * offset;
         // tempDae.position.y = (radius * scale);
@@ -247,6 +257,7 @@ class Gallery
 
         tempDae.updateMatrix();
         this.container.add(tempDae);
+        this.inGallery = true;
 
         var timeline = new TimelineMax({paused: true, onComplete: ()=>{
 
@@ -297,6 +308,39 @@ class Gallery
 
     update()
     {
+        if(!this.inGallery || !this.dae) return;
+
+        let amount = 0.001;
+        let scale;
+
+        if(this.mouseDown)
+        {
+            scale = Math.min(this.dae.scale.x + amount, this.dae.initialScale * 2);
+            this.dae.scale.set(scale, scale, scale);
+
+            amount = 0.005;
+
+            window.APP.soundManager.zoomPlay(true);
+
+            scale = Math.min(window.APP.landing.scene.mesh.scale.x + amount, window.APP.landing.scene.mesh.initialScale * 2);
+            window.APP.landing.scene.mesh.scale.set(scale, scale, scale);
+
+            scale = Math.min(window.APP.landing.scene.meshWireframe.scale.x + amount, window.APP.landing.scene.meshWireframe.initialScale * 2);
+            window.APP.landing.scene.meshWireframe.scale.set(scale, scale, scale);
+        } else {
+            scale = Math.max(this.dae.scale.x - amount, this.dae.initialScale);
+            this.dae.scale.set(scale, scale, scale);
+
+            amount = 0.005;
+
+            window.APP.soundManager.zoomPlay(false);
+
+            scale = Math.max(window.APP.landing.scene.mesh.scale.x - amount, window.APP.landing.scene.mesh.initialScale);
+            window.APP.landing.scene.mesh.scale.set(scale, scale, scale);
+
+            scale = Math.max(window.APP.landing.scene.meshWireframe.scale.x - amount, window.APP.landing.scene.meshWireframe.initialScale);
+            window.APP.landing.scene.meshWireframe.scale.set(scale, scale, scale);
+        }
     }
 
     onResize()

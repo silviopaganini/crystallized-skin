@@ -61,7 +61,7 @@ class App {
 
     this.emitter       = ee({});
     this.artists       = data['artists'];
-    this.currentArtist = 0;
+    this.currentArtist = ((Math.random() * this.artists.length) + .5) >> 0;
     this.video         = new VideoOverlay();
     this.ui            = new UI(data['general-copy']);
     this.landing       = new LandingPage();

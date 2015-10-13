@@ -19,6 +19,8 @@ class UI  {
     this.h3About          = document.querySelector('main section.about div.container > h3');
     this.h2About          = document.querySelector('main section.about div.container > h2');
     this.h4About          = document.querySelector('main section.about div.container > h4');
+
+    this.downloadButton   = document.querySelector('main section.about div.container > h3 > a.download-button');
     
     // this.h2Gallery     = document.querySelector('main header div.container-gallery > h2');
     
@@ -36,6 +38,8 @@ class UI  {
     this.button           = document.querySelector('button');
     this.copyContainer    = document.querySelector('main section.about div.container > div.about-copy');
     this.aboutCreds       = document.querySelector('main section.about div.container > div.about-credits');
+    this.aboutCreds2      = document.querySelector('main section.about div.container > div.below_credits');
+    
     
     this.containerPiece   = document.querySelector('main header div.container-gallery > div.container');
     this.pieceName        = document.querySelector('p.piece-name');
@@ -171,6 +175,11 @@ class UI  {
     this.setString( this.h2About, 'title' );
     this.setString( this.h4About, 'about_sumup' );
     this.setString( this.aboutCreds, 'credits' );
+    this.setString( this.aboutCreds2, 'below_credits' );
+
+    this.setString( this.downloadButton, 'download_button' );
+
+    
 
     this.setString( this.artistH3, 'artists_title' );
     // this.setString( this.bottomButton, 'launch_button' );
@@ -217,7 +226,9 @@ class UI  {
     TweenMax.to(this.containerPiece, 0, {autoAlpha: 1});
 
     let data = window.APP.artists[window.APP.currentArtist];
-    this.changeCopyArtistField(this.pieceName, data.artist_name + " - " + data.piece_name + ", " + data.year, 0);
+    this.changeCopyArtistField(this.pieceName, 
+      "<a href='"+ data.url +"'target='_blank'>"+ data.artist_name + "</a> &mdash; " + data.piece_name + " &mdash; " + data.year
+      , 0);
     this.changeCopyArtistField(this.pieceLinkCont, null, .2);
     TweenMax.to(this.divArrowBottom, .5, {y: 0, autoAlpha: 1,delay: .3});
     window.APP.video.addVideo(data.video_url);

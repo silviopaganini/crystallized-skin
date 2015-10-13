@@ -64,13 +64,13 @@ class LandingPage {
         // autoClear        : false,
         gammaInput       : true,
         gammeOutput      : true,
-        devicePixelRatio : window.devicePixelRatio
+        devicePixelRatio : 1
     } );
 
-    // this.renderer.shadowMapEnabled = true;
-    // this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
+    // this.renderer.shadowMap.enabled = true;
+    // this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    this.renderer.setClearColor(0x000000, 1);
+    // this.renderer.setClearColor(0x000000, 1);
     this.container.appendChild(this.renderer.domElement)
   }
 
