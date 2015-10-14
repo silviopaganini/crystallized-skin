@@ -103,6 +103,7 @@ class LandingPage {
   {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.scene.onResize();
+    window.APP.ui.scroll.onScroll();
   }
 }
 

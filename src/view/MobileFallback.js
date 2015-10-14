@@ -22,6 +22,7 @@ class MobileFallback {
     // this.bottomButton = this.el.querySelector('div.bottom > h3');
     this.aboutCreds   = this.el.querySelector('.content div.about-credits');
     this.artistsH3    = this.el.querySelector('div.artists div.container > h3');
+    this.aboutCreds2  = this.el.querySelector('div.content > div.below_credits');
 
     css(this.el, {display: 'block'});
 
@@ -48,6 +49,9 @@ class MobileFallback {
     this.setString( this.p, 'mobile_fallback' );
     this.setString( this.contentCopy, 'about_copy' );
     // this.setString( this.bottomButton, 'launch_button' );
+
+    this.setString( this.aboutCreds2, 'below_credits' );
+
     this.setString( this.artistsH3, 'artists_title' );
     this.setString( this.h4, 'about_sumup' );
     this.setString( this.aboutCreds, 'credits' );

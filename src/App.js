@@ -37,7 +37,8 @@ class App {
           e['general-copy'] = data['general-copy'].elements
 
           // window.open("data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(e)));
-          TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
+          this.init(e);
+
         } 
     });
 
@@ -58,7 +59,6 @@ class App {
 
     document.querySelector('div.fallback').remove();
 
-
     this.emitter       = ee({});
     this.artists       = data['artists'];
     this.currentArtist = ((Math.random() * this.artists.length) + .5) >> 0;
@@ -70,9 +70,10 @@ class App {
 
     this.emitter.on('updateArtist', this.updateCurrentArtist.bind(this));
     this.emitter.on('ready', () => {
+      window.scrollTo(0, 0);
       window.onresize = this.landing.onResize.bind(this.landing);
-      document.querySelector('main').style.display = 'block';
-      TweenMax.to(document.querySelector('main'), 1, {autoAlpha: 1});
+      TweenMax.to(document.querySelector('.preloader'), 1.5, {autoAlpha: 0});
+      TweenMax.to(document.querySelector('main'), 1.5, {autoAlpha: 1});
     });
 
     this.landing.init();
@@ -81,6 +82,7 @@ class App {
 
   initMobile(data, tabletop)
   {
+    window.scrollTo(0, 0);
     this.mobilefb = new MobileFallback(data['general-copy']);
     TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0});
     document.querySelector('main').remove();

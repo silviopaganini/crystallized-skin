@@ -142,7 +142,7 @@ class ScrollManager
   onScroll(e)
   {
     if(this.scrolling) {
-      e.preventDefault();
+      if(e) e.preventDefault();
       return;
     }
 
@@ -158,15 +158,21 @@ class ScrollManager
 
     if(!this.offsets) return;
 
+    let foundOffset = false;
+
     for (var i = 0; i < this.offsets.length; i++) {
       // console.log(window.pageYOffset, window.pageYOffset - this.offsets[i])
-      if(Math.abs(window.pageYOffset - this.offsets[i].offsetTop + (this.offsets[i].querySelector('p').offsetHeight / 2)) < window.innerHeight / 2)
+      if(Math.abs(window.pageYOffset - this.offsets[i].offsetTop + (this.offsets[i].querySelector('p').offsetHeight / 2)) <= window.innerHeight / 2)
       {
+        foundOffset = true
         this.timerToScroll = setTimeout((a) =>{
+          window.APP.mobilefb.artistsH3.style.opacity = '100';
           this.scrollTo(this.offsets[a].offsetTop + (this.offsets[a].querySelector('p').offsetHeight / 2));
         }.bind(this), this.delay / 1.8, [i]);
       }
     };
+
+    if(!foundOffset) window.APP.mobilefb.artistsH3.style.opacity = '0';
   }
 
   listArtistsOffsetY(of)

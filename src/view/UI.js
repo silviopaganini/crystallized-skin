@@ -199,6 +199,7 @@ class UI  {
 
   showArtist(direction)
   {
+    this.showLoading(true);
     this.scroll.scrollTo(this.sectionVideo.offsetHeight, () => {
       this.animateLanding( true,  () => {
 
@@ -262,7 +263,7 @@ class UI  {
     this.button.dataset.disabled = out ? "true" : 'false';
 
     for (var i = 0; i < this.landingEls.length; i++) {
-      timeline.add( TweenMax.to( this.landingEls[i], .4, { y: out ? 15 : 0, autoAlpha: out ? 0 : 1, ease: Power2.easeOut }), i * .1);
+      timeline.add( TweenMax.to( this.landingEls[i], .3, { y: out ? 10 : 0, autoAlpha: out ? 0 : 1, ease: Power4.easeOut }), i * .1);
     };
 
     timeline.play();

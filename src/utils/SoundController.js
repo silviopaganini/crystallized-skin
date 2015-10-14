@@ -46,7 +46,6 @@ class SoundController
     if(zoom)
     {
       if(!this.zoomSound.isPaused()) return;
-      console.log('play zoom');
       this.zoomSound.play().fadeTo(60, 500);
       return;
     }

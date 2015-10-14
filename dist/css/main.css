@@ -131,6 +131,13 @@ div.fallback div.content div.about-credits
   color: #73746b;
 }
 
+div.fallback div.content div.below_credits
+{
+  padding-top: 20px;
+  font-size: 12px;
+  color: #73746b;
+}
+
 div.fallback div.content div.about-credits > p
 {
   padding: 0;
@@ -171,7 +178,6 @@ main
 {
     opacity: 0;
     visibility: hidden;
-    display: none;
 }
 
 .sound-container
@@ -472,7 +478,7 @@ section.about div.container h4
   margin: 0;
 }
 
-section.about div.container > h3
+section.about div.container > h3 > a
 {
   color: black;
 }
@@ -609,31 +615,38 @@ ARTTISTS
 
 div.fallback div.artists div.container h3
 {
-  padding: 1em 0 1em;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  transition: all .3s;
+  -webkit-transition: all .3s;
 }
 
 .artists div.container ul
 {
-  list-style: none;
-  width: 100%;
   margin: 0;
   padding: 0;
+  text-align: center;
 }
 
 .artists div.container ul > li
 {
   display: inline-block;
-  width: 100%;
+  /*width: 100%;*/
   text-align: center;
   cursor: pointer;
   font-size: 16px;
-  /*border: 1px solid red;*/
+  /*float: left;*/
+  /*border: 1px solid yellow;*/
 }
 
-@media only screen and (min-width: 1280px) { 
+/*@media only screen and (min-width: 1280px) { 
   .artists div.container ul > li
   {
-   width: 24%; 
+   width: 510px; 
+   border: 1px solid yellow;
   }
 }
 
@@ -642,15 +655,13 @@ div.fallback div.artists div.container h3
   {
    width: 33%; 
   }
-}
+}*/
 
 div.fallback div.artists div.container ul > li
 {
   display: block;
   cursor: pointer;
   font-size: 16px;
-  width: 100vw;
-  height: 100vh;
   display: table;
 
 }
@@ -667,6 +678,15 @@ div.fallback .artists div.container ul > li > div
   vertical-align: middle;
   display: table-cell;
   /*border: 1px solid green;*/
+  padding: 0;
+  margin-bottom: -20px;
+}
+
+div.fallback .artists div.container ul > li > p
+{
+  margin-bottom: 20px;
+  padding: 0;
+  /*border: 1px solid red;*/
 }
 
 .artists div.container ul > li:hover p

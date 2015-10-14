@@ -144,10 +144,10 @@ class SceneHome
 
       this.light = new THREE.DirectionalLight(this.p.lightColor, 1);
       this.light.position.set( 0, 0, 1 );
-      this.light.castShadow = true;
-      this.light.shadowCameraNear  = 0.01; 
-      this.light.shadowDarkness = .5;
-      this.light.shadowCameraVisible = true;
+      // this.light.castShadow = true;
+      // this.light.shadowCameraNear  = 0.01; 
+      // this.light.shadowDarkness = .5;
+      // this.light.shadowCameraVisible = true;
       this.scene.add(this.light);
 
       // this.light = new THREE.AmbientLight(this.p.lightColor, 1);
@@ -161,8 +161,8 @@ class SceneHome
       // this.geo.originalVertices = this.geo.vertices.slice();
       this.mesh = new THREE.Mesh(this.geo, this.planeMaterial);
 
-      this.mesh.castShadow = true;
-      this.mesh.receiveShadow = false;
+      // this.mesh.castShadow = true;
+      // this.mesh.receiveShadow = false;
 
       this.meshWireframe = new THREE.Mesh(this.geo, this.wireframeMaterial);
       // this.meshWireframe.castShadow = true;

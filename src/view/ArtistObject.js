@@ -9,8 +9,8 @@ class ArtistObject {
     this.new_window = new_window;
 
     this.totalFrames = 6;
-    this.frameWidth  = 640;
-    this.frameHeight = 360;
+    this.frameWidth  = 510;
+    this.frameHeight = 510;
     this.ratio       = this.frameWidth / this.totalFrames;
 
     this.image     = data.image;
