@@ -301,9 +301,12 @@ class Gallery
 
     getURL(url)
     {
-        let parsed = URL.parse(url, true);
-        if(parsed.host === null) return url;
-        return "https://googledrive.com/host/" + parsed.query.id + "?r=" + UtilsP.rrandom(9999);
+        return url
+        
+        // let parsed = URL.parse(url, true);
+        // console.log(parsed.host, url);
+        // if(parsed.host === null && parsed.host.indexOf('drive') > -1) ;
+        // return "https://googledrive.com/host/" + parsed.query.id + "?r=" + UtilsP.rrandom(9999);
     }
 
     update()
