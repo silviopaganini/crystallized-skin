@@ -50,6 +50,7 @@ class UI  {
     
     this.navLeft          = document.querySelector("nav a[data-side='left']");
     this.navRight         = document.querySelector("nav a[data-side='right']");
+    this.readConcept      = document.querySelector('main header .read-concept');
     this.arrowBottom      = document.querySelector('main header .arrow-bottom > img');
     this.divArrowBottom   = document.querySelector('main header .arrow-bottom');
     this.arrowBottomVideo = this.sectionVideo.querySelector("div.arrow-bottom");
@@ -136,6 +137,7 @@ class UI  {
     eve.on(this.pieceName, 'mouseout', this.hoverLink.bind(this));
 
     eve.on(this.arrowBottom, 'click', this.scrollToAboutPage.bind(this));
+    eve.on(this.readConcept, 'click', this.scrollToAboutPage.bind(this));
 
     eve.on(this.arrowBottomVideo, 'click', this.showAboveTheFold.bind(this));
     
@@ -178,8 +180,7 @@ class UI  {
     this.setString( this.aboutCreds2, 'below_credits' );
 
     this.setString( this.downloadButton, 'download_button' );
-
-    
+    this.setString( this.readConcept, 'down_read_the_concept' );
 
     this.setString( this.artistH3, 'artists_title' );
     // this.setString( this.bottomButton, 'launch_button' );
@@ -265,6 +266,12 @@ class UI  {
     for (var i = 0; i < this.landingEls.length; i++) {
       timeline.add( TweenMax.to( this.landingEls[i], .3, { y: out ? 10 : 0, autoAlpha: out ? 0 : 1, ease: Power4.easeOut }), i * .1);
     };
+
+    i++;
+    timeline.add( TweenMax.to(this.divArrowBottom, .3, {y: out ? 10 : 0, autoAlpha: out ? 0 : 1, display: out ? 'none' : 'block', ease: Power4.easeOut}), i * .1);
+
+    i++;
+    timeline.add( TweenMax.to(this.readConcept, .3, {y: !out ? 10 : 0, autoAlpha: !out ? 0 : 1, display: !out ? 'none' : 'block', ease: Power4.easeOut}), i * .1);
 
     timeline.play();
   }
