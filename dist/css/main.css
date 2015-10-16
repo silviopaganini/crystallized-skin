@@ -49,7 +49,7 @@ body
 
 div.fallback div.background
 {
-  background: url('../assets/background-backup.png');
+  background: url('../assets/background-backup.jpg');
   -moz-background-size: 200vw 100vh;
   -webkit-background-size: 200vw 100vh;
   -o-background-size: 200vw 100vh;
@@ -871,20 +871,25 @@ nav a[data-side='right']:hover
 
 .preloader {
   position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    background-color: rgba(0,0,0,.8);
-    width: 100%;
-    height: 100%;
-    pointer-events: visible;
-    display: flex;
-    justify-content: center;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: rgba(0,0,0,.8);
+  width: 100%;
+  height: 100%;
+  pointer-events: visible;
+
+  display: flex;
+  display: -webkit-flex;
+
+  justify-content: center;
+  -webkit-justify-content: center;
 }
 
 .gif
 {
   align-self: center;
+  -webkit-align-self: center;
 
   -webkit-animation: gif-anim 1.3s infinite ease-in-out;
           animation: gif-anim 1.3s infinite ease-in-out; 
@@ -892,9 +897,9 @@ nav a[data-side='right']:hover
 
 @-webkit-keyframes gif-anim {
   0%, 100% {
-    transform: translateY(0);
+    -webkit-transform: translateY(0);
   } 50% {
-    transform: translateY(15%);
+    -webkit-transform: translateY(15%);
   }
 }
 

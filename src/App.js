@@ -16,16 +16,18 @@ class App {
 
     let parsedURL = URL.parse(window.location.href, true);
 
-    if(parsedURL.port == "" || parsedURL.query.d == '1')
+    if(parsedURL.port !== "")
     {
-
-      ajax({url: window.location.origin + window.location.pathname + 'data/data.txt', method: 'get'}, (err, res, body) => {
-        let e = JSON.parse(body);
-        TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0, onComplete: this.init.bind(this), onCompleteParams: [e]});
+      ajax({
+          url: window.location.origin + window.location.pathname + 'data/data.txt', 
+          encoding: 'utf-8', 
+          json: true, 
+          method: 'GET'
+        }, (err, res, body) => {
+        this.init(body);
       })
 
       return;
-
     }
 
     Tabletop.init({
@@ -36,9 +38,8 @@ class App {
           e.artists         = data['artists'].elements
           e['general-copy'] = data['general-copy'].elements
 
-          // window.open("data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(e)));
+          // window.open("data:text/json;charset=utf-8," + JSON.stringify(e));
           this.init(e);
-
         } 
     });
 
@@ -46,13 +47,16 @@ class App {
 
   init(data)
   {
+    console.log(data)
     this.browser = require('browser-detection/src/browser-detection')();
     this.mobile  = !(this.browser.os == 'osx' || this.browser.os == 'win')
+    console.log(this.mobile);
     
     this.artists = data['artists'];
 
     if(this.mobile)
     {
+      document.querySelector('main').remove();
       this.initMobile(data);
       return;
     }
@@ -85,7 +89,6 @@ class App {
     window.scrollTo(0, 0);
     this.mobilefb = new MobileFallback(data['general-copy']);
     TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0});
-    document.querySelector('main').remove();
   }
 
   updateCurrentArtist(dir)
