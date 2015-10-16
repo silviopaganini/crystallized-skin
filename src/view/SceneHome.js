@@ -62,7 +62,7 @@ class SceneHome
     // this.controls.rotateStart.set( window.innerWidth / 2, window.innerHeight / 2);
 
 
-    this.gallery = new Gallery(this.scene, this.renderer.domElement, this.camera);
+    this.gallery = new Gallery(this.scene, this.renderer.domElement, this.camera, this.clock);
   }
 
   createMaterials()
@@ -321,6 +321,16 @@ class SceneHome
       this.mapTexture.offset.y %= 1;
       this.mapTexture.needsUpdate = true;
     }
+
+    let mov = Math.sin(this.clock.getElapsedTime()) * 3;
+
+    for (var i = 0; i < this.scene.children.length; i++) {
+      if(this.scene.children[i].type !== "DirectionalLight")
+      {
+        // console.log(this.scene.children[i])
+        this.scene.children[i].position.y = mov;
+      }
+    };
 
     // this.controls.update()
 

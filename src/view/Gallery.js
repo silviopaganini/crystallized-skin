@@ -316,6 +316,8 @@ class Gallery
         let amount = 0.001;
         let scale;
 
+        this.container.y += 0.01 * Math.sin()
+
         if(this.mouseDown)
         {
             scale = Math.min(this.dae.scale.x + amount, this.dae.initialScale * 2);
