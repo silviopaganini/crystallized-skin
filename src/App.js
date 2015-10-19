@@ -47,10 +47,8 @@ class App {
 
   init(data)
   {
-    console.log(data)
     this.browser = require('browser-detection/src/browser-detection')();
     this.mobile  = !(this.browser.os == 'osx' || this.browser.os == 'win')
-    console.log(this.mobile);
     
     this.artists = data['artists'];
 
