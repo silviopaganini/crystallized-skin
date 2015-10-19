@@ -8,11 +8,31 @@ import VideoOverlay    from './view/VideoOverlay';
 import MobileFallback  from './view/MobileFallback';
 import SoundController from './utils/SoundController';
 
-import ajax           from 'ajax-request'
-import URL            from 'url';
+import ajax            from 'ajax-request'
+import URL             from 'url';
+import Share           from 'easy-share-popup';
 
 class App {
   constructor(data) {
+
+    this.share = new Share('http://crystallizedskins.com');
+
+    /*
+    sharing (hacking, sorry)
+    */
+
+    let facebookShare = document.querySelector('a[data-type="facebook"]');
+    let twitterShare = document.querySelector('a[data-type="twitter"]');
+    facebookShare.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.share.facebook(null, "An online collection of 3D objects by 13 international video artists, available for download. #crystallizedskins");
+    }.bind(this));
+
+    twitterShare.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.share.twitter(null, "An online collection of 3D objects by 13 international video artists, available for download. #crystallizedskins");
+    }.bind(this));
+
 
     let parsedURL = URL.parse(window.location.href, true);
 

@@ -21,6 +21,18 @@ class UI  {
     this.h4About          = document.querySelector('main section.about div.container > h4');
 
     this.downloadButton   = document.querySelector('main section.about div.container > h3 > a.download-button');
+
+    let facebookShare = document.querySelector('main section.about div.container > div.container-share > a[data-type="facebook"]');
+    let twitterShare = document.querySelector('main section.about div.container > div.container-share > a[data-type="twitter"]');
+    facebookShare.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.APP.share.facebook(null, "An online collection of 3D objects by 13 international video artists, available for download. #crystallizedskins");
+    }.bind(this));
+
+    twitterShare.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.APP.share.twitter(null, "An online collection of 3D objects by 13 international video artists, available for download. #crystallizedskins");
+    }.bind(this));
     
     // this.h2Gallery     = document.querySelector('main header div.container-gallery > h2');
     

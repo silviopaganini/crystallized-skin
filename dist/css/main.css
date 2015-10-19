@@ -531,6 +531,23 @@ section.about div.container h3
   margin: 0;
 }
 
+section.about div.container > .container-share
+{
+  width: 100%;
+  /*position: fixed;*/
+  display: inline;
+  text-align: center;
+}
+
+section.about div.container > .container-share > a
+{
+  margin-top: 20px;
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  margin-right: 10px;
+}
+
 section.about div.container h4
 {
 }
@@ -884,6 +901,24 @@ nav a[data-side='right']:hover
 
   justify-content: center;
   -webkit-justify-content: center;
+}
+
+.preloader > .container-share
+{
+  width: 100%;
+  position: fixed;
+  display: inline;
+  bottom: 40px;
+  left: 0;
+  text-align: center;
+}
+
+.preloader > .container-share > a
+{
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  margin-right: 10px;
 }
 
 .gif
