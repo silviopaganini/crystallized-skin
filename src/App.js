@@ -50,18 +50,18 @@ class App {
       return;
     }
 
-    Tabletop.init({
-        key: "1iYhvt8m8VNK4TMv6UAHt1IjG0DFksGw0GkpDhAke_FI",
-        callback: (data, tabletop) =>{
+    // Tabletop.init({
+    //     key: "1iYhvt8m8VNK4TMv6UAHt1IjG0DFksGw0GkpDhAke_FI",
+    //     callback: (data, tabletop) =>{
 
-          let e = {};
-          e.artists         = data['artists'].elements
-          e['general-copy'] = data['general-copy'].elements
+    //       let e = {};
+    //       e.artists         = data['artists'].elements
+    //       e['general-copy'] = data['general-copy'].elements
 
-          // window.open("data:text/json;charset=utf-8," + JSON.stringify(e));
-          this.init(e);
-        } 
-    });
+    //       window.open("data:text/json;charset=utf-8," + JSON.stringify(e));
+    //       this.init(e);
+    //     } 
+    // });
 
   }
 
