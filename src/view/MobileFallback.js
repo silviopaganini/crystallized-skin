@@ -5,9 +5,7 @@ import Scroll       from '../utils/ScrollManager';
 import ArtistObject from './ArtistObject';
 
 class MobileFallback {
-  constructor(copy) {
-
-    this.copy = copy;
+  constructor() {
 
     this.scroll  = new Scroll();
     
@@ -43,17 +41,17 @@ class MobileFallback {
 
   setCopy()
   {
-    this.setString( this.title, 'title' );
-    this.setString( this.sub, 'about_label' );
+    // this.setString( this.title, 'title' );
+    // this.setString( this.sub, 'about_label' );
     // this.setString( this.h2, 'sub_header' );
-    this.setString( this.p, 'mobile_fallback' );
-    this.setString( this.contentCopy, 'about_copy' );
+    // this.setString( this.p, 'mobile_fallback' );
+    // this.setString( this.contentCopy, 'about_copy' );
     // this.setString( this.bottomButton, 'launch_button' );
 
     // this.setString( this.aboutCreds2, 'below_credits' );
 
-    this.setString( this.artistsH3, 'artists_title' );
-    this.setString( this.h4, 'about_sumup' );
+    // this.setString( this.artistsH3, 'artists_title' );
+    // this.setString( this.h4, 'about_sumup' );
     // this.setString( this.aboutCreds, 'credits' );
 
   }
@@ -68,8 +66,8 @@ class MobileFallback {
       let art = new ArtistObject(
         window.APP.artists[i], 
         i, 
-        _.findWhere(this.copy, {label : 'watch_film_button'}).copy, 
-        _.findWhere(this.copy, {label : 'new_window'}).copy, 
+        "Watch the Film",
+        "opens in a new window",
         true
       );
       

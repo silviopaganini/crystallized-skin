@@ -7,13 +7,13 @@ import Scroll       from '../utils/ScrollManager';
 import ArtistObject from './ArtistObject';
 
 class UI  {
-  constructor(copy) 
+  constructor() 
   {
     this.loadingOnScreen  = false;
 
     this.canvas = document.querySelector('#container-canvas');
     
-    this.copy             = copy;
+    // this.copy             = copy;
     this.h1               = document.querySelector('main header div.container > h1');
 
     this.h3About          = document.querySelector('main section.about div.container > h3');
@@ -185,23 +185,23 @@ class UI  {
   setCopy()
   {
     // this.setString( this.h1, 'title' );
-    this.setString( this.h3About, 'about_label' );
-    this.setString( this.h2About, 'title' );
-    this.setString( this.h4About, 'about_sumup' );
+    // this.setString( this.h3About, 'about_label' );
+    // this.setString( this.h2About, 'title' );
+    // this.setString( this.h4About, 'about_sumup' );
     // this.setString( this.aboutCreds, 'credits' );
     // this.setString( this.aboutCreds2, 'below_credits' );
 
-    this.setString( this.downloadButton, 'download_button' );
-    this.setString( this.readConcept, 'down_read_the_concept' );
+    // this.setString( this.downloadButton, 'download_button' );
+    // this.setString( this.readConcept, 'down_read_the_concept' );
 
-    this.setString( this.artistH3, 'artists_title' );
+    // this.setString( this.artistH3, 'artists_title' );
     // this.setString( this.bottomButton, 'launch_button' );
 
     // this.setString( this.h3, 'sub_header' );
-    this.setString( this.button, 'launch_button' );
+    // this.setString( this.button, 'launch_button' );
     // this.setString( this.h2Gallery, 'title' );
-    this.setString( this.pieceLink, 'watch_film_button' );
-    this.setString( this.copyContainer, 'about_copy' );
+    // this.setString( this.pieceLink, 'watch_film_button' );
+    // this.setString( this.copyContainer, 'about_copy' );
     
   }
 

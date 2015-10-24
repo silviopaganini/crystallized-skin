@@ -85,7 +85,7 @@ class App {
     this.artists       = data['artists'];
     this.currentArtist = ((Math.random() * this.artists.length - 1) + .5) >> 0;
     this.video         = new VideoOverlay();
-    this.ui            = new UI(data['general-copy']);
+    this.ui            = new UI();
     this.landing       = new LandingPage();
 
     this.soundManager = new SoundController();
@@ -108,7 +108,7 @@ class App {
   initMobile(data, tabletop)
   {
     window.scrollTo(0, 0);
-    this.mobilefb = new MobileFallback(data['general-copy']);
+    this.mobilefb = new MobileFallback();
     TweenMax.to(document.querySelector('.preloader'), .4, {autoAlpha: 0});
   }
 
