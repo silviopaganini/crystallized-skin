@@ -51,7 +51,7 @@ class ArtistObject {
 
   scale()
   {
-    let scale = window.innerWidth / 640 ;
+    let scale = (window.innerWidth * .5) / 640 ;
     css(this.container, {
       'width'               : window.innerWidth,
       'background-position' : 'center',

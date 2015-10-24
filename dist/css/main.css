@@ -107,6 +107,11 @@ div.fallback header div.container
   vertical-align: middle;
 }
 
+div.fallback header h3
+{
+  /*padding: 2em;*/
+}
+
 div.fallback div.content
 {
   background-color: white;
@@ -141,40 +146,93 @@ div.fallback div.content h4
   text-align: center;
 }
 
-div.fallback div.content div.about-credits
-{
-  color: #73746b;
-}
-
-div.fallback div.content div.below_credits
+/*div.fallback div.content div.below_credits
 {
   padding-top: 20px;
   color: #73746b;
-}
+}*/
 
-div.fallback div.content div.about-credits > p
+div.fallback div.content div.below_credits
 {
-  padding: 0;
-  margin: 0;
-  line-height: 1.8em;
+  font-family: 'SabonNext LT Display';
+  /*letter-spacing: 1px;*/
+  padding-top: 20px;
+  font-size: 15px;
+  color: #73746b;
+  line-height: 28px;
 }
 
-div.fallback div.content div.about-credits > p > a:hover
+div.fallback div.content div.below_credits > p.smallprint
+{
+  letter-spacing: .4px;
+  padding: 0;
+  margin: 5px 0 0;
+  font-size: 10px;
+  line-height: 13px;
+  color: #cdcdcd;
+}
+
+div.fallback div.content div.below_credits > p.smallprint > a:hover
 {
   text-decoration: underline;
 }
 
-div.fallback div.content div.about-credits > p:nth-child(even)
+div.fallback div.content div.below_credits > a
 {
-  color: #604fff;
+  transition: all .5s;
+  -webkit-transition: all .5s;
+  border-bottom: 1px solid #73746b;
 }
 
-div.fallback div.content div.about-credits > p:nth-child(odd)
+div.fallback div.content div.below_credits > a:hover
 {
   color: #ff4f4f;
+  border-bottom: 1px solid #ff4f4f;
+}
+
+/*div.fallback div.content div.about-credits > p
+{
+  padding: 0;
+  margin: 0;
+  line-height: 1.8em;
+}*/
+
+div.fallback div.content div.about-credits
+{
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px 0;
+  text-align: center;
+}
+
+div.fallback div.content div.about-credits > div {
+  color: #ff4f4f;
+  padding: 10px 30px;
+  font-size: 15px;
+  flex-shrink: 0;
+  flex-basis: fit-content;
+  min-width: 240px;
+}
+
+div.fallback div.content div.about-credits > div > a > img
+{
+  width: 157px;
+}
+
+div.fallback div.content div.about-credits > div > a
+{
+  transition: all .5s;
+  -webkit-transition: all .5s;
 }
 
 
+div.fallback div.content div.about-credits > div > a:hover
+{
+  opacity: .4;
+}
 
 
 
@@ -801,7 +859,6 @@ div.fallback div.artists div.container ul > li
   cursor: pointer;
   font-size: 16px;
   display: table;
-  padd
 }
 
 .artists div.container ul > li > div 
@@ -815,14 +872,13 @@ div.fallback .artists div.container ul > li > div
 {
   vertical-align: middle;
   display: table-cell;
-  /*border: 1px solid green;*/
-  padding: 0;
+  border: 1px solid transparent;
 }
 
 div.fallback .artists div.container ul > li > p
 {
-  margin-top: 20px;
-  padding: 0;
+  margin-top: -60px;
+  padding: 0 5%;
   /*border: 1px solid red;*/
 }
 
