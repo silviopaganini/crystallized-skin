@@ -92,10 +92,13 @@ class App {
 
     this.emitter.on('updateArtist', this.updateCurrentArtist.bind(this));
     this.emitter.on('ready', () => {
-      window.scrollTo(0, 0);
-      window.onresize = this.landing.onResize.bind(this.landing);
-      TweenMax.to(document.querySelector('.preloader'), 1.5, {autoAlpha: 0});
-      TweenMax.to(document.querySelector('main'), 1.5, {autoAlpha: 1});
+      setTimeout(function(){
+        window.scrollTo(0, 0);
+        window.onresize = this.landing.onResize.bind(this.landing);
+        TweenMax.to(document.querySelector('.preloader'), 1.5, {autoAlpha: 0});
+        TweenMax.to(document.querySelector('main'), 1.5, {autoAlpha: 1});
+      }.bind(this), 1000);
+      
     });
 
     this.landing.init();

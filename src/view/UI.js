@@ -188,8 +188,8 @@ class UI  {
     this.setString( this.h3About, 'about_label' );
     this.setString( this.h2About, 'title' );
     this.setString( this.h4About, 'about_sumup' );
-    this.setString( this.aboutCreds, 'credits' );
-    this.setString( this.aboutCreds2, 'below_credits' );
+    // this.setString( this.aboutCreds, 'credits' );
+    // this.setString( this.aboutCreds2, 'below_credits' );
 
     this.setString( this.downloadButton, 'download_button' );
     this.setString( this.readConcept, 'down_read_the_concept' );
@@ -197,7 +197,7 @@ class UI  {
     this.setString( this.artistH3, 'artists_title' );
     // this.setString( this.bottomButton, 'launch_button' );
 
-    this.setString( this.h3, 'sub_header' );
+    // this.setString( this.h3, 'sub_header' );
     this.setString( this.button, 'launch_button' );
     // this.setString( this.h2Gallery, 'title' );
     this.setString( this.pieceLink, 'watch_film_button' );
