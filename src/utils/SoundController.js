@@ -7,13 +7,15 @@ class SoundController
 {
   constructor(args) {
 
-    this.sounds = [
-        'https://drive.google.com/open?id=0B0uHwEQ4FBZxUlE2RmtHRDZfY1E',
-        'https://drive.google.com/open?id=0B0uHwEQ4FBZxb3hWRzVFNHVIUTQ',
-        'https://drive.google.com/open?id=0B0uHwEQ4FBZxdHE3dm1FMWplLWs'
-    ]
+    // this.sounds = [
+    //     'https://drive.google.com/open?id=0B0uHwEQ4FBZxUlE2RmtHRDZfY1E',
+    //     'https://drive.google.com/open?id=0B0uHwEQ4FBZxb3hWRzVFNHVIUTQ',
+    //     'https://drive.google.com/open?id=0B0uHwEQ4FBZxdHE3dm1FMWplLWs'
+    // ]
 
-    this.playing = false;
+    this.sounds = [];
+
+    this.playing = true;
     this.wasPlaying = false;
 
     this.soundButton = document.querySelector('.sound-container');
@@ -28,7 +30,7 @@ class SoundController
 
     this.currentSound = 0;
     this.sounds = MathP.randomArray(this.sounds);
-    this.playSound();
+    // this.playSound();
   }
 
   flickPlay()
@@ -43,6 +45,8 @@ class SoundController
 
   zoomPlay(zoom)
   {
+    if(!this.playing) return;
+
     if(zoom)
     {
       if(!this.zoomSound.isPaused()) return;
