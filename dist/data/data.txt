@@ -27,7 +27,7 @@
     {
       "id": "2",
       "artist_name": "Katie Torn",
-      "video_url": "https://vimeo.com/139072869",
+      "video_url": "https://vimeo.com/41115151",
       "url": "http://www.katietorn.com",
       "model": "http://d3b7wkwhnzo88i.cloudfront.net/compressed/3d/katietorn.obj",
       "model_full_res": "http://d3b7wkwhnzo88i.cloudfront.net/v1/3d/katietorn.obj",
