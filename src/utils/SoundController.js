@@ -7,13 +7,7 @@ class SoundController
 {
   constructor(args) {
 
-    // this.sounds = [
-    //     'https://drive.google.com/open?id=0B0uHwEQ4FBZxUlE2RmtHRDZfY1E',
-    //     'https://drive.google.com/open?id=0B0uHwEQ4FBZxb3hWRzVFNHVIUTQ',
-    //     'https://drive.google.com/open?id=0B0uHwEQ4FBZxdHE3dm1FMWplLWs'
-    // ]
-
-    this.sounds = [];
+    this.soundURL = "http://crystallizedskins.s3.amazonaws.com/v1/CrystallizedSkins_Medley.mp3";
 
     this.playing = true;
     this.wasPlaying = false;
@@ -29,8 +23,7 @@ class SoundController
     this.zoomSound.load();
 
     this.currentSound = 0;
-    this.sounds = MathP.randomArray(this.sounds);
-    // this.playSound();
+    this.playSound();
   }
 
   flickPlay()
@@ -90,7 +83,7 @@ class SoundController
   {
     this.wasPlaying = true;
     this.soundButton.dataset.state = 'on';
-    this.sound.play().fadeTo(5, 1000, ()=>{
+    this.sound.play().fadeTo(4, 1000, ()=>{
       this.playing = true;
     });
   }
@@ -102,24 +95,17 @@ class SoundController
     this.playing = true;
     this.wasPlaying = true;
 
-    this.sound = new buzz.sound( this.getURL(this.sounds[this.currentSound]), {
+    this.sound = new buzz.sound( this.soundURL, {
         autoplay : false,
-        loop: false,
+        loop: true,
         volume: 0
     } );
 
-    this.sound.bindOnce('ended', this.playSound.bind(this));
-    this.sound.load().play().fadeTo(5, 1000);
+    // this.sound.bindOnce('ended', this.playSound.bind(this));
+    this.sound.load().play().fadeTo(4, 1000);
 
-    this.currentSound++;
-    this.currentSound %= this.sounds.length;
-  }
-
-  getURL(url)
-  {
-      let parsed = URL.parse(url, true);
-      if(parsed.host === null) return url;
-      return "https://googledrive.com/host/" + parsed.query.id + "?r=" + MathP.rrandom(9999);
+    // this.currentSound++;
+    // this.currentSound %= this.sounds.length;
   }
 }
 
