@@ -219,18 +219,18 @@ class SceneHome
   {
     var Params = function(){
         this.nodes = 50;
-        this.power = 50;
-        this.lightColor = '#acacac';
-        this.meshColor = '#222222';
-        this.meshSpecular = '#1e1e1e';
+        this.power = 30;
+        this.lightColor = '#cacaca';
+        this.meshColor = '#020202';
+        this.meshSpecular = '#1f201c';
         this.meshEmissive = '#000000';
-        this.wireColour = '#a29c9c';
-        this.shininess = 20;
+        this.wireColour = '#293141';
+        this.shininess = 8;
 
-        this.modelMeshColor = '#989898';
-        this.modelMeshSpecular = '#9d9d9d';
-        this.modelMeshEmissive = '#181818';
-        this.modelShininess = 10;        
+        this.modelMeshColor = '#3d4330';
+        this.modelMeshSpecular = '#d9ffff';
+        this.modelMeshEmissive = '#121813';
+        this.modelShininess = 7;        
 
         this.noiseAmount = .05;
         this.noiseSpeed = 1;
