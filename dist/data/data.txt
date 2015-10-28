@@ -41,7 +41,7 @@
       "artist_name": "Yves Netzhammer",
       "video_url": "https://www.youtube.com/watch?v=9pzplrAdSK4",
       "url": "http://netzhammer.com/",
-      "model": "http://d3b7wkwhnzo88i.cloudfront.net/compressed/3d/yvesnetzhammer.obj",
+      "model": "http://d3b7wkwhnzo88i.cloudfront.net/v1/3d/yvesnetzhammer_flip-normals.obj",
       "model_full_res": "http://d3b7wkwhnzo88i.cloudfront.net/v1/3d/yvesnetzhammer.obj",
       "model_local": "3d/yvesnetzhammer.obj",
       "image": "assets/artists/04.png",
