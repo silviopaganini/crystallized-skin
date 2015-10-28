@@ -220,22 +220,22 @@ class SceneHome
     var Params = function(){
         this.nodes = 50;
         this.power = 30;
-        this.lightColor = '#cacaca';
-        this.meshColor = '#020202';
-        this.meshSpecular = '#1f201c';
+        this.lightColor = '#fffdf2';
+        this.meshColor = '#000000';
+        this.meshSpecular = '#090909';
         this.meshEmissive = '#000000';
-        this.wireColour = '#293141';
-        this.shininess = 8;
+        this.wireColour = '#000000';
+        this.shininess = 50;
 
-        this.modelMeshColor = '#3d4330';
-        this.modelMeshSpecular = '#d9ffff';
-        this.modelMeshEmissive = '#121813';
-        this.modelShininess = 7;        
+        this.modelMeshColor = '#555555';
+        this.modelMeshSpecular = '#ffffff';
+        this.modelMeshEmissive = '#202220';
+        this.modelShininess = 2;        
 
         this.noiseAmount = .05;
         this.noiseSpeed = 1;
-        this.clamp = .05;
-        this.lumInfluence = .5;
+        this.clamp = .25;
+        this.lumInfluence = -.5;
         this.onlySSAO = false;
     }
 
@@ -284,6 +284,22 @@ class SceneHome
     // gui.close();
   }
 
+  toggleMaterial(page = 'home')
+  {
+    if(page == 'home')
+    {
+      this.mesh.material.emissive = new THREE.Color('#1e1e1e');
+      this.meshWireframe.material.color = new THREE.Color('#575757');  
+    } else {
+      this.mesh.material.emissive = new THREE.Color('#000000');
+      this.meshWireframe.material.color = new THREE.Color('#000000');  
+    }
+
+    this.mesh.material.needsUpdate = true;
+    this.meshWireframe.geometry.verticesNeedUpdate = true;
+    
+  }
+
   updateColours()
   {
       this.mesh.material.color = new THREE.Color(this.p.meshColor);
@@ -301,7 +317,10 @@ class SceneHome
   {
     if(!out)
     {
+      this.toggleMaterial('home')
       this.gallery.animateOut();
+    } else {
+      this.toggleMaterial('gallery')
     }
 
     callback();
