@@ -223,8 +223,8 @@ class SceneHome
         this.lightColor = '#fffdf2';
         this.meshColor = '#000000';
         this.meshSpecular = '#090909';
-        this.meshEmissive = '#000000';
-        this.wireColour = '#000000';
+        this.meshEmissive = '#1e1e1e';
+        this.wireColour = '#575757';
         this.shininess = 50;
 
         this.modelMeshColor = '#555555';
