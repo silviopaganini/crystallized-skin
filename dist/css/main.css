@@ -160,6 +160,7 @@ div.fallback div.content div.below_credits
   font-size: 15px;
   color: #73746b;
   line-height: 28px;
+  text-align: center;
 }
 
 div.fallback div.content div.below_credits > p.smallprint
