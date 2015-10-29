@@ -221,9 +221,9 @@ class SceneHome
         this.nodes = 50;
         this.power = 30;
         this.lightColor = '#fffdf2';
-        this.meshColor = '#000000';
+        this.meshColor = '#0c0c0c';
         this.meshSpecular = '#090909';
-        this.meshEmissive = '#1e1e1e';
+        this.meshEmissive = '#0f0e0e';
         this.wireColour = '#575757';
         this.shininess = 50;
 
@@ -288,12 +288,18 @@ class SceneHome
   {
     if(page == 'home')
     {
-      this.mesh.material.emissive = new THREE.Color('#1e1e1e');
+      this.mesh.material.emissive = new THREE.Color('#090909');
       this.meshWireframe.material.color = new THREE.Color('#575757');  
     } else {
       this.mesh.material.emissive = new THREE.Color('#000000');
       this.meshWireframe.material.color = new THREE.Color('#000000');  
     }
+
+    // this.lightColor = '#fffdf2';
+    //     this.meshColor = '#0c0c0c';
+    //     this.meshSpecular = '#090909';
+    //     this.meshEmissive = '#0f0e0e';
+    //     this.wireColour = '#575757';
 
     this.mesh.material.needsUpdate = true;
     this.meshWireframe.geometry.verticesNeedUpdate = true;
